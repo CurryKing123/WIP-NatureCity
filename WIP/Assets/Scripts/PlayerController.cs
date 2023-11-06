@@ -7,9 +7,9 @@ using UnityEngine.AI;
 
 public class PlayerController : MonoBehaviour
 {
+
     private NavMeshAgent agent;
 
-    private BoxCollider boxCol;
     private bool isMoving = false;
     private bool isMovingToResource = false;
     private Transform targetResource;
@@ -17,7 +17,6 @@ public class PlayerController : MonoBehaviour
     private void Start()
     {
         agent = GetComponent<NavMeshAgent>();
-        boxCol = GetComponent<BoxCollider>();
     }
 
     private void Update()
@@ -71,11 +70,10 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
+    
 
-    private void OnTriggerExit(Collider other)
-    {
-        Debug.Log("Leaving Resource Area");
-    }
+
+
     
     private void MoveToResource(Transform resource)
     {

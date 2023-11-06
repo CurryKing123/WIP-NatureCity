@@ -3,16 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public enum ResourceType
-{
-    Stone,
-    Wood
-}
 
 public class Resource : MonoBehaviour
 {
-    [field: SerializeField] public string DisplayName {get; private set;}
-
+    [field: SerializeField] public ResourceDescription ResourceType {get; private set;}
+    [field: SerializeField] public Inventory Inventory { get; private set; }
     
     public int resourceCount = 2;
     public float gatheringTime = 2.0f;
@@ -27,12 +22,13 @@ public class Resource : MonoBehaviour
             StartCoroutine(GatherResource(player));
         }
     }
+
     
     
 
     private IEnumerator GatherResource(Transform player)
     {
-        while(resourceCount >= 0)
+        while(resourceCount >= 0 )
         {
             Debug.Log("Gathering...");
         // Play the gathering animation
@@ -40,6 +36,7 @@ public class Resource : MonoBehaviour
 
         yield return new WaitForSeconds(gatheringTime);
         resourceCount--;
+        Inventory.AddResources(ResourceType, 1);
 
         if (resourceCount <= 0)
         {

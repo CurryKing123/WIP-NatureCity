@@ -152,7 +152,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 69e1f81cf570ae94799e3ec42f7c0f8e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <DisplayName>k__BackingField: Wood
+  <ResourceType>k__BackingField: {fileID: 11400000, guid: d24e54f3685d80b4091816816a5bee15, type: 2}
+  <Inventory>k__BackingField: {fileID: 2675855663737227054, guid: a77e3cc7f2faa604b9776a411c7da16b, type: 3}
   resourceCount: 2
   gatheringTime: 2
 --- !u!1 &7222887862436926918
