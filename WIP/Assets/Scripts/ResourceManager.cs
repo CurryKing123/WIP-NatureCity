@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Events;
 
 
-public class Resource : MonoBehaviour
+public class ResourceManager : MonoBehaviour
 {
     [field: SerializeField] public ResourceDescription ResourceType {get; private set;}
     [field: SerializeField] public Inventory Inventory { get; private set; }
@@ -28,7 +28,9 @@ public class Resource : MonoBehaviour
 
     private IEnumerator GatherResource(Transform player)
     {
-        while(resourceCount >= 0 )
+        ResourceCollection resCol = player.GetComponent<ResourceCollection>();
+
+        while(resCol.resourceAmount >= 0 )
         {
             Debug.Log("Gathering...");
         // Play the gathering animation

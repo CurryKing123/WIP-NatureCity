@@ -1,24 +1,20 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    public static GameManager Instance;
-    private int totalResources = 0;
+    public static int woodAmount;
+    public static int stoneAmount;
 
-    private void Awake()
+    public static void AddWoodAmount(int amount)
     {
-        if (Instance == null)
-        {
-            Instance = this;
-        }
+        woodAmount += amount;
     }
 
-    public void AddResources(int amount)
+    public static int GetWoodAmount()
     {
-        totalResources += amount;
-
-        // Update your UI or resource display here
+        return woodAmount;
     }
 }

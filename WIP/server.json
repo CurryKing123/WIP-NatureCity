@@ -1,0 +1,68 @@
+{
+    "Maps":{
+        "M1":{
+           "map_property_loader":"map_1_property",
+           "area":"artic",
+           "resources": [
+                {
+                    "resourcesid": "1",
+                    "rooting_time": 2
+                }
+            ] 
+        },
+        "M2":{           
+            "map_property_loader":"map_1_property",
+            "area":"rain_forest",
+            "resources":[
+                {
+                    "resourcesid": "1",
+                    "rooting_time": 1,
+                    "resrouce_density": 1
+                },
+                {
+                    "resourcesid": "2",
+                    "rooting_time": 3,
+                    "resrouce_density": 10
+                }
+            ],
+            "enemy":[
+
+            ]
+        },
+        "M3":{
+            "area":"desert",
+            "resources":[
+                {
+                    "resourcesid": "1",
+                    "rooting_time": 1,
+                    "resrouce_density": 2
+                },
+                {
+                    "resourcesid": "2",
+                    "rooting_time": 3,
+                    "resrouce_density": 1
+                }
+            ]
+        },
+        "M4":{
+            "area":"rain_forest",
+            "resources":[
+                {
+                    "resourcesid": "1",
+                    "rooting_time": 1,
+                    "resrouce_density": 2
+                },
+                {
+                    "resourcesid": "2",
+                    "rooting_time": 3,
+                    "resrouce_density": 2
+                },
+                {
+                    "resourcesid": "2",
+                    "rooting_time": 3,
+                    "resrouce_density": 2
+                }
+            ]
+        }
+    }
+}

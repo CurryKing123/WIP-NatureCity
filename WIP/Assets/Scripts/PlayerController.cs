@@ -34,7 +34,7 @@ public class PlayerController : MonoBehaviour
 
                 if (hit.collider.CompareTag("Resource"))
                 {
-                    Resource resource = hit.collider.GetComponent<Resource>();
+                    ResourceManager resource = hit.collider.GetComponent<ResourceManager>();
                     targetResource = hit.transform;
                     
                     
@@ -61,7 +61,7 @@ public class PlayerController : MonoBehaviour
         if (other.CompareTag("Resource") && (isMovingToResource))
         {
             agent.speed = 0f;
-            Resource resource = other.GetComponent<Resource>();
+            ResourceManager resource = other.GetComponent<ResourceManager>();
 
             if (resource.resourceCount > 0)
             {
