@@ -30,7 +30,8 @@ public class ResourceManager : MonoBehaviour
     {
         ResourceCollection resCol = player.GetComponent<ResourceCollection>();
 
-        while(resCol.resourceAmount >= 0 )
+        //while(resCol.myResourceList.resources[resourceAmount] > 0 )
+        while(resourceCount > 0)
         {
             Debug.Log("Gathering...");
         // Play the gathering animation
