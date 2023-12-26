@@ -1,0 +1,1 @@
+DELETE FROM NATURE.map WHERE map_id=?;

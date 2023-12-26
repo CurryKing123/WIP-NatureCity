@@ -1,0 +1,1 @@
+DELETE FROM NATURE.bag WHERE item_bag_id=?;

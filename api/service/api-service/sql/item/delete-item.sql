@@ -1,0 +1,1 @@
+DELETE FROM NATURE.item WHERE item_id=?;

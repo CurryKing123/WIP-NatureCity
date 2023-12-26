@@ -1,0 +1,1 @@
+DELETE FROM NATURE.position WHERE position_id=?;

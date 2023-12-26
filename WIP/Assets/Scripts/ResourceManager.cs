@@ -25,7 +25,7 @@ public class ResourceManager : MonoBehaviour
 
     
     
-
+//Gathering Resources
     private IEnumerator GatherResource(Transform player)
     {
         ResourceCollection resCol = player.GetComponent<ResourceCollection>();

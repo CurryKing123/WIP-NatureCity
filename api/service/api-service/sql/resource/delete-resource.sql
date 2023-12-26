@@ -1,0 +1,1 @@
+DELETE FROM NATURE.resource WHERE resource_id=?;

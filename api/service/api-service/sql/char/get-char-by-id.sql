@@ -1,0 +1,1 @@
+SELECT * FROM NATURE.user where user_id=?;

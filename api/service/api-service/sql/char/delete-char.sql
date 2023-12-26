@@ -1,0 +1,1 @@
+DELETE FROM NATURE.user WHERE user_id=?;
