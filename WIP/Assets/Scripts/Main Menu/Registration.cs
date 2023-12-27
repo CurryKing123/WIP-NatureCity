@@ -16,22 +16,19 @@ public class Registration : MonoBehaviour
     
     IEnumerator Register()
     {
-        WWWForm form = new WWWForm();
-        form.AddField("username", usernameField.text);
-        form.AddField("password", passwordField.text);
-
-        UnityWebRequest www = UnityWebRequest.Post("http://localhost:8002/account/post-account", form);
-        
-        www.SetRequestHeader("key","1");
-        yield return www.SendWebRequest();
-
-        if (www.result != UnityWebRequest.Result.Success)
+        using (UnityWebRequest www = UnityWebRequest.Post("http://localhost:8002/account/post-account", "{ \"username\": \"" + usernameField.text + "\", \"password\": \"" + usernameField.text + "\" }", "application/json"))
         {
-            Debug.Log(www.error);
-        }
-        else
-        {
-            Debug.Log("Form upload complete!");
+            www.SetRequestHeader("key", "1");
+            yield return www.SendWebRequest();
+
+            if (www.result != UnityWebRequest.Result.Success)
+            {
+                Debug.Log(www.error);
+            }
+            else
+            {
+                Debug.Log("Form upload complete!");
+            }
         }
     }
 
