@@ -26,9 +26,16 @@ app.use("/position", posRouter)
 app.use("/item", itemRouter)
 app.use("/bag", bagRouter)
 
+///Getting Account Info
+app.get("/account", async (req,res) => {
+    const {username, password} = req.query;
+    if(username == null || password == null)
+    {
+        res.sendStatus("Invalid credentials");
+        return;
+    }
 
-app.get("/",(req,res) => {
-    res.json({ message: "Hello Issac111! You are dealing with awesome Paul"})
+
 })
 
 app.listen(8002, () =>{

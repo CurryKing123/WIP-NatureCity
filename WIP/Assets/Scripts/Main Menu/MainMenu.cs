@@ -9,4 +9,19 @@ public class MainMenu : MonoBehaviour
     {
         SceneManager.LoadScene(1);
     }
+
+    public void GoToLogin()
+    {
+        SceneManager.LoadScene(2);
+    }
+
+    public void GoBack()
+    {
+        SceneManager.LoadScene(0);
+    }
+
+    public void GoPlay()
+    {
+        SceneManager.LoadScene(3);
+    }
 }

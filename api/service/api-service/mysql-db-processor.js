@@ -317,6 +317,7 @@ async function postBag(page = 1, req) {
   prepareStatement.push(req.body.item_weight);
   prepareStatement.push(req.body.item_bag_capacity);
   prepareStatement.push(req.body.item_quantity);
+  prepareStatement.push(req.body.resource_id);
   query = fs.readFileSync("./service/api-service/sql/bag/post-bag.sql");
   req.prepareStatement = prepareStatement;
   return dbProcessor(page, query, req);
@@ -328,6 +329,7 @@ async function putBag(page = 1, req) {
   prepareStatement.push(req.body.item_weight);
   prepareStatement.push(req.body.item_bag_capacity);
   prepareStatement.push(req.body.item_quantity);
+  prepareStatement.push(req.body.resource_id);
   prepareStatement.push(req.query.item_bag_id);
   query = fs.readFileSync("./service/api-service/sql/bag/put-bag.sql");
   req.prepareStatement = prepareStatement;

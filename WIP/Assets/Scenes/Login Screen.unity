@@ -283,6 +283,7 @@ GameObject:
   - component: {fileID: 341678062}
   - component: {fileID: 341678061}
   - component: {fileID: 341678065}
+  - component: {fileID: 341678066}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -395,6 +396,18 @@ MonoBehaviour:
   passwordField: {fileID: 1060641649}
   registerButton: {fileID: 1807055394}
   backButton: {fileID: 0}
+--- !u!114 &341678066
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 341678060}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f425fc8bbcaab5945aebb5b7c518cfbc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &419820141
 GameObject:
   m_ObjectHideFlags: 0
@@ -1536,8 +1549,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 341678065}
-        m_TargetAssemblyTypeName: Registration, Assembly-CSharp
-        m_MethodName: CallRegister
+        m_TargetAssemblyTypeName: Account, Assembly-CSharp
+        m_MethodName: CallLogin
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1668,9 +1681,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 341678065}
-        m_TargetAssemblyTypeName: Registration, Assembly-CSharp
-        m_MethodName: CallRegister
+      - m_Target: {fileID: 341678066}
+        m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
+        m_MethodName: GoBack
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
