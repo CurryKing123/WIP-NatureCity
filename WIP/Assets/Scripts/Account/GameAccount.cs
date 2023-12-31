@@ -4,6 +4,6 @@ using UnityEngine;
 
 public class GameAccount 
 {
-    public string _id;
+    public string user_id;
     public string username;
 }

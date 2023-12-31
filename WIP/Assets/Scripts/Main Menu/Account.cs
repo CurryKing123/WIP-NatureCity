@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
+using UnityEditor.PackageManager.Requests;
 
 public class Account : MonoBehaviour
 {
@@ -41,10 +42,11 @@ public class Account : MonoBehaviour
 
     IEnumerator Login()
     {
-        using (UnityWebRequest www = UnityWebRequest.Get("http://localhost:8002/account/get-account"))
+        using (UnityWebRequest www = UnityWebRequest.Get($"{"http://localhost:8002/account/get-account"}?rUsername={usernameField.text}&rPassword{passwordField.text}"))
         {
             www.SetRequestHeader("key", "1");
             yield return www.SendWebRequest();
+            
 
             if (www.result != UnityWebRequest.Result.Success) 
             {
@@ -53,8 +55,7 @@ public class Account : MonoBehaviour
             else 
             {
                 GameAccount returnedAccount = JsonUtility.FromJson<GameAccount>(www.downloadHandler.text);
-            // Show results as text
-                Debug.Log(www.downloadHandler.text);
+                Debug.Log($"{returnedAccount.user_id} Welcome " + returnedAccount.username);
             }
         }
     }
