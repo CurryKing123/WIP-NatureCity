@@ -1,5 +1,6 @@
 const {
     getAccount,
+    getAccountLogin,
     postAccount,
     deleteAccount,
     putAccount,
@@ -8,6 +9,14 @@ const {
   exports.getAccountFromDb = async (req, res) => {
     try {
       res.json(await getAccount(req.query.page, req));
+    } catch (err) {
+      res.status(422).json({ message: err.message });
+    }
+  };
+
+  exports.getAccountLoginFromDb = async (req, res) => {
+    try {
+      res.json(await getAccountLogin(req.query.page, req));
     } catch (err) {
       res.status(422).json({ message: err.message });
     }

@@ -48,7 +48,7 @@ async function getCharById(page = 1, req) {
   query = fs.readFileSync("./service/api-service/sql/char/get-char-by-id.sql");
   let prepareStatement = [];  
   prepareStatement.push(req.query.user_id);
-  req.prepareStatement = prepareStatement
+  req.prepareStatement = prepareStatement;
   return dbProcessor(page, query, req);
 }
 
@@ -200,6 +200,15 @@ async function deleteResNode(page = 1, req) {
 async function getAccount(page = 1, req) {
   query = fs.readFileSync("./service/api-service/sql/account/get-account.sql");
   req.prepareStatement = [];
+  return dbProcessor(page, query, req);
+}
+
+async function getAccountLogin(page = 1, req) {
+  query = fs.readFileSync("./service/api-service/sql/account/get-account-login.sql");
+  let prepareStatement = [];
+  prepareStatement.push(req.query.username);
+  prepareStatement.push(req.query.password);
+  req.prepareStatement = prepareStatement;
   return dbProcessor(page, query, req);
 }
 
@@ -385,6 +394,7 @@ module.exports = {
   putCharStat,
   deleteCharStat,
   getAccount,
+  getAccountLogin,
   postAccount,
   putAccount,
   deleteAccount,

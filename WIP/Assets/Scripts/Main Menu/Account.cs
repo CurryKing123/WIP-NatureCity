@@ -4,7 +4,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
-using UnityEditor.PackageManager.Requests;
+using System.Text.RegularExpressions;
+using System.Text;
 
 public class Account : MonoBehaviour
 {
@@ -42,11 +43,11 @@ public class Account : MonoBehaviour
 
     IEnumerator Login()
     {
-        using (UnityWebRequest www = UnityWebRequest.Get($"{"http://localhost:8002/account/get-account"}?rUsername={usernameField.text}&rPassword{passwordField.text}"))
+        using (UnityWebRequest www = UnityWebRequest.Get($"http://localhost:8002/account/get-account-login?username={usernameField.text}&password={passwordField.text}"))
         {
             www.SetRequestHeader("key", "1");
             yield return www.SendWebRequest();
-            
+
 
             if (www.result != UnityWebRequest.Result.Success) 
             {
@@ -54,8 +55,7 @@ public class Account : MonoBehaviour
             }
             else 
             {
-                GameAccount returnedAccount = JsonUtility.FromJson<GameAccount>(www.downloadHandler.text);
-                Debug.Log($"{returnedAccount.user_id} Welcome " + returnedAccount.username);
+                Debug.Log(www.downloadHandler.text);
             }
         }
     }
@@ -70,5 +70,12 @@ public class Account : MonoBehaviour
     public void GoBack()
     {
         SceneManager.LoadScene(0);
+    }
+
+    public class Data
+    {
+        public int user_id;
+        public string username;
+        public string password;
     }
 }

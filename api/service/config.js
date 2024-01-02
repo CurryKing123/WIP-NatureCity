@@ -1,13 +1,13 @@
 const mysql_config = {
     db: {
-        connectoinLimit: 100,
+        connectionLimit: 1000,
         host: "localhost",
         user: "root",
         password: "mauFJcuf5dhRMQrjj",
         database: "NATURE",
         insecureAuth : true
     },
-    listPerPage: 100,
+    listPerPage: 1000,
 }
 
 module.exports = {
