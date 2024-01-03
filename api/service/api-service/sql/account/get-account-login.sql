@@ -1,2 +1,2 @@
 SELECT * FROM NATURE.user_account 
-WHERE username=? AND password=?
+    WHERE username=? AND password=?;

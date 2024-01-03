@@ -47,6 +47,7 @@ public class Account : MonoBehaviour
         {
             www.SetRequestHeader("key", "1");
             yield return www.SendWebRequest();
+            
 
 
             if (www.result != UnityWebRequest.Result.Success) 
