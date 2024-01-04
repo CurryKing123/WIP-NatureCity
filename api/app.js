@@ -13,6 +13,7 @@ const posRouter = require("./service/routes/position-router");
 const itemRouter = require("./service/routes/item-router");
 const bagRouter = require("./service/routes/bag-router");
 
+
 app.use(express.json())
 app.use(cors())
 
