@@ -63,8 +63,7 @@ public class Account : MonoBehaviour
                 if(dH.Contains($"{usernameField.text}"))
                 {
                     Debug.Log("Login Successful!");
-                    Debug.Log(www.downloadHandler.text);
-                    Debug.Log(myAccount.data[0].user_id);
+                    Debug.Log($"User: {myAccount.data[0].user_id}");
                 }
                 else
                 {
