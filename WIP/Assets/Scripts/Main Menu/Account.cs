@@ -6,6 +6,7 @@ using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
 using System.Text.RegularExpressions;
 using System.Text;
+using System;
 
 public class Account : MonoBehaviour
 {
@@ -36,7 +37,7 @@ public class Account : MonoBehaviour
             }
             else
             {
-                Debug.Log("Form upload complete!");
+                Debug.Log("Registration Complete!");
             }
         }
     }
@@ -48,15 +49,22 @@ public class Account : MonoBehaviour
             www.SetRequestHeader("key", "1");
             yield return www.SendWebRequest();
 
+            MyAccount myAccount = new MyAccount();
+            
+            string dH = www.downloadHandler.text;
+            myAccount = JsonUtility.FromJson<MyAccount>(dH);
+
             if (www.result != UnityWebRequest.Result.Success) 
             {
                 Debug.Log(www.error);
             }
             else 
             {
-                if(www.downloadHandler.data.Length > 29)
+                if(dH.Contains($"{usernameField.text}"))
                 {
-                    Debug.Log("Login Successful");
+                    Debug.Log("Login Successful!");
+                    Debug.Log(www.downloadHandler.text);
+                    Debug.Log(myAccount.data[0].user_id);
                 }
                 else
                 {
@@ -64,6 +72,19 @@ public class Account : MonoBehaviour
                 }
             }
         }
+    }
+    [Serializable]
+    public class MyAccount
+    {
+
+        public Data[] data;
+    }
+    [Serializable]
+    public class Data
+    {
+        public string username;
+        public string password;
+        public int user_id;
     }
 
     
@@ -78,10 +99,4 @@ public class Account : MonoBehaviour
         SceneManager.LoadScene(0);
     }
 
-    public class Data
-    {
-        public int user_id;
-        public string username;
-        public string password;
-    }
 }
