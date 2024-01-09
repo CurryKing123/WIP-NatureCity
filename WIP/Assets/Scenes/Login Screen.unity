@@ -394,7 +394,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   usernameField: {fileID: 722170861}
   passwordField: {fileID: 1060641649}
-  registerButton: {fileID: 1807055394}
+  reglogButton: {fileID: 1807055394}
   backButton: {fileID: 1835486584}
 --- !u!114 &341678066
 MonoBehaviour:
@@ -932,7 +932,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 341678065}
-        m_TargetAssemblyTypeName: Registration, Assembly-CSharp
+        m_TargetAssemblyTypeName: Account, Assembly-CSharp
         m_MethodName: VerifyInputs
         m_Mode: 1
         m_Arguments:

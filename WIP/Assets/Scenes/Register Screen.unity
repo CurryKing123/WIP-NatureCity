@@ -393,8 +393,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   usernameField: {fileID: 722170861}
   passwordField: {fileID: 1060641649}
-  registerButton: {fileID: 1807055394}
-  backButton: {fileID: 0}
+  reglogButton: {fileID: 1807055394}
+  backButton: {fileID: 1652676697}
 --- !u!1 &419820141
 GameObject:
   m_ObjectHideFlags: 0

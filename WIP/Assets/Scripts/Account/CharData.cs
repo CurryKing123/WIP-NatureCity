@@ -4,13 +4,12 @@ using System.Collections.Generic;
 using UnityEngine;
 
     [Serializable]
-    public class MyAccount
+    public class CharArray
     {
-
-        public Data[] data;
+        public CharData[] data;
     }
     [Serializable]
-    public class Data
+    public class CharData
     {
         public string username;
         public string password;

@@ -12,7 +12,7 @@ public class Account : MonoBehaviour
 {
     public InputField usernameField;
     public InputField passwordField;
-    public Button registerButton;
+    public Button reglogButton;
     public Button backButton;
     public void CallRegister()
     {
@@ -72,25 +72,13 @@ public class Account : MonoBehaviour
             }
         }
     }
-    [Serializable]
-    public class MyAccount
-    {
-
-        public Data[] data;
-    }
-    [Serializable]
-    public class Data
-    {
-        public string username;
-        public string password;
-        public int user_id;
-    }
+    
 
     
     ///Need 8 Characters To Interact With The Button
-     void VerifyInputs()
+    public void VerifyInputs()
     {
-        registerButton.interactable = (usernameField.text.Length >= 8 && passwordField.text.Length >= 8);
+        reglogButton.interactable = (usernameField.text.Length >= 8 && passwordField.text.Length >= 8);
     }
 
     public void GoBack()
