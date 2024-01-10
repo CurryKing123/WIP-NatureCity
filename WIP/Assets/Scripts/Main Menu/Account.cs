@@ -22,6 +22,14 @@ public class Account : MonoBehaviour
     {
         StartCoroutine(Login());
     }
+    private void CallChar(int myAccountID)
+    {
+        StartCoroutine(GetChar(myAccountID));
+    }
+    private void PostChar(int myAccountID)
+    {
+        StartCoroutine(MakeChar(myAccountID));
+    }
     
     ///Register Button Interaction
     IEnumerator Register()
@@ -31,13 +39,16 @@ public class Account : MonoBehaviour
             www.SetRequestHeader("key", "1");
             yield return www.SendWebRequest();
 
+            MyAccount myAccount = new MyAccount();
+            
+
             if (www.result != UnityWebRequest.Result.Success)
             {
                 Debug.Log(www.error);
             }
             else
             {
-                Debug.Log("Registration Complete!");
+                Debug.Log("Registration Complete");
             }
         }
     }
@@ -53,6 +64,7 @@ public class Account : MonoBehaviour
             
             string dH = www.downloadHandler.text;
             myAccount = JsonUtility.FromJson<MyAccount>(dH);
+            
 
             if (www.result != UnityWebRequest.Result.Success) 
             {
@@ -62,14 +74,61 @@ public class Account : MonoBehaviour
             {
                 if(dH.Contains($"{usernameField.text}"))
                 {
+                    int myAccountID = myAccount.data[0].user_id;
                     Debug.Log("Login Successful!");
                     Debug.Log($"User: {myAccount.data[0].user_id}");
+                    CallChar(myAccountID);
                 }
                 else
                 {
                     Debug.Log("Incorrect Credentials");
                 }
             }
+        }
+    }
+
+    IEnumerator GetChar(int myAccountID)
+    {
+        using (UnityWebRequest www = UnityWebRequest.Get($"http://localhost:8002/char/get-char-by-id?user_id={myAccountID}"))
+        {
+            www.SetRequestHeader("key", "1");
+            yield return www.SendWebRequest();
+
+            CharArray myChar = new CharArray();
+            string dH = www.downloadHandler.text;
+            Debug.Log($"{dH.Length}");
+            myChar = JsonUtility.FromJson<CharArray>(dH);
+
+            if (www.result != UnityWebRequest.Result.Success) 
+            {
+                Debug.Log(www.error);
+            }
+            
+            else
+            {
+                if(dH.Length>29)
+                {
+                    Debug.Log("Logged in to something");
+                }
+                else
+                {
+                    Debug.Log("Making new character page");
+                    PostChar(myAccountID);
+                }
+            }
+        }
+    }
+    IEnumerator MakeChar(int myAccountID)
+    {
+        using (UnityWebRequest www = UnityWebRequest.Post($"http://localhost:8002/char/post-char", "{ \"user_id\": \"" + myAccountID + "\"}", "application/json"))
+        {
+            www.SetRequestHeader("key", "1");
+            yield return www.SendWebRequest();
+
+            CharArray myChar = new CharArray();
+            string dH = www.downloadHandler.text;
+            Debug.Log($"{dH}");
+            myChar = JsonUtility.FromJson<CharArray>(dH);
         }
     }
     

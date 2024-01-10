@@ -1,5 +1,6 @@
 UPDATE NATURE.user
-SET    user_name = ?,
+SET    user_id = ?,
+        user_name = ?,
        character_race = ?,
        equip_item_1 = ?,
        equip_item_2 = ?,
@@ -9,4 +10,4 @@ SET    user_name = ?,
        player_hp = ?,
        player_stamina = ?,
        player_status = ?
-WHERE  user_id = ?; 
+WHERE  char_id = ?; 

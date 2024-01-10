@@ -1,1 +1,1 @@
-DELETE FROM NATURE.user WHERE user_id=?;
+DELETE FROM NATURE.user WHERE char_id=?;

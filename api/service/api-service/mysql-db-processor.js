@@ -39,6 +39,7 @@ async function deleteMap(page = 1, req) {
   return dbProcessor(page, query, req);
 }
 
+//Character Info
 async function getChar(page = 1, req) {
   query = fs.readFileSync("./service/api-service/sql/char/get-char.sql");
   req.prepareStatement = [];
@@ -54,6 +55,7 @@ async function getCharById(page = 1, req) {
 
 async function postChar(page = 1, req) {
   let prepareStatement = [];
+  prepareStatement.push(req.body.user_id);
   prepareStatement.push(req.body.user_name);
   prepareStatement.push(req.body.character_race);// id from race table
   prepareStatement.push(req.body.equip_item_1);//  id from item table
@@ -71,6 +73,7 @@ async function postChar(page = 1, req) {
 
 async function putChar(page = 1, req) {
   let prepareStatement = [];
+  prepareStatement.push(req.query.user_id);
   prepareStatement.push(req.body.user_name);
   prepareStatement.push(req.body.character_race);// id from race table
   prepareStatement.push(req.body.equip_item_1);//  id from item table
@@ -81,7 +84,7 @@ async function putChar(page = 1, req) {
   prepareStatement.push(req.body.player_hp);// int value
   prepareStatement.push(req.body.player_stamina);//int value
   prepareStatement.push(req.body.player_status);// id from status table
-  prepareStatement.push(req.query.user_id);
+  prepareStatement.push(req.query.char_id);
   query = fs.readFileSync("./service/api-service/sql/char/put-char.sql");
   req.prepareStatement = prepareStatement;
   return dbProcessor(page, query, req);
@@ -90,7 +93,7 @@ async function putChar(page = 1, req) {
 async function deleteChar(page = 1, req) {
   query = fs.readFileSync("./service/api-service/sql/char/delete-char.sql");
   let prepareStatement = [];
-  prepareStatement.push(req.query.user_id);
+  prepareStatement.push(req.query.char_id);
   req.prepareStatement = prepareStatement;
   return dbProcessor(page, query, req);
 }

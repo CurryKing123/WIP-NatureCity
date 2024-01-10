@@ -1,5 +1,6 @@
 INSERT INTO `NATURE`.`user`
-            ( `user_name`,
+            ( `user_id`,
+            `user_name`,
              `character_race`,
              `equip_item_1`,
              `equip_item_2`,
@@ -10,6 +11,7 @@ INSERT INTO `NATURE`.`user`
              `player_stamina`,
              `player_status`)
 VALUES      (?,
+            ?,
              ?,
              ?,
              ?,
