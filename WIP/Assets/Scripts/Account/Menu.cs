@@ -7,8 +7,9 @@ using UnityEngine.SceneManagement;
 using System.Text.RegularExpressions;
 using System.Text;
 using System;
+using System.IO;
 
-public class Account : MonoBehaviour
+public class Menu : MonoBehaviour
 {
     public InputField usernameField;
     public InputField passwordField;
@@ -30,6 +31,10 @@ public class Account : MonoBehaviour
     {
         StartCoroutine(MakeChar(myAccountID));
     }
+    public void GetAccData(string dH)
+    {
+        System.IO.File.WriteAllText(Application.persistentDataPath + "CharData.json", dH);
+    }
     
     ///Register Button Interaction
     IEnumerator Register()
@@ -38,8 +43,8 @@ public class Account : MonoBehaviour
         {
             www.SetRequestHeader("key", "1");
             yield return www.SendWebRequest();
-
             MyAccount myAccount = new MyAccount();
+            
             
 
             if (www.result != UnityWebRequest.Result.Success)
@@ -51,6 +56,7 @@ public class Account : MonoBehaviour
                 Debug.Log("Registration Complete");
             }
         }
+        
     }
 
     IEnumerator Login()
@@ -61,9 +67,9 @@ public class Account : MonoBehaviour
             yield return www.SendWebRequest();
 
             MyAccount myAccount = new MyAccount();
-            
             string dH = www.downloadHandler.text;
             myAccount = JsonUtility.FromJson<MyAccount>(dH);
+            Debug.Log(dH);
             
 
             if (www.result != UnityWebRequest.Result.Success) 
@@ -76,7 +82,7 @@ public class Account : MonoBehaviour
                 {
                     int myAccountID = myAccount.data[0].user_id;
                     Debug.Log("Login Successful!");
-                    Debug.Log($"User: {myAccount.data[0].user_id}");
+                    Debug.Log($"User: {myAccountID}");
                     CallChar(myAccountID);
                 }
                 else
@@ -106,14 +112,25 @@ public class Account : MonoBehaviour
             
             else
             {
-                if(dH.Length>29)
+                if(dH.Length > 29)
                 {
-                    Debug.Log("Logged in to something");
+                    int myCharID = myChar.data[0].user_id;
+                    if(myCharID == myAccountID)
+                    {
+                        Debug.Log("Logged in to something");
+                        GetAccData(dH);
+                        SceneManager.LoadScene(0);
+                    }
+                    else
+                    {
+                        Debug.Log(www.error);
+                    }
                 }
                 else
                 {
-                    Debug.Log("Making new character page");
+                    Debug.Log("Logging in to new account");
                     PostChar(myAccountID);
+                    SceneManager.LoadScene(4);
                 }
             }
         }
@@ -124,11 +141,6 @@ public class Account : MonoBehaviour
         {
             www.SetRequestHeader("key", "1");
             yield return www.SendWebRequest();
-
-            CharArray myChar = new CharArray();
-            string dH = www.downloadHandler.text;
-            Debug.Log($"{dH}");
-            myChar = JsonUtility.FromJson<CharArray>(dH);
         }
     }
     
