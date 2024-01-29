@@ -11,10 +11,10 @@ using System.IO;
 
 public class Menu : MonoBehaviour
 {
-    public InputField usernameField;
-    public InputField passwordField;
-    public Button reglogButton;
-    public Button backButton;
+    [SerializeField] private InputField usernameField;
+    [SerializeField] private InputField passwordField;
+    [SerializeField] private Button reglogButton;
+    [SerializeField] private Button backButton;
     public void CallRegister()
     {
         StartCoroutine(Register());
@@ -33,7 +33,8 @@ public class Menu : MonoBehaviour
     }
     public void GetAccData(string dH)
     {
-        System.IO.File.WriteAllText(Application.persistentDataPath + "CharData.json", dH);
+        File.WriteAllText(Application.persistentDataPath + "CharData.json", dH);
+        Debug.Log(Application.persistentDataPath);
     }
     
     ///Register Button Interaction
@@ -129,11 +130,11 @@ public class Menu : MonoBehaviour
                 else
                 {
                     Debug.Log("Logging in to new account");
+                    Debug.Log(Application.persistentDataPath);
                     PostChar(myAccountID);
-                    SceneManager.LoadScene(0);
+                    yield return GetChar(myAccountID);
                 }
             }
-            CallChar(myAccountID);
         }
     }
     IEnumerator MakeChar(int myAccountID)
