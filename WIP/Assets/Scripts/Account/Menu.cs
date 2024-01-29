@@ -130,9 +130,10 @@ public class Menu : MonoBehaviour
                 {
                     Debug.Log("Logging in to new account");
                     PostChar(myAccountID);
-                    SceneManager.LoadScene(4);
+                    SceneManager.LoadScene(0);
                 }
             }
+            CallChar(myAccountID);
         }
     }
     IEnumerator MakeChar(int myAccountID)
