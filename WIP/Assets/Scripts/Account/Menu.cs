@@ -31,7 +31,7 @@ public class Menu : MonoBehaviour
     {
         StartCoroutine(MakeChar(myAccountID));
     }
-    public void GetAccData(string dH)
+    public static void GetAccData(string dH)
     {
         File.WriteAllText(Application.persistentDataPath + "CharData.json", dH);
         Debug.Log(Application.persistentDataPath);
