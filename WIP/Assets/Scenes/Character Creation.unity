@@ -204,7 +204,6 @@ GameObject:
   - component: {fileID: 341678062}
   - component: {fileID: 341678061}
   - component: {fileID: 341678065}
-  - component: {fileID: 341678066}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -308,25 +307,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 341678060}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 99b02387a0051c243843743e5b3897e0, type: 3}
+  m_Script: {fileID: 11500000, guid: 0154b9081e2aad94c852cfe673024ac9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  usernameField: {fileID: 722170861}
-  passwordField: {fileID: 0}
-  reglogButton: {fileID: 1807055394}
+  nameField: {fileID: 722170861}
+  createButton: {fileID: 1807055394}
   backButton: {fileID: 1835486584}
---- !u!114 &341678066
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 341678060}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f425fc8bbcaab5945aebb5b7c518cfbc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &419820141
 GameObject:
   m_ObjectHideFlags: 0
@@ -511,7 +497,7 @@ GameObject:
   - component: {fileID: 722170862}
   - component: {fileID: 722170861}
   m_Layer: 5
-  m_Name: Username Input
+  m_Name: Name Input
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1069,7 +1055,7 @@ GameObject:
   - component: {fileID: 1807055395}
   - component: {fileID: 1807055394}
   m_Layer: 5
-  m_Name: Login
+  m_Name: Create
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1138,7 +1124,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1807055395}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 341678065}
+        m_TargetAssemblyTypeName: CharCreation, Assembly-CSharp
+        m_MethodName: CreateName
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1807055395
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1260,8 +1258,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 341678066}
-        m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
+      - m_Target: {fileID: 341678065}
+        m_TargetAssemblyTypeName: CharCreation, Assembly-CSharp
         m_MethodName: GoBack
         m_Mode: 1
         m_Arguments:

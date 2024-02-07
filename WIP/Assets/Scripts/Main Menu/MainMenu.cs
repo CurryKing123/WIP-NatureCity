@@ -35,7 +35,7 @@ public class MainMenu : MonoBehaviour
         if (myChar.data[0].character_race == "")
         {
             Debug.Log("New Character");
-            SceneManager.LoadScene(3);
+            SceneManager.LoadScene(4);
         }
     }
 }
