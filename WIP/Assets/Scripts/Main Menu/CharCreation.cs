@@ -25,6 +25,7 @@ public class CharCreation : MonoBehaviour
             string json = JsonUtility.ToJson(myChar, true);
             File.WriteAllText(Application.persistentDataPath + "CharData.json", json);
             Debug.Log("Username Acceptable");
+            Debug.Log(myChar.data[0].char_id);
             StartCoroutine(CreateUsername());
         }
         else 
@@ -36,7 +37,11 @@ public class CharCreation : MonoBehaviour
     IEnumerator CreateUsername()
     {
         string json = File.ReadAllText(Application.persistentDataPath + "CharData.json");
-        using (UnityWebRequest www = UnityWebRequest.Put("http://localhost:8002/char/put-char", json))
+        CharArray myChar = new CharArray();
+        myChar = JsonUtility.FromJson<CharArray>(json);
+        string jsonUse = JsonUtility.ToJson(myChar.data[0], true);
+        int charID = myChar.data[0].char_id;
+        using (UnityWebRequest www = UnityWebRequest.Put($"http://localhost:8002/char/put-char?char_id={charID}", jsonUse))
         {
             www.SetRequestHeader("key", "1");
             yield return www.SendWebRequest();

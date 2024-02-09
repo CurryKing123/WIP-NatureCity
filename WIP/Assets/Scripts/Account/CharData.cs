@@ -11,6 +11,7 @@ using UnityEngine;
     [Serializable]
     public class CharData
     {
+        public int char_id;
         public int user_id;
         public string user_name;
         public string character_race;

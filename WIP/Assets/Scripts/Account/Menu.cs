@@ -44,8 +44,11 @@ public class Menu : MonoBehaviour
         {
             www.SetRequestHeader("key", "1");
             yield return www.SendWebRequest();
+
             MyAccount myAccount = new MyAccount();
-            
+            string dH = www.downloadHandler.text;
+            myAccount = JsonUtility.FromJson<MyAccount>(dH);
+            int myAccountID = myAccount.data[0].user_id;
             
 
             if (www.result != UnityWebRequest.Result.Success)
@@ -54,6 +57,7 @@ public class Menu : MonoBehaviour
             }
             else
             {
+                PostChar(myAccountID);
                 Debug.Log("Registration Complete");
             }
         }
@@ -103,7 +107,7 @@ public class Menu : MonoBehaviour
 
             CharArray myChar = new CharArray();
             string dH = www.downloadHandler.text;
-            Debug.Log($"{dH.Length}");
+            Debug.Log(dH);
             myChar = JsonUtility.FromJson<CharArray>(dH);
 
             if (www.result != UnityWebRequest.Result.Success) 
@@ -113,6 +117,7 @@ public class Menu : MonoBehaviour
             
             else
             {
+                //Ideally should be if an account row exists in table
                 if(dH.Length > 29)
                 {
                     int myCharID = myChar.data[0].user_id;
