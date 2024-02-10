@@ -8,6 +8,7 @@ using System.Text.RegularExpressions;
 using System.Text;
 using System;
 using System.IO;
+using System.Threading;
 
 public class Menu : MonoBehaviour
 {
@@ -45,19 +46,12 @@ public class Menu : MonoBehaviour
             www.SetRequestHeader("key", "1");
             yield return www.SendWebRequest();
 
-            MyAccount myAccount = new MyAccount();
-            string dH = www.downloadHandler.text;
-            myAccount = JsonUtility.FromJson<MyAccount>(dH);
-            int myAccountID = myAccount.data[0].user_id;
-            
-
             if (www.result != UnityWebRequest.Result.Success)
             {
                 Debug.Log(www.error);
             }
             else
             {
-                PostChar(myAccountID);
                 Debug.Log("Registration Complete");
             }
         }
@@ -117,27 +111,19 @@ public class Menu : MonoBehaviour
             
             else
             {
-                //Ideally should be if an account row exists in table
-                if(dH.Length > 29)
-                {
-                    int myCharID = myChar.data[0].user_id;
-                    if(myCharID == myAccountID)
-                    {
-                        Debug.Log("Logged in to something");
-                        GetAccData(dH);
-                        SceneManager.LoadScene(0);
-                    }
-                    else
-                    {
-                        Debug.Log(www.error);
-                    }
-                }
-                else
+                if(myChar.data.Length == 0)
                 {
                     Debug.Log("Logging in to new account");
                     Debug.Log(Application.persistentDataPath);
                     PostChar(myAccountID);
+                    Thread.Sleep(1000);
                     yield return GetChar(myAccountID);
+                }
+                else
+                {
+                    Debug.Log("Logged in to something");
+                    GetAccData(dH);
+                    SceneManager.LoadScene(0);
                 }
             }
         }
