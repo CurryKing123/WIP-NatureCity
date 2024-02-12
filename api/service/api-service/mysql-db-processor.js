@@ -73,7 +73,7 @@ async function postChar(page = 1, req) {
 
 async function putChar(page = 1, req) {
   let prepareStatement = [];
-  prepareStatement.push(req.query.user_id);
+  prepareStatement.push(req.body.user_id);
   prepareStatement.push(req.body.user_name);
   prepareStatement.push(req.body.character_race);// id from race table
   prepareStatement.push(req.body.equip_item_1);//  id from item table

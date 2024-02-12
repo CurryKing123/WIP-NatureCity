@@ -8,12 +8,17 @@ using System.Text.RegularExpressions;
 using System.Text;
 using System;
 using System.IO;
+using System.Threading;
 using Unity.VisualScripting;
 public class CharCreation : MonoBehaviour
 {
     [SerializeField] private InputField nameField;
     [SerializeField] private Button createButton;
     [SerializeField] private Button backButton;
+    public void CreateUser()
+    {
+        StartCoroutine(CreateUsername());
+    }
     public void CreateName()
     {
         if (nameField.text.Length > 1 && nameField.text.Length < 9)
@@ -26,7 +31,7 @@ public class CharCreation : MonoBehaviour
             File.WriteAllText(Application.persistentDataPath + "CharData.json", json);
             Debug.Log("Username Acceptable");
             Debug.Log(myChar.data[0].char_id);
-            StartCoroutine(CreateUsername());
+            CreateUser();
         }
         else 
         {
@@ -39,8 +44,9 @@ public class CharCreation : MonoBehaviour
         string json = File.ReadAllText(Application.persistentDataPath + "CharData.json");
         CharArray myChar = new CharArray();
         myChar = JsonUtility.FromJson<CharArray>(json);
-        string jsonUse = JsonUtility.ToJson(myChar.data[0], true);
+        string jsonUse = JsonUtility.ToJson(myChar.data[0], true);  
         int charID = myChar.data[0].char_id;
+        Debug.Log(jsonUse);
         using (UnityWebRequest www = UnityWebRequest.Put($"http://localhost:8002/char/put-char?char_id={charID}", jsonUse))
         {
             www.SetRequestHeader("key", "1");
@@ -52,7 +58,7 @@ public class CharCreation : MonoBehaviour
             }
             else
             {
-                Debug.Log("Upload complete!");
+                Debug.Log(www.downloadHandler.text);
             }
         }
     }
