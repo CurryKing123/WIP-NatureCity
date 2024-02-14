@@ -9,7 +9,7 @@ using UnityEngine;
         public CharData[] data;
     }
     [Serializable]
-    public class CharData
+    public struct CharData
     {
         public int char_id;
         public int user_id;

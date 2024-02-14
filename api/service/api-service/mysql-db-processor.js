@@ -84,8 +84,8 @@ async function putChar(page = 1, req) {
   prepareStatement.push(req.body.player_hp);// int value
   prepareStatement.push(req.body.player_stamina);//int value
   prepareStatement.push(req.body.player_status);// id from status table
-  prepareStatement.push(req.query.char_id);
   query = fs.readFileSync("./service/api-service/sql/char/put-char.sql");
+  prepareStatement.push(req.query.char_id);
   req.prepareStatement = prepareStatement;
   return dbProcessor(page, query, req);
 }
