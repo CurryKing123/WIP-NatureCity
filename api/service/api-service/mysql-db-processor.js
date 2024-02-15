@@ -356,6 +356,51 @@ async function deleteBag(page = 1, req) {
   return dbProcessor(page, query, req);
 }
 
+//Race
+
+async function getRace(page = 1, req) {
+  query = fs.readFileSync("./service/api-service/sql/race/get-race.sql");
+  req.prepareStatement = [];
+  return dbProcessor(page, query, req);
+}
+
+async function getRaceByName(page = 1, req) {
+  query = fs.readFileSync("./service/api-service/sql/race/get-race.sql");
+  req.prepareStatement = [];
+  return dbProcessor(page, query, req);
+}
+
+async function postRace(page = 1, req) {
+  let prepareStatement = [];
+  prepareStatement.push(req.body.race_name);
+  prepareStatement.push(req.body.move_speed);
+  prepareStatement.push(req.body.resist);
+  prepareStatement.push(req.body.carry_amount);
+  query = fs.readFileSync("./service/api-service/sql/race/post-race.sql");
+  req.prepareStatement = prepareStatement;
+  return dbProcessor(page, query, req);
+}
+
+async function putRace(page = 1, req) {
+  let prepareStatement = [];
+  prepareStatement.push(req.body.race_name);
+  prepareStatement.push(req.body.move_speed);
+  prepareStatement.push(req.body.resist);
+  prepareStatement.push(req.body.carry_amount);
+  prepareStatement.push(req.query.race_id);
+  query = fs.readFileSync("./service/api-service/sql/race/put-race.sql");
+  req.prepareStatement = prepareStatement;
+  return dbProcessor(page, query, req);
+}
+
+async function deleteRace(page = 1, req) {
+  query = fs.readFileSync("./service/api-service/sql/race/del-race.sql");
+  let prepareStatement = [];
+  prepareStatement.push(req.query.race_id);
+  req.prepareStatement = prepareStatement;
+  return dbProcessor(page, query, req);
+}
+
 async function dbProcessor(page = 1, query, req) {
   let config = mysql_config;
   let rows = [];
@@ -412,5 +457,10 @@ module.exports = {
   getBag,
   postBag,
   deleteBag,
-  putBag
+  putBag,
+  getRace,
+  getRaceByName,
+  postRace,
+  deleteRace,
+  putRace
 };

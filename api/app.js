@@ -12,6 +12,7 @@ const accRouter = require("./service/routes/account-router");
 const posRouter = require("./service/routes/position-router");
 const itemRouter = require("./service/routes/item-router");
 const bagRouter = require("./service/routes/bag-router");
+const raceRouter = require("./service/routes/race-router");
 
 
 app.use(express.json())
@@ -27,6 +28,7 @@ app.use("/account", accRouter)
 app.use("/position", posRouter)
 app.use("/item", itemRouter)
 app.use("/bag", bagRouter)
+app.use("/race", raceRouter)
 
 
 

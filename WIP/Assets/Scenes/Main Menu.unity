@@ -152,6 +152,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f8540c28c7f5c14692741b4b33b323a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  charData:
+    data: []
 --- !u!4 &5086465
 Transform:
   m_ObjectHideFlags: 0
@@ -252,7 +254,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 281501814}
         m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
-        m_MethodName: GoToLogin
+        m_MethodName: LogInOut
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -554,6 +556,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   alertText: {fileID: 1325340146}
+  playButton: {fileID: 937987446}
+  logButton: {fileID: 16297769}
+  regButton: {fileID: 70458831}
 --- !u!1 &289281716
 GameObject:
   m_ObjectHideFlags: 0
@@ -870,7 +875,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &937987445
 RectTransform:
   m_ObjectHideFlags: 0

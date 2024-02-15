@@ -1,8 +1,11 @@
+using System;
+using System.IO;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Networking;
 using UnityEngine.AI;
 
 public class PlayerController : MonoBehaviour
@@ -13,10 +16,42 @@ public class PlayerController : MonoBehaviour
     private bool isMoving = false;
     private bool isMovingToResource = false;
     private Transform targetResource;
+    public void CallRace(string race)
+    {
+        StartCoroutine(GetRace(race));
+    }
 
     private void Start()
     {
+        string dH = (File.ReadAllText(Application.persistentDataPath + "CharData.json"));
+        CharArray myChar = new CharArray();
+        myChar = JsonUtility.FromJson<CharArray>(dH);
+        string charRace = myChar.data[0].character_race;
+        CallRace(charRace);
+
+
         agent = GetComponent<NavMeshAgent>();
+    }
+
+    IEnumerator GetRace(string race)
+    {
+        using (UnityWebRequest www = UnityWebRequest.Get($"http://localhost:8002/race/get-race-by-name?{race}"))
+        {
+            www.SetRequestHeader("key", "1");
+            yield return www.SendWebRequest();
+
+            if (www.result != UnityWebRequest.Result.Success) 
+            {
+                Debug.Log(www.error);
+            }
+            else
+            {
+                Races charRace = new Races();
+                string dH = www.downloadHandler.text;
+                charRace = JsonUtility.FromJson<Races>(dH);
+                agent.speed = charRace.data[0].move_speed;
+            }
+        }
     }
 
     private void Update()
@@ -25,7 +60,6 @@ public class PlayerController : MonoBehaviour
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
-            agent.speed = 3.5f;
             
 
             if (Physics.Raycast(ray, out hit))
@@ -61,13 +95,7 @@ public class PlayerController : MonoBehaviour
         if (other.CompareTag("Resource") && (isMovingToResource))
         {
             agent.speed = 0f;
-            ResourceManager resource = other.GetComponent<ResourceManager>();
-
-            if (resource.resourceCount > 0)
-            {
-                // Start gathering animation and process
-                resource.StartGathering(transform);
-            }
+            
         }
     }
     

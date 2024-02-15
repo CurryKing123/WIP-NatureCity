@@ -31,6 +31,7 @@ public class CharCreation : MonoBehaviour
             CharArray myChar = new CharArray();
             myChar = JsonUtility.FromJson<CharArray>(dH);
             myChar.data[0].user_name = nameField.text;
+            myChar.data[0].character_race = "fox";
             string json = JsonUtility.ToJson(myChar, true);
 
             //Replacing old json with new one that has a new username

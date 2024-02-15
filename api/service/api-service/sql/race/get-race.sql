@@ -1,0 +1,1 @@
+SELECT * FROM NATURE.character_race;

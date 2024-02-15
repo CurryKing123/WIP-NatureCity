@@ -1,9 +1,10 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor.PackageManager;
 using UnityEngine;
 
-[System.Serializable]
+[Serializable]
 public class PlayerData : MonoBehaviour
 {
     public float[] position;

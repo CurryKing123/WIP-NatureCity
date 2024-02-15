@@ -1,0 +1,1 @@
+DELETE FROM NATURE.character_race WHERE race_id=?;
