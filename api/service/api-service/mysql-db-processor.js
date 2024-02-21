@@ -170,6 +170,14 @@ async function getResNode(page = 1, req) {
   return dbProcessor(page, query, req);
 }
 
+async function getResNodeById(page = 1, req) {
+  query = fs.readFileSync("./service/api-service/sql/resource_node/get-resource_node-by-id.sql");
+  let prepareStatement = [];
+  prepareStatement.push(req.query.resource_node_id);
+  req.prepareStatement = prepareStatement;
+  return dbProcessor(page, query, req);
+}
+
 async function postResNode(page = 1, req) {
   let prepareStatement = [];
   prepareStatement.push(req.body.resource_node_name);
@@ -430,6 +438,7 @@ module.exports = {
   putChar,
   deleteChar,
   getResNode,
+  getResNodeById,
   postResNode,
   putResNode,
   deleteResNode,

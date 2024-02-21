@@ -16,6 +16,9 @@ public class PlayerController : MonoBehaviour
     private bool isMoving = false;
     private bool isMovingToResource = false;
     private Transform targetResource;
+    public int carryAmount;
+    public int playerInventory;
+
     public void CallRace(string race)
     {
         StartCoroutine(GetRace(race));
@@ -32,28 +35,6 @@ public class PlayerController : MonoBehaviour
 
         agent = GetComponent<NavMeshAgent>();
     }
-
-    IEnumerator GetRace(string race)
-    {
-        using (UnityWebRequest www = UnityWebRequest.Get($"http://localhost:8002/race/get-race-by-name?{race}"))
-        {
-            www.SetRequestHeader("key", "1");
-            yield return www.SendWebRequest();
-
-            if (www.result != UnityWebRequest.Result.Success) 
-            {
-                Debug.Log(www.error);
-            }
-            else
-            {
-                Races charRace = new Races();
-                string dH = www.downloadHandler.text;
-                charRace = JsonUtility.FromJson<Races>(dH);
-                agent.speed = charRace.data[0].move_speed;
-            }
-        }
-    }
-
     private void Update()
     {
         if (Input.GetMouseButtonDown(1))
@@ -94,8 +75,15 @@ public class PlayerController : MonoBehaviour
         
         if (other.CompareTag("Resource") && (isMovingToResource))
         {
-            agent.speed = 0f;
-            
+            if (playerInventory == carryAmount)
+            {
+                Debug.Log("Inventory Full");
+            }
+            else
+            {
+                ResourceManager resMan = other.GetComponent<ResourceManager>();
+                resMan.StartGathering(transform);
+            }
         }
     }
     
@@ -111,6 +99,29 @@ public class PlayerController : MonoBehaviour
     {
         agent.SetDestination(destination);
         isMoving = true;
+    }
+
+    //Get race data for current player
+    IEnumerator GetRace(string race)
+    {
+        using (UnityWebRequest www = UnityWebRequest.Get($"http://localhost:8002/race/get-race-by-name?{race}"))
+        {
+            www.SetRequestHeader("key", "1");
+            yield return www.SendWebRequest();
+
+            if (www.result != UnityWebRequest.Result.Success) 
+            {
+                Debug.Log(www.error);
+            }
+            else
+            {
+                Races charRace = new Races();
+                string dH = www.downloadHandler.text;
+                charRace = JsonUtility.FromJson<Races>(dH);
+                agent.speed = charRace.data[0].move_speed;
+                carryAmount = charRace.data[0].carry_amount;
+            }
+        }
     }
 
 

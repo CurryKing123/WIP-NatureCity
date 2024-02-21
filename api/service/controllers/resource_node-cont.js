@@ -1,5 +1,6 @@
 const {
     getResNode,
+    getResNodeById,
     postResNode,
     deleteResNode,
     putResNode,
@@ -8,6 +9,14 @@ const {
   exports.getResNodeFromDb = async (req, res) => {
     try {
       res.json(await getResNode(req.query.page, req));
+    } catch (err) {
+      res.status(422).json({ message: err.message });
+    }
+  };
+
+  exports.getResNodeByIdFromDb = async (req, res) => {
+    try {
+      res.json(await getResNodeById(req.query.page, req));
     } catch (err) {
       res.status(422).json({ message: err.message });
     }

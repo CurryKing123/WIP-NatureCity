@@ -1,0 +1,1 @@
+SELECT * FROM NATURE.resource_node where resource_node_id=?;
