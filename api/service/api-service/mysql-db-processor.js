@@ -164,6 +164,12 @@ async function deleteRes(page = 1, req) {
   return dbProcessor(page, query, req);
 }
 
+
+
+//Resource Nodes
+
+
+
 async function getResNode(page = 1, req) {
   query = fs.readFileSync("./service/api-service/sql/resource_node/get-resource_node.sql");
   req.prepareStatement = [];
@@ -183,6 +189,7 @@ async function postResNode(page = 1, req) {
   prepareStatement.push(req.body.resource_node_name);
   prepareStatement.push(req.body.resource_amount);
   prepareStatement.push(req.body.gathering_time);
+  prepareStatement.push(req.body.resource_id);
   query = fs.readFileSync("./service/api-service/sql/resource_node/post-resource_node.sql");
   req.prepareStatement = prepareStatement;
   return dbProcessor(page, query, req);
@@ -193,6 +200,7 @@ async function putResNode(page = 1, req) {
   prepareStatement.push(req.body.resource_node_name);
   prepareStatement.push(req.body.resource_amount);
   prepareStatement.push(req.body.gathering_time);
+  prepareStatement.push(req.body.resource_id);
   prepareStatement.push(req.query.resource_node_id);
   query = fs.readFileSync("./service/api-service/sql/resource_node/put-resource_node.sql");
   req.prepareStatement = prepareStatement;
@@ -290,6 +298,12 @@ async function deletePos(page = 1, req) {
   return dbProcessor(page, query, req);
 }
 
+
+
+//Item
+
+
+
 async function getItem(page = 1, req) {
   query = fs.readFileSync("./service/api-service/sql/item/get-item.sql");
   req.prepareStatement = [];
@@ -325,6 +339,12 @@ async function deleteItem(page = 1, req) {
   return dbProcessor(page, query, req);
 }
 
+
+
+//Bag
+
+
+
 async function getBag(page = 1, req) {
   query = fs.readFileSync("./service/api-service/sql/bag/get-bag.sql");
   req.prepareStatement = [];
@@ -333,11 +353,8 @@ async function getBag(page = 1, req) {
 
 async function postBag(page = 1, req) {
   let prepareStatement = [];
-  prepareStatement.push(req.body.item_id);
-  prepareStatement.push(req.body.item_weight);
+  prepareStatement.push(req.body.bag_name);
   prepareStatement.push(req.body.item_bag_capacity);
-  prepareStatement.push(req.body.item_quantity);
-  prepareStatement.push(req.body.resource_id);
   query = fs.readFileSync("./service/api-service/sql/bag/post-bag.sql");
   req.prepareStatement = prepareStatement;
   return dbProcessor(page, query, req);
@@ -345,12 +362,9 @@ async function postBag(page = 1, req) {
 
 async function putBag(page = 1, req) {
   let prepareStatement = [];
-  prepareStatement.push(req.body.item_id);
-  prepareStatement.push(req.body.item_weight);
+  prepareStatement.push(req.body.bag_name);
   prepareStatement.push(req.body.item_bag_capacity);
-  prepareStatement.push(req.body.item_quantity);
-  prepareStatement.push(req.body.resource_id);
-  prepareStatement.push(req.query.item_bag_id);
+  prepareStatement.push(req.query.bag_id);
   query = fs.readFileSync("./service/api-service/sql/bag/put-bag.sql");
   req.prepareStatement = prepareStatement;
   return dbProcessor(page, query, req);
@@ -359,12 +373,16 @@ async function putBag(page = 1, req) {
 async function deleteBag(page = 1, req) {
   query = fs.readFileSync("./service/api-service/sql/bag/delete-bag.sql");
   let prepareStatement = [];
-  prepareStatement.push(req.query.item_bag_id);
+  prepareStatement.push(req.query.bag_id);
   req.prepareStatement = prepareStatement;
   return dbProcessor(page, query, req);
 }
 
+
+
 //Race
+
+
 
 async function getRace(page = 1, req) {
   query = fs.readFileSync("./service/api-service/sql/race/get-race.sql");
@@ -408,6 +426,62 @@ async function deleteRace(page = 1, req) {
   req.prepareStatement = prepareStatement;
   return dbProcessor(page, query, req);
 }
+
+
+
+//Inventory
+
+
+
+async function getInv(page = 1, req) {
+  query = fs.readFileSync("./service/api-service/sql/inventory/get-inv.sql");
+  req.prepareStatement = [];
+  return dbProcessor(page, query, req);
+}
+
+async function getInvByCount(page = 1, req) {
+  query = fs.readFileSync("./service/api-service/sql/inventory/get-inv-by-count.sql");
+  req.prepareStatement = [];
+  return dbProcessor(page, query, req);
+}
+
+async function getInvById(page = 1, req) {
+  query = fs.readFileSync("./service/api-service/sql/inventory/get-inv-by-id.sql");
+  req.prepareStatement = [];
+  return dbProcessor(page, query, req);
+}
+
+async function postInv(page = 1, req) {
+  let prepareStatement = [];
+  prepareStatement.push(req.body.char_id);
+  prepareStatement.push(req.body.item_id);
+  prepareStatement.push(req.body.item_amount);
+  query = fs.readFileSync("./service/api-service/sql/inventory/post-inv.sql");
+  req.prepareStatement = prepareStatement;
+  return dbProcessor(page, query, req);
+}
+
+async function putInv(page = 1, req) {
+  let prepareStatement = [];
+  prepareStatement.push(req.body.char_id);
+  prepareStatement.push(req.body.item_id);
+  prepareStatement.push(req.body.item_amount);
+  query = fs.readFileSync("./service/api-service/sql/inventory/put-inv.sql");
+  req.prepareStatement = prepareStatement;
+  return dbProcessor(page, query, req);
+}
+
+async function deleteInv(page = 1, req) {
+  query = fs.readFileSync("./service/api-service/sql/inventory/del-inv.sql");
+  let prepareStatement = [];
+  prepareStatement.push(req.query.item_count);
+  req.prepareStatement = prepareStatement;
+  return dbProcessor(page, query, req);
+}
+
+
+
+
 
 async function dbProcessor(page = 1, query, req) {
   let config = mysql_config;
@@ -471,5 +545,11 @@ module.exports = {
   getRaceByName,
   postRace,
   deleteRace,
-  putRace
+  putRace,
+  getInv,
+  getInvById,
+  getInvByCount,
+  postInv,
+  deleteInv,
+  putInv
 };

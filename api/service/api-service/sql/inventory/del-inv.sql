@@ -1,0 +1,1 @@
+DELETE FROM NATURE.inventory WHERE item_amount=?;

@@ -1,1 +1,1 @@
-DELETE FROM NATURE.bag WHERE item_bag_id=?;
+DELETE FROM NATURE.bag WHERE bag_id=?;

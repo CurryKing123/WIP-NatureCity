@@ -1,0 +1,1 @@
+SELECT * FROM NATURE.inventory where char_id=?;
