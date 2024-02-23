@@ -18,6 +18,7 @@ public class PlayerController : MonoBehaviour
     private Transform targetResource;
     public int carryAmount;
     public int playerInventory;
+    public int charId;
 
     public void CallRace(string race)
     {
@@ -30,6 +31,8 @@ public class PlayerController : MonoBehaviour
         CharArray myChar = new CharArray();
         myChar = JsonUtility.FromJson<CharArray>(dH);
         string charRace = myChar.data[0].character_race;
+        charId = myChar.data[0].char_id;
+        
         CallRace(charRace);
 
 

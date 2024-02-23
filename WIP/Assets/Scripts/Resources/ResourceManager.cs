@@ -20,6 +20,9 @@ public class ResourceManager : MonoBehaviour
     public int resNodeId;
     public int resAmount;
     public float gatherTime;
+    public int resId;
+    public string resType;
+    public int itemId;
     public void Start()
     {
 
@@ -88,6 +91,49 @@ public class ResourceManager : MonoBehaviour
                 resNodes = JsonUtility.FromJson<ResourceNodes>(dH);
                 resAmount = resNodes.data[0].resource_amount;
                 gatherTime = resNodes.data[0].gathering_time;
+                resId = resNodes.data[0].resource_id;
+                StartCoroutine(GetResourceData(resId));
+            }
+        }
+    }
+    IEnumerator GetResourceData(int resId)
+    {
+        using (UnityWebRequest www = UnityWebRequest.Get($"http://localhost:8002/resource/get-resource-by-id?resource_id={resId}"))
+        {
+            www.SetRequestHeader("key", "1");
+            yield return www.SendWebRequest();
+
+            if (www.result != UnityWebRequest.Result.Success)
+            {
+                Debug.Log(www.error);
+            }
+            else
+            {
+                string dH = www.downloadHandler.text;
+                Resource res = new Resource();
+                res = JsonUtility.FromJson<Resource>(dH);
+                resType = res.data[0].resource_type;
+                StartCoroutine(GetItemData(resType));
+            }
+        }
+    }
+    IEnumerator GetItemData(string resType)
+    {
+        using (UnityWebRequest www = UnityWebRequest.Get($"http://localhost:8002/item/get-item-by-type?item_type={resType}"))
+        {
+            www.SetRequestHeader("key", "1");
+            yield return www.SendWebRequest();
+
+            if (www.result != UnityWebRequest.Result.Success)
+            {
+                Debug.Log(www.error);
+            }
+            else
+            {
+                string dH = www.downloadHandler.text;
+                Inventory inv = new Inventory();
+                inv = JsonUtility.FromJson<Inventory>(dH);
+                itemId = inv.data[0].item_id;
             }
         }
     }

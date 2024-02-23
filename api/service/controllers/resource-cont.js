@@ -1,5 +1,7 @@
 const {
     getRes,
+    getResById,
+    getResByType,
     postRes,
     deleteRes,
     putRes,
@@ -8,6 +10,22 @@ const {
   exports.getResFromDb = async (req, res) => {
     try {
       res.json(await getRes(req.query.page, req));
+    } catch (err) {
+      res.status(422).json({ message: err.message });
+    }
+  };
+
+  exports.getResByIdFromDb = async (req, res) => {
+    try {
+      res.json(await getResById(req.query.page, req));
+    } catch (err) {
+      res.status(422).json({ message: err.message });
+    }
+  };
+
+  exports.getResByTypeFromDb = async (req, res) => {
+    try {
+      res.json(await getResByType(req.query.page, req));
     } catch (err) {
       res.status(422).json({ message: err.message });
     }

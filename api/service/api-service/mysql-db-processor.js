@@ -39,7 +39,12 @@ async function deleteMap(page = 1, req) {
   return dbProcessor(page, query, req);
 }
 
+
+
 //Character Info
+
+
+
 async function getChar(page = 1, req) {
   query = fs.readFileSync("./service/api-service/sql/char/get-char.sql");
   req.prepareStatement = [];
@@ -98,6 +103,12 @@ async function deleteChar(page = 1, req) {
   return dbProcessor(page, query, req);
 }
 
+
+
+//Character Stats
+
+
+
 async function getCharStat(page = 1, req) {
   query = fs.readFileSync("./service/api-service/sql/charstat/get-charstat.sql");
   req.prepareStatement = [];
@@ -129,9 +140,31 @@ async function deleteCharStat(page = 1, req) {
   return dbProcessor(page, query, req);
 }
 
+
+
+//Resource
+
+
+
 async function getRes(page = 1, req) {
   query = fs.readFileSync("./service/api-service/sql/resource/get-resource.sql");
   req.prepareStatement = [];
+  return dbProcessor(page, query, req);
+}
+
+async function getResById(page = 1, req) {
+  query = fs.readFileSync("./service/api-service/sql/resource/get-resource-by-id.sql");
+  let prepareStatement = [];  
+  prepareStatement.push(req.query.resource_id);
+  req.prepareStatement = prepareStatement;
+  return dbProcessor(page, query, req);
+}
+
+async function getResByType(page = 1, req) {
+  query = fs.readFileSync("./service/api-service/sql/resource/get-resource-by-type.sql");
+  let prepareStatement = [];  
+  prepareStatement.push(req.query.resource_type);
+  req.prepareStatement = prepareStatement;
   return dbProcessor(page, query, req);
 }
 
@@ -258,7 +291,12 @@ async function deleteAccount(page = 1, req) {
   return dbProcessor(page, query, req);
 }
 
+
+
 ///position
+
+
+
 async function getPos(page = 1, req) {
   query = fs.readFileSync("./service/api-service/sql/position/get-pos.sql");
   req.prepareStatement = [];
@@ -391,8 +429,10 @@ async function getRace(page = 1, req) {
 }
 
 async function getRaceByName(page = 1, req) {
-  query = fs.readFileSync("./service/api-service/sql/race/get-race.sql");
-  req.prepareStatement = [];
+  query = fs.readFileSync("./service/api-service/sql/race/get-race-by-name.sql");
+  let prepareStatement = [];  
+  prepareStatement.push(req.query.race_name);
+  req.prepareStatement = prepareStatement;
   return dbProcessor(page, query, req);
 }
 
@@ -506,46 +546,58 @@ module.exports = {
   postMap,
   putMap,
   deleteMap,
+
   getChar,
   getCharById,
   postChar,
   putChar,
   deleteChar,
+
   getResNode,
   getResNodeById,
   postResNode,
   putResNode,
   deleteResNode,
+
   getRes,
+  getResById,
+  getResByType,
   postRes,
   putRes,
   deleteRes,
+
   getCharStat,
   postCharStat,
   putCharStat,
   deleteCharStat,
+
   getAccount,
   getAccountLogin,
   postAccount,
   putAccount,
   deleteAccount,
+
   getPos,
   postPos,
   deletePos,
   putPos,
+
   getItem,
   postItem,
   deleteItem,
   putItem,
+
   getBag,
   postBag,
   deleteBag,
   putBag,
+
   getRace,
   getRaceByName,
   postRace,
   deleteRace,
   putRace,
+
   getInv,
   getInvById,
   getInvByCount,

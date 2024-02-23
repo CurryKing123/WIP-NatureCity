@@ -16,4 +16,5 @@ public class ResNodeData
     public string resource_node_name;
     public int resource_amount;
     public float gathering_time;
+    public int resource_id;
 }
