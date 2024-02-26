@@ -348,6 +348,14 @@ async function getItem(page = 1, req) {
   return dbProcessor(page, query, req);
 }
 
+async function getItemByType(page = 1, req) {
+  query = fs.readFileSync("./service/api-service/sql/item/get-item-by-type.sql");
+  let prepareStatement = [];
+  prepareStatement.push(req.query.item_type);
+  req.prepareStatement = prepareStatement;
+  return dbProcessor(page, query, req);
+}
+
 async function postItem(page = 1, req) {
   let prepareStatement = [];
   prepareStatement.push(req.body.item_type);
@@ -481,13 +489,17 @@ async function getInv(page = 1, req) {
 
 async function getInvByCount(page = 1, req) {
   query = fs.readFileSync("./service/api-service/sql/inventory/get-inv-by-count.sql");
-  req.prepareStatement = [];
+  let prepareStatement = [];
+  prepareStatement.push(req.query.item_amount);
+  req.prepareStatement = prepareStatement;
   return dbProcessor(page, query, req);
 }
 
 async function getInvById(page = 1, req) {
   query = fs.readFileSync("./service/api-service/sql/inventory/get-inv-by-id.sql");
-  req.prepareStatement = [];
+  let prepareStatement = [];
+  prepareStatement.push(req.query.char_id);
+  req.prepareStatement = prepareStatement;
   return dbProcessor(page, query, req);
 }
 
@@ -506,6 +518,7 @@ async function putInv(page = 1, req) {
   prepareStatement.push(req.body.char_id);
   prepareStatement.push(req.body.item_id);
   prepareStatement.push(req.body.item_amount);
+  prepareStatement.push(req.query.inv_id);
   query = fs.readFileSync("./service/api-service/sql/inventory/put-inv.sql");
   req.prepareStatement = prepareStatement;
   return dbProcessor(page, query, req);
@@ -583,6 +596,7 @@ module.exports = {
   putPos,
 
   getItem,
+  getItemByType,
   postItem,
   deleteItem,
   putItem,

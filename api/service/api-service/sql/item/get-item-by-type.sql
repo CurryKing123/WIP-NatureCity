@@ -1,0 +1,1 @@
+SELECT * FROM NATURE.item where item_type=?;

@@ -1,5 +1,6 @@
 const {
     getItem,
+    getItemByType,
     postItem,
     deleteItem,
     putItem,
@@ -8,6 +9,14 @@ const {
   exports.getItemFromDb = async (req, res) => {
     try {
       res.json(await getItem(req.query.page, req));
+    } catch (err) {
+      res.status(422).json({ message: err.message });
+    }
+  };
+
+  exports.getItemByTypeFromDb = async (req, res) => {
+    try {
+      res.json(await getItemByType(req.query.page, req));
     } catch (err) {
       res.status(422).json({ message: err.message });
     }

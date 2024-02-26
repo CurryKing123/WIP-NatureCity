@@ -3,4 +3,4 @@ SET char_id,
 item_id,
 item_amount
 
-WHERE =?;
+WHERE char_id=?;

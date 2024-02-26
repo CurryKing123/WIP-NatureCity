@@ -41,7 +41,8 @@ public class Menu : MonoBehaviour
     ///Register Button Interaction
     IEnumerator Register()
     {
-        using (UnityWebRequest www = UnityWebRequest.Post("http://localhost:8002/account/post-account", "{ \"username\": \"" + usernameField.text + "\", \"password\": \"" + passwordField.text + "\" }", "application/json"))
+        using (UnityWebRequest www = UnityWebRequest.Post("http://localhost:8002/account/post-account", 
+        "{ \"username\": \"" + usernameField.text + "\", \"password\": \"" + passwordField.text + "\" }", "application/json"))
         {
             www.SetRequestHeader("key", "1");
             yield return www.SendWebRequest();
