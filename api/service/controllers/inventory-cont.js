@@ -2,6 +2,7 @@ const {
     getInv,
     getInvByCount,
     getInvById,
+    getInvById2,
     postInv,
     deleteInv,
     putInv,

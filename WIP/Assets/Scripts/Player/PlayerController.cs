@@ -22,6 +22,7 @@ public class PlayerController : MonoBehaviour
     public int playerInventory;
     public int charId;
     public string charRace;
+    public string invDh;
 
     public void CallRace(string race)
     {
@@ -34,6 +35,14 @@ public class PlayerController : MonoBehaviour
     public void CallInv(int charId)
     {
         StartCoroutine(GetInv(charId));
+    }
+    public void AddMoreItem(int itemID)
+    {
+        StartCoroutine(AddMoreItemToInv(itemID));
+    }
+    public void CallInvItem(int charId, int itemId)
+    {
+        StartCoroutine(GetInvItem(charId, itemId));
     }
 
     private void Start()
@@ -151,6 +160,50 @@ public class PlayerController : MonoBehaviour
             if (www.result != UnityWebRequest.Result.Success) 
             {
                 Debug.Log(www.error);
+                CallInvItem(charId, itemID);
+            }
+        }
+    }
+
+        IEnumerator GetInvItem(int charId, int itemId)
+    {
+        using (UnityWebRequest www = UnityWebRequest.Get($"http://localhost:8002/inventory/get-inv-by-id?char_id={charId}&item_id={itemId}"))
+        {
+            www.SetRequestHeader("key", "1");
+            yield return www.SendWebRequest();
+
+            if (www.result != UnityWebRequest.Result.Success) 
+            {
+                Debug.Log(www.error);
+            }
+            else
+            {
+                invDh = www.downloadHandler.text;
+                Debug.Log(invDh);
+                AddMoreItem(itemId);
+            }
+        }
+    }
+
+    IEnumerator AddMoreItemToInv(int itemId)
+    {
+        Inventory inv = new Inventory();
+        inv = JsonUtility.FromJson<Inventory>(invDh);
+        inv.data[0].item_amount = inv.data[0].item_amount + 1;
+        string jsonUse = JsonUtility.ToJson(inv.data[0], true);
+        using (UnityWebRequest www = UnityWebRequest.Put($"http://localhost:8002/inventory/put-inv?char_id={charId}&item_id={itemId}", jsonUse))
+        {
+            www.SetRequestHeader("key", "1");
+            www.SetRequestHeader("content-type", "application/json");
+            yield return www.SendWebRequest();
+
+            if (www.result != UnityWebRequest.Result.Success)
+            {
+                Debug.Log(www.error);
+            }
+            else
+            {
+                Debug.Log(www.downloadHandler.text);
             }
         }
     }
@@ -169,8 +222,8 @@ public class PlayerController : MonoBehaviour
             else
             {
                 Inventory myInv = new Inventory();
-                string dH = www.downloadHandler.text;
-                myInv = JsonUtility.FromJson<Inventory>(dH);
+                invDh = www.downloadHandler.text;
+                myInv = JsonUtility.FromJson<Inventory>(invDh);
                 for(int i = 0; i < myInv.data.Length; i++)
                 {
                     playerInventory += myInv.data[i].item_amount;
