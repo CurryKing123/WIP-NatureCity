@@ -248,7 +248,12 @@ async function deleteResNode(page = 1, req) {
   return dbProcessor(page, query, req);
 }
 
+
+
 ///account
+
+
+
 async function getAccount(page = 1, req) {
   query = fs.readFileSync("./service/api-service/sql/account/get-account.sql");
   req.prepareStatement = [];
@@ -348,6 +353,14 @@ async function getItem(page = 1, req) {
   return dbProcessor(page, query, req);
 }
 
+async function getItemByName(page = 1, req) {
+  query = fs.readFileSync("./service/api-service/sql/item/get-item-by-name.sql");
+  let prepareStatement = [];
+  prepareStatement.push(req.query.item_name);
+  req.prepareStatement = prepareStatement;
+  return dbProcessor(page, query, req);
+}
+
 async function getItemByType(page = 1, req) {
   query = fs.readFileSync("./service/api-service/sql/item/get-item-by-type.sql");
   let prepareStatement = [];
@@ -394,6 +407,14 @@ async function deleteItem(page = 1, req) {
 async function getBag(page = 1, req) {
   query = fs.readFileSync("./service/api-service/sql/bag/get-bag.sql");
   req.prepareStatement = [];
+  return dbProcessor(page, query, req);
+}
+
+async function getBagByName(page = 1, req) {
+  query = fs.readFileSync("./service/api-service/sql/bag/get-bag-by-name.sql");
+  let prepareStatement = [];
+  prepareStatement.push(req.query.bag_name);
+  req.prepareStatement = prepareStatement;
   return dbProcessor(page, query, req);
 }
 
@@ -595,12 +616,14 @@ module.exports = {
   putPos,
 
   getItem,
+  getItemByName,
   getItemByType,
   postItem,
   deleteItem,
   putItem,
 
   getBag,
+  getBagByName,
   postBag,
   deleteBag,
   putBag,

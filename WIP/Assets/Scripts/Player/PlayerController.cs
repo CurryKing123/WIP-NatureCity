@@ -23,6 +23,12 @@ public class PlayerController : MonoBehaviour
     public int charId;
     public string charRace;
     public string invDh;
+    public string equip1;
+    public string equip2;
+    public string equip3;
+    public string equip4;
+    public string equip5;
+
 
     public void CallRace(string race)
     {
@@ -47,14 +53,18 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
+        ItemManagement itMan = gameObject.GetComponent<ItemManagement>();
         string dH = (File.ReadAllText(Application.persistentDataPath + "CharData.json"));
         CharArray myChar = new CharArray();
         myChar = JsonUtility.FromJson<CharArray>(dH);
         charRace = myChar.data[0].character_race;
         charId = myChar.data[0].char_id;
+        equip1 = myChar.data[0].equip_item_1;
         
         CallRace(charRace);
         CallInv(charId);
+        itMan.CallEquip(equip1);
+
 
 
         agent = GetComponent<NavMeshAgent>();

@@ -3,6 +3,7 @@ const router = express.Router()
 
 const {
     getItemFromDb,
+    getItemByNameFromDb,
     getItemByTypeFromDb,
     postItemFromDb,
     deleteItemFromDb,
@@ -11,7 +12,8 @@ const {
 
 const { authValidator } = require("../../middleware/config-controller")
 
-router.route("/get-item").get(authValidator, getItemFromDb)
+router.route("/get-item").get(authValidator, getItemByNameFromDb)
+router.route("/get-item-by-name").get(authValidator, getItemByNameFromDb)
 router.route("/get-item-by-type").get(authValidator, getItemByTypeFromDb)
 router.route("/post-item").post(authValidator, postItemFromDb)
 router.route("/delete-item").delete(authValidator, deleteItemFromDb)
