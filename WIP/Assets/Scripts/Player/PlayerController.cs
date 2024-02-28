@@ -14,6 +14,7 @@ public class PlayerController : MonoBehaviour
 {
 
     private NavMeshAgent agent;
+    public bool inResArea = false;
     private bool isMoving = false;
     private bool isMovingToResource = false;
     private Transform targetResource;
@@ -104,21 +105,38 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
+
+
+    //Gathering Trigger
+
+
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("In Resource Area");
-        
-        if (other.CompareTag("Resource") && (isMovingToResource))
+        if (other.CompareTag("Resource"))
         {
-            if (playerInventory == carryAmount)
-            {
-                Debug.Log("Inventory Full");
-            }
-            else
-            {
-                ResourceManager resMan = other.GetComponent<ResourceManager>();
-                resMan.StartGathering(transform);
-            }
+            Debug.Log("In Resource Area");
+            inResArea = true;
+            if (isMovingToResource)
+                {
+                    if (playerInventory == carryAmount)
+                    {
+                        Debug.Log("Inventory Full");
+                    }
+                    else
+                    {
+                        ResourceManager resMan = other.GetComponent<ResourceManager>();
+                        resMan.StartGathering(transform);
+                    }
+                
+                }
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {if (other.CompareTag("Resource"))
+        {
+            Debug.Log("Out of Resource Area");
+            inResArea = false;
         }
     }
     

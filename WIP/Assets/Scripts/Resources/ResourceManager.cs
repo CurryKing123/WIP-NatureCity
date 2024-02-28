@@ -39,13 +39,15 @@ public class ResourceManager : MonoBehaviour
     }
 
     
+
+    
     
 //Gathering Resources
     private IEnumerator GatherResource(Transform player)
     {
-        while(resAmount > 0)
+        PlayerController playCont = player.GetComponent<PlayerController>();
+        while(resAmount > 0 && playCont.inResArea)
         {
-            PlayerController playCont = player.GetComponent<PlayerController>();
             Debug.Log("Gathering...");
         // Play the gathering animation
 
