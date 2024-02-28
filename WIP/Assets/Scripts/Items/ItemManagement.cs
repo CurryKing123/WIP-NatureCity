@@ -38,7 +38,13 @@ public class ItemManagement : MonoBehaviour
                 string dH = www.downloadHandler.text;
                 Items items = new Items();
                 items = JsonUtility.FromJson<Items>(dH);
-                if(items.data[0].item_type == "bag")
+                if(items.data.Length == 0)
+                {
+                    PlayerController player = gameObject.GetComponent<PlayerController>();
+                    carryCap.text = "Capacity: " + player.carryAmount;
+                    Debug.Log("No Equipment Found");
+                }
+                else if(items.data[0].item_type == "bag")
                 {
                     CallBag(items.data[0].item_name);
                 }

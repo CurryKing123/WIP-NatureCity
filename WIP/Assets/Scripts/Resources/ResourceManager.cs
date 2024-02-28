@@ -30,13 +30,14 @@ public class ResourceManager : MonoBehaviour
     public void Start()
     {
         StartCoroutine(GetResNode(resNodeId));
-        waitTime = gatherTime;
     }
 
     public void StartGathering(Transform tPlayer)
     {
         if (!isBeingGathered)
         {
+            Debug.Log("Start Gathering...");
+            waitTime = gatherTime;
             player = tPlayer;
             isBeingGathered = true;
         }
@@ -44,8 +45,10 @@ public class ResourceManager : MonoBehaviour
 
     public void StopGathering()
     {
-        if (!isBeingGathered)
+        if (isBeingGathered)
         {
+            Debug.Log("Stop Gathering...");
+            localTime = 0;
             isBeingGathered = false;
         }
     }
@@ -85,7 +88,7 @@ public class ResourceManager : MonoBehaviour
             }
 
             waitTime = localTime + gatherTime;
-            Debug.Log("Gathering...");
+            Debug.Log("Gathered 1...");
 
             resAmount--;
             playCont.playerInventory++;
