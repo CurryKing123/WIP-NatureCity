@@ -23,57 +23,139 @@ public class ResourceManager : MonoBehaviour
     public int resId;
     public string resType;
     public int itemId;
+    private float localTime = 0f;
+    private float waitTime = 0f;
+    private Transform player;
+
     public void Start()
     {
-
         StartCoroutine(GetResNode(resNodeId));
+        waitTime = gatherTime;
     }
-    public void StartGathering(Transform player)
+
+    public void StartGathering(Transform tPlayer)
     {
-        
         if (!isBeingGathered)
         {
+            player = tPlayer;
             isBeingGathered = true;
-            StartCoroutine(GatherResource(player));
         }
     }
 
-    
+    public void StopGathering()
+    {
+        if (!isBeingGathered)
+        {
+            isBeingGathered = false;
+        }
+    }
 
+    void Update()
+    {
+
+        if (isBeingGathered)
+        {
+            localTime += Time.deltaTime;
+            GatherResource(player);
+        }
+    }
+    //public void StartGathering(Transform player)
+    //{
+    //    if (!isBeingGathered)
+    //    {
+    //        isBeingGathered = true;
+    //        StartCoroutine(GatherResource(player));
+    //    }
+    //}
     
-    
-//Gathering Resources
-    private IEnumerator GatherResource(Transform player)
+    //public void StopGathering(Transform player)
+    //{
+    //    isBeingGathered = false;
+    //    StopCoroutine(GatherResource(player));
+    //}
+
+    private void GatherResource(Transform player)
     {
         PlayerController playCont = player.GetComponent<PlayerController>();
-        while(resAmount > 0 && playCont.inResArea)
+        if(resAmount > 0 && playCont.inResArea)
         {
+            if (localTime < waitTime) 
+            {
+                return;
+            }
+
+            waitTime = localTime + gatherTime;
             Debug.Log("Gathering...");
-        // Play the gathering animation
-
-
-            yield return new WaitForSeconds(gatherTime);
 
             resAmount--;
             playCont.playerInventory++;
             playCont.AddItem(itemId);
 
             if (resAmount <= 0)
-            {
-                // Resource depleted
-                Destroy(gameObject);
-                Debug.Log("Gathering Finished");
-                isBeingGathered = false;
-                break;
-            }
-            else if(playCont.playerInventory == playCont.carryAmount)
-            {
-                Debug.Log("Inventory Full");
-                isBeingGathered = false;
-                break;
-            }
-        }
+           {
+               // Resource depleted
+               Destroy(gameObject);
+               Debug.Log("Gathering Finished");
+               isBeingGathered = false;
+               return;
+           }
+           else if(playCont.playerInventory == playCont.carryAmount)
+           {
+               Debug.Log("Inventory Full");
+               isBeingGathered = false;
+               return;
+           }
+       }
     }
+    
+
+    
+    
+//Gathering Resources
+    //private IEnumerator GatherResource(Transform player)
+    //{
+    //    PlayerController playCont = player.GetComponent<PlayerController>();
+    //    while(resAmount > 0)
+    //    {
+    //        Debug.Log("Gathering...");
+    //    // Play the gathering animation
+//
+    //        //for(int i = 0; i <= gatherTime; i++)
+    //        //{
+    //        //    if(playCont.agent.speed == 0)
+    //        //    {
+    //        //        yield return new WaitForSeconds(i);
+    //        //    }
+    //        //    else
+    //        //    {
+    //        //        break;
+    //        //    }
+    //        //}
+//
+    //        yield return new WaitForSeconds(gatherTime);
+//
+//
+//
+    //        resAmount--;
+    //        playCont.playerInventory++;
+    //        playCont.AddItem(itemId);
+//
+    //        if (resAmount <= 0)
+    //        {
+    //            // Resource depleted
+    //            Destroy(gameObject);
+    //            Debug.Log("Gathering Finished");
+    //            isBeingGathered = false;
+    //            break;
+    //        }
+    //        else if(playCont.playerInventory == playCont.carryAmount)
+    //        {
+    //            Debug.Log("Inventory Full");
+    //            isBeingGathered = false;
+    //            break;
+    //        }
+    //    }
+    //}
 
     IEnumerator GetResNode(int resNodeId)
     {

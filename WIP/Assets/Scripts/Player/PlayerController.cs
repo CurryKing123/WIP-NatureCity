@@ -13,7 +13,7 @@ using System.Linq;
 public class PlayerController : MonoBehaviour
 {
 
-    private NavMeshAgent agent;
+    public NavMeshAgent agent;
     public bool inResArea = false;
     private bool isMoving = false;
     private bool isMovingToResource = false;
@@ -135,6 +135,8 @@ public class PlayerController : MonoBehaviour
     private void OnTriggerExit(Collider other)
     {if (other.CompareTag("Resource"))
         {
+            ResourceManager resMan = other.GetComponent<ResourceManager>();
+            resMan.StopGathering();
             Debug.Log("Out of Resource Area");
             inResArea = false;
         }
