@@ -31,6 +31,14 @@ const {
       res.status(422).json({ message: err.message });
     }
   };
+
+  exports.getInvById2FromDb = async (req, res) => {
+    try {
+      res.json(await getInvById2(req.query.page, req));
+    } catch (err) {
+      res.status(422).json({ message: err.message });
+    }
+  };
   
   exports.postInvFromDb = async (req, res) => {
     try {

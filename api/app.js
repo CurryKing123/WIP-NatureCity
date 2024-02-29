@@ -14,6 +14,8 @@ const itemRouter = require("./service/routes/item-router");
 const bagRouter = require("./service/routes/bag-router");
 const raceRouter = require("./service/routes/race-router");
 const invRouter = require("./service/routes/inventory-router");
+const globalinvRouter = require("./service/routes/global_inventory-router");
+
 
 
 app.use(express.json())
@@ -31,6 +33,7 @@ app.use("/item", itemRouter)
 app.use("/bag", bagRouter)
 app.use("/race", raceRouter)
 app.use("/inventory", invRouter)
+app.use("/global_inventory", globalinvRouter)
 
 
 

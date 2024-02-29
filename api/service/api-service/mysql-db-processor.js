@@ -353,6 +353,14 @@ async function getItem(page = 1, req) {
   return dbProcessor(page, query, req);
 }
 
+async function getItemById(page = 1, req) {
+  query = fs.readFileSync("./service/api-service/sql/item/get-item-by-id.sql");
+  let prepareStatement = [];
+  prepareStatement.push(req.query.item_id);
+  req.prepareStatement = prepareStatement;
+  return dbProcessor(page, query, req);
+}
+
 async function getItemByName(page = 1, req) {
   query = fs.readFileSync("./service/api-service/sql/item/get-item-by-name.sql");
   let prepareStatement = [];
@@ -524,6 +532,15 @@ async function getInvById(page = 1, req) {
   return dbProcessor(page, query, req);
 }
 
+async function getInvById2(page = 1, req) {
+  query = fs.readFileSync("./service/api-service/sql/inventory/get-inv-by-id2.sql");
+  let prepareStatement = [];
+  prepareStatement.push(req.query.char_id);
+  prepareStatement.push(req.query.item_id);
+  req.prepareStatement = prepareStatement;
+  return dbProcessor(page, query, req);
+}
+
 async function postInv(page = 1, req) {
   let prepareStatement = [];
   prepareStatement.push(req.body.char_id);
@@ -545,9 +562,56 @@ async function putInv(page = 1, req) {
 }
 
 async function deleteInv(page = 1, req) {
-  query = fs.readFileSync("./service/api-service/sql/inventory/del-inv.sql");
+  query = fs.readFileSync("./service/api-service/sql/inventory/delete-inv.sql");
   let prepareStatement = [];
-  prepareStatement.push(req.query.item_count);
+  prepareStatement.push(req.query.item_amount);
+  req.prepareStatement = prepareStatement;
+  return dbProcessor(page, query, req);
+}
+
+
+
+//Global Inventory
+
+
+
+async function getGlobalInv(page = 1, req) {
+  query = fs.readFileSync("./service/api-service/sql/global_inventory/get-global_inv.sql");
+  req.prepareStatement = [];
+  return dbProcessor(page, query, req);
+}
+
+async function getGlobalInvById(page = 1, req) {
+  query = fs.readFileSync("./service/api-service/sql/global_inventory/get-global_inv-by-id.sql");
+  let prepareStatement = [];
+  prepareStatement.push(req.query.res_id);
+  req.prepareStatement = prepareStatement;
+  return dbProcessor(page, query, req);
+}
+
+async function postGlobalInv(page = 1, req) {
+  let prepareStatement = [];
+  prepareStatement.push(req.body.res_amount);
+  prepareStatement.push(req.body.res_name);
+  query = fs.readFileSync("./service/api-service/sql/global_inventory/post-global_inv.sql");
+  req.prepareStatement = prepareStatement;
+  return dbProcessor(page, query, req);
+}
+
+async function putGlobalInv(page = 1, req) {
+  let prepareStatement = [];
+  prepareStatement.push(req.body.res_amount);
+  prepareStatement.push(req.body.res_name);
+  prepareStatement.push(req.query.res_id);
+  query = fs.readFileSync("./service/api-service/sql/global_inventory/put-global_inv.sql");
+  req.prepareStatement = prepareStatement;
+  return dbProcessor(page, query, req);
+}
+
+async function deleteGlobalInv(page = 1, req) {
+  query = fs.readFileSync("./service/api-service/sql/global_inventory/delete-global_inv.sql");
+  let prepareStatement = [];
+  prepareStatement.push(req.query.res_id);
   req.prepareStatement = prepareStatement;
   return dbProcessor(page, query, req);
 }
@@ -616,6 +680,7 @@ module.exports = {
   putPos,
 
   getItem,
+  getItemById,
   getItemByName,
   getItemByType,
   postItem,
@@ -636,8 +701,15 @@ module.exports = {
 
   getInv,
   getInvById,
+  getInvById2,
   getInvByCount,
   postInv,
   deleteInv,
-  putInv
+  putInv,
+
+  getGlobalInv,
+  getGlobalInvById,
+  postGlobalInv,
+  deleteGlobalInv,
+  putGlobalInv
 };

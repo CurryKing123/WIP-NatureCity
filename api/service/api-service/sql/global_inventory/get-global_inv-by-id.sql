@@ -1,0 +1,1 @@
+SELECT * FROM NATURE.global_inventory where res_id = ?;

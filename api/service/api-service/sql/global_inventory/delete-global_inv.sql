@@ -1,0 +1,1 @@
+DELETE FROM NATURE.global_inventory WHERE res_id=?;

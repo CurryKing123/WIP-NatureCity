@@ -51,6 +51,10 @@ public class PlayerController : MonoBehaviour
     {
         StartCoroutine(GetInvItem(charId, itemId));
     }
+    public void DepositResource(int charId)
+    {
+        StartCoroutine(DepoRes(charId));
+    }
 
     private void Start()
     {
@@ -130,10 +134,16 @@ public class PlayerController : MonoBehaviour
                 
                 }
         }
+
+        else if (other.CompareTag("HomeTree"))
+        {
+            
+        }
     }
 
     private void OnTriggerExit(Collider other)
-    {if (other.CompareTag("Resource"))
+    {
+        if (other.CompareTag("Resource"))
         {
             ResourceManager resMan = other.GetComponent<ResourceManager>();
             resMan.StopGathering();
@@ -238,6 +248,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    //Get Inventory At Start
     IEnumerator GetInv(int charId)
     {
         using (UnityWebRequest www = UnityWebRequest.Get($"http://localhost:8002/inventory/get-inv-by-id?char_id={charId}"))
@@ -262,5 +273,34 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
+
+    //Check Inventory At HomeTree
+
+    IEnumerator DepoRes(int charId)
+    {
+        using (UnityWebRequest www = UnityWebRequest.Get($"http://localhost:8002/inventory/get-inv-by-id?char_id={charId}"))
+        {
+            www.SetRequestHeader("key", "1");
+            yield return www.SendWebRequest();
+
+            if (www.result != UnityWebRequest.Result.Success) 
+            {
+                Debug.Log(www.error);
+            }
+            else
+            {
+                string dH = www.downloadHandler.text;
+                Inventory inv = new Inventory();
+                inv = JsonUtility.FromJson<Inventory>(dH);
+                for(int i = 0; i < inv.data.Length; i++)
+                {
+                    ItemManagement itMan = gameObject.GetComponent<ItemManagement>();
+                    int itemId = inv.data[i].item_id;
+                    itMan.CallItem(itemId);
+                }
+            }
+        }
+    }
+
 
 }
