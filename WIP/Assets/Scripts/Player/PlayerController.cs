@@ -137,7 +137,7 @@ public class PlayerController : MonoBehaviour
 
         else if (other.CompareTag("HomeTree"))
         {
-            
+            DepositResource(charId);
         }
     }
 
@@ -294,6 +294,7 @@ public class PlayerController : MonoBehaviour
                 inv = JsonUtility.FromJson<Inventory>(dH);
                 for(int i = 0; i < inv.data.Length; i++)
                 {
+                    Debug.Log("Depositing...");
                     ItemManagement itMan = gameObject.GetComponent<ItemManagement>();
                     int itemId = inv.data[i].item_id;
                     itMan.CallItem(itemId);

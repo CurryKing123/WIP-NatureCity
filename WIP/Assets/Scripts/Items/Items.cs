@@ -16,4 +16,6 @@ public class ItemData
     public string item_type;
     public string item_description;
     public string item_name;
+    public int res_id;
+    public int res_cost;
 }

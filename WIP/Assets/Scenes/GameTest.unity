@@ -863,6 +863,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b25602a94a8d0d4ab89dc5522cbaa6b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  agent: {fileID: 0}
+  inResArea: 0
   speed: 0
   carryAmount: 0
   playerInventory: 0
@@ -914,6 +916,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   carryCap: {fileID: 1901271032}
+  resAmount: 0
+  itemType: 
+  resId: 0
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0
@@ -1112,7 +1117,7 @@ GameObject:
   - component: {fileID: 1121633741}
   m_Layer: 0
   m_Name: Deposit
-  m_TagString: Untagged
+  m_TagString: HomeTree
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1132,7 +1137,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3

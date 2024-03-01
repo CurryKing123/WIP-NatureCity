@@ -138,13 +138,13 @@ public class ResourceManager : MonoBehaviour
                 Resource res = new Resource();
                 res = JsonUtility.FromJson<Resource>(dH);
                 resType = res.data[0].resource_type;
-                StartCoroutine(GetItemData(resType));
+                StartCoroutine(GetItemData(resId));
             }
         }
     }
-    IEnumerator GetItemData(string resType)
+    IEnumerator GetItemData(int resId)
     {
-        using (UnityWebRequest www = UnityWebRequest.Get($"http://localhost:8002/item/get-item-by-type?item_type={resType}"))
+        using (UnityWebRequest www = UnityWebRequest.Get($"http://localhost:8002/item/get-item-by-res?res_id={resId}"))
         {
             www.SetRequestHeader("key", "1");
             yield return www.SendWebRequest();
@@ -156,9 +156,9 @@ public class ResourceManager : MonoBehaviour
             else
             {
                 string dH = www.downloadHandler.text;
-                Inventory inv = new Inventory();
-                inv = JsonUtility.FromJson<Inventory>(dH);
-                itemId = inv.data[0].item_id;
+                Items item = new Items();
+                item = JsonUtility.FromJson<Items>(dH);
+                itemId = item.data[0].item_id;
             }
         }
     }

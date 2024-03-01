@@ -6,6 +6,7 @@ const {
     getItemByIdFromDb,
     getItemByNameFromDb,
     getItemByTypeFromDb,
+    getItemByResFromDb,
     postItemFromDb,
     deleteItemFromDb,
     putItemFromDb
@@ -17,6 +18,7 @@ router.route("/get-item").get(authValidator, getItemFromDb)
 router.route("/get-item-by-id").get(authValidator, getItemByIdFromDb)
 router.route("/get-item-by-name").get(authValidator, getItemByNameFromDb)
 router.route("/get-item-by-type").get(authValidator, getItemByTypeFromDb)
+router.route("/get-item-by-res").get(authValidator, getItemByResFromDb)
 router.route("/post-item").post(authValidator, postItemFromDb)
 router.route("/delete-item").delete(authValidator, deleteItemFromDb)
 router.route("/put-item").put(authValidator,putItemFromDb)

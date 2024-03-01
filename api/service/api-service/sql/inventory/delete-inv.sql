@@ -1,1 +1,1 @@
-DELETE FROM NATURE.inventory WHERE item_amount=?;
+DELETE FROM NATURE.inventory WHERE char_id=? and item_id=?;
