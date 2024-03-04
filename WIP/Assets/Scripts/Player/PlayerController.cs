@@ -17,8 +17,10 @@ public class PlayerController : MonoBehaviour
     public bool inResArea = false;
     private bool isMoving = false;
     private bool isMovingToResource = false;
+    private bool isGathering = false;
     private float distFromRes;
     private Transform targetResource;
+    private ResourceManager resMan;
     public Vector3 playerPos;
 
 
@@ -108,13 +110,16 @@ public class PlayerController : MonoBehaviour
                     targetResource = hit.transform;
                     
                     
-                    if (resource != null)
+                    if (inResArea == false)
                     {
                         InvokeRepeating("DistanceFromResource", 0f, .3f);
                         MoveToResource(targetResource);
-                        Debug.Log(distFromRes);
                         isMovingToResource = true;
                         Debug.Log("Moving to resource");
+                    }
+                    else
+                    {
+
                     }
                 }
                 else
@@ -122,6 +127,11 @@ public class PlayerController : MonoBehaviour
                     // Move the player to the clicked position
                     MovePlayer(hit.point);
                     isMovingToResource = false;
+                    if (isGathering)
+                    {
+                        Debug.Log("Stop Gathering");
+                        //Figure Out How To Stop Gathering Clicking Away From Resource
+                    }
                 }
             }
         }
@@ -146,6 +156,7 @@ public class PlayerController : MonoBehaviour
                     else
                     {
                         ResourceManager resMan = other.GetComponent<ResourceManager>();
+                        isGathering = true;
                         resMan.StartGathering(transform);
                     }
                 
@@ -166,6 +177,7 @@ public class PlayerController : MonoBehaviour
             resMan.StopGathering();
             Debug.Log("Out of Resource Area");
             inResArea = false;
+            isGathering = false;
         }
     }
     

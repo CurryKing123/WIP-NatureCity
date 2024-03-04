@@ -16,7 +16,7 @@ using Palmmedia.ReportGenerator.Core;
 public class ResourceManager : MonoBehaviour
 {
 
-    private bool isBeingGathered = false;
+    public bool isBeingGathered = false;
     public int resNodeId;
     public int resAmount;
     public float gatherTime;

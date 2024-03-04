@@ -941,6 +941,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   agent: {fileID: 0}
   inResArea: 0
+  playerPos: {x: 0, y: 0, z: 0}
   speed: 0
   carryAmount: 0
   playerInventory: 0
