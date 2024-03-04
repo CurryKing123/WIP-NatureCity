@@ -68,6 +68,7 @@ public class ItemManagement : MonoBehaviour
                 items = JsonUtility.FromJson<Items>(dH);
                 if(items.data.Length == 0)
                 {
+                    StartCoroutine(wait());
                     PlayerController player = gameObject.GetComponent<PlayerController>();
                     carryCap.text = "Capacity: " + player.carryAmount;
                     Debug.Log("No Equipment Found");
@@ -79,6 +80,11 @@ public class ItemManagement : MonoBehaviour
 
             }
         }
+    }
+    //Wait for ? seconds
+    IEnumerator wait()
+    {
+        yield return new WaitForSeconds(.2f);
     }
     IEnumerator GetBag(string bagName)
     {

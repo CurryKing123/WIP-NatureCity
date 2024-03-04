@@ -16,8 +16,8 @@ public class PlayerController : MonoBehaviour
     public NavMeshAgent agent;
     public bool inResArea = false;
     private bool isMoving = false;
-    private bool isMovingToResource = false;
-    private bool isGathering = false;
+    public bool isMovingToResource = false;
+    public bool isGathering = false;
     private float distFromRes;
     private Transform targetResource;
     private ResourceManager resMan;
@@ -108,18 +108,31 @@ public class PlayerController : MonoBehaviour
                 {
                     ResourceManager resource = hit.collider.GetComponent<ResourceManager>();
                     targetResource = hit.transform;
+                    isMovingToResource = true;
+                    InvokeRepeating("DistanceFromResource", 0f, .3f);
                     
                     
                     if (inResArea == false)
                     {
-                        InvokeRepeating("DistanceFromResource", 0f, .3f);
                         MoveToResource(targetResource);
-                        isMovingToResource = true;
                         Debug.Log("Moving to resource");
                     }
                     else
                     {
+                        if (isMovingToResource && distFromRes < 5)
+                        MoveToResource(targetResource);
+                        {
+                            if (playerInventory == carryAmount)
+                            {
+                                Debug.Log("Inventory Full");
+                            }
+                            else
+                            {
+                                isGathering = true;
+                                resource.StartGathering(transform);
+                            }
 
+                        }
                     }
                 }
                 else
@@ -129,8 +142,8 @@ public class PlayerController : MonoBehaviour
                     isMovingToResource = false;
                     if (isGathering)
                     {
-                        Debug.Log("Stop Gathering");
                         //Figure Out How To Stop Gathering Clicking Away From Resource
+                        isGathering = false;
                     }
                 }
             }

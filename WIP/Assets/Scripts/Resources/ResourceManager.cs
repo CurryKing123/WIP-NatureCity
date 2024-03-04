@@ -70,6 +70,12 @@ public class ResourceManager : MonoBehaviour
         {
             if (localTime < waitTime) 
             {
+                //Checking to see if Player is gathering
+                if (playCont.isGathering == false)
+                {
+                    //Stops Gathering When Clicking Away
+                    StopGathering();
+                }
                 return;
             }
 
@@ -81,19 +87,19 @@ public class ResourceManager : MonoBehaviour
             playCont.AddItem(itemId);
 
             if (resAmount <= 0)
-           {
-               // Resource depleted
-               Destroy(gameObject);
-               Debug.Log("Gathering Finished");
-               isBeingGathered = false;
-               return;
-           }
-           else if(playCont.playerInventory == playCont.carryAmount)
-           {
-               Debug.Log("Inventory Full");
-               isBeingGathered = false;
-               return;
-           }
+            {
+                // Resource depleted
+                Destroy(gameObject);
+                Debug.Log("Gathering Finished");
+                isBeingGathered = false;
+                return;
+            }
+            else if(playCont.playerInventory == playCont.carryAmount)
+            {
+                Debug.Log("Inventory Full");
+                isBeingGathered = false;
+                return;
+            }
        }
     }
 
