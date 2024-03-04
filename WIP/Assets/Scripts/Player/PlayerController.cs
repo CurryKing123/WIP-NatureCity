@@ -17,7 +17,11 @@ public class PlayerController : MonoBehaviour
     public bool inResArea = false;
     private bool isMoving = false;
     private bool isMovingToResource = false;
+    private float distFromRes;
     private Transform targetResource;
+    public Vector3 playerPos;
+
+
     public float speed;
     public int carryAmount;
     public int playerInventory;
@@ -29,6 +33,8 @@ public class PlayerController : MonoBehaviour
     public string equip3;
     public string equip4;
     public string equip5;
+
+
 
 
     public void CallRace(string race)
@@ -73,6 +79,15 @@ public class PlayerController : MonoBehaviour
 
 
         agent = GetComponent<NavMeshAgent>();
+        InvokeRepeating("PlayerPosition", 0f, .3f);
+    }
+    private void PlayerPosition()
+    {
+        playerPos = transform.position;
+    }
+    private void DistanceFromResource()
+    {
+        distFromRes = Vector3.Distance(targetResource.position, playerPos);
     }
     private void Update()
     {
@@ -95,7 +110,9 @@ public class PlayerController : MonoBehaviour
                     
                     if (resource != null)
                     {
+                        InvokeRepeating("DistanceFromResource", 0f, .3f);
                         MoveToResource(targetResource);
+                        Debug.Log(distFromRes);
                         isMovingToResource = true;
                         Debug.Log("Moving to resource");
                     }
@@ -120,7 +137,7 @@ public class PlayerController : MonoBehaviour
         {
             Debug.Log("In Resource Area");
             inResArea = true;
-            if (isMovingToResource)
+            if (isMovingToResource && distFromRes < 5)
                 {
                     if (playerInventory == carryAmount)
                     {
