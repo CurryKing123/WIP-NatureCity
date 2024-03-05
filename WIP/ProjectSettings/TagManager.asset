@@ -8,6 +8,7 @@ TagManager:
   - GameManager
   - UserData
   - HomeTree
+  - BuildArea
   layers:
   - Default
   - TransparentFX

@@ -13,14 +13,18 @@ using System.Linq;
 public class PlayerController : MonoBehaviour
 {
 
-    public NavMeshAgent agent;
     public bool inResArea = false;
     private bool isMoving = false;
     public bool isMovingToResource = false;
     public bool isGathering = false;
+    private bool inBuildArea = false;
+
+    public NavMeshAgent agent;
     private float distFromRes;
     private Transform targetResource;
     private ResourceManager resMan;
+    private BuildingUI buildUI;
+    private InventoryUI invUI;
     public Vector3 playerPos;
 
 
@@ -43,9 +47,9 @@ public class PlayerController : MonoBehaviour
     {
         StartCoroutine(GetRace(race));
     }
-    public void AddItem(int itemID)
+    public void CheckInv(int charId, int itemId)
     {
-        StartCoroutine(AddItemToInv(itemID));
+        StartCoroutine(CheckInvForDupe(charId, itemId));
     }
     public void CallInv(int charId)
     {
@@ -55,9 +59,9 @@ public class PlayerController : MonoBehaviour
     {
         StartCoroutine(AddMoreItemToInv(itemID));
     }
-    public void CallInvItem(int charId, int itemId)
+    public void AddNewInvItem(int itemId)
     {
-        StartCoroutine(GetInvItem(charId, itemId));
+        StartCoroutine(AddNewItem(itemId));
     }
     public void DepositResource(int charId)
     {
@@ -73,6 +77,9 @@ public class PlayerController : MonoBehaviour
         charRace = myChar.data[0].character_race;
         charId = myChar.data[0].char_id;
         equip1 = myChar.data[0].equip_item_1;
+
+        buildUI = GetComponent<BuildingUI>();
+        invUI = GetComponent<InventoryUI>();
         
         CallRace(charRace);
         CallInv(charId);
@@ -89,7 +96,10 @@ public class PlayerController : MonoBehaviour
     }
     private void DistanceFromResource()
     {
-        distFromRes = Vector3.Distance(targetResource.position, playerPos);
+        if (targetResource != null)
+        {
+            distFromRes = Vector3.Distance(targetResource.position, playerPos);
+        }
     }
     private void Update()
     {
@@ -112,16 +122,14 @@ public class PlayerController : MonoBehaviour
                     InvokeRepeating("DistanceFromResource", 0f, .3f);
                     
                     
-                    if (inResArea == false)
+                    if (targetResource != null)
                     {
                         MoveToResource(targetResource);
                         Debug.Log("Moving to resource");
-                    }
-                    else
-                    {
+
                         if (isMovingToResource && distFromRes < 5)
-                        MoveToResource(targetResource);
                         {
+
                             if (playerInventory == carryAmount)
                             {
                                 Debug.Log("Inventory Full");
@@ -146,6 +154,32 @@ public class PlayerController : MonoBehaviour
                         isGathering = false;
                     }
                 }
+            }
+        }
+
+        //Build UI Popup
+        if (Input.GetKeyDown(KeyCode.B) && inBuildArea)
+        {
+            if (buildUI.popUp == false)
+            {
+                buildUI.BuildPopup();
+            }
+            else
+            {
+                buildUI.ExitBuildPopup();
+            }
+        }
+
+        //Inventory UI Popup
+        if (Input.GetKeyDown(KeyCode.I))
+        {
+            if (invUI.popUp == false)
+            {
+                invUI.InvPopUp();
+            }
+            else
+            {
+                invUI.ExitInvPopUp();
             }
         }
     }
@@ -180,6 +214,12 @@ public class PlayerController : MonoBehaviour
         {
             DepositResource(charId);
         }
+
+        else if (other.CompareTag("BuildArea"))
+        {
+            Debug.Log("Entering Build Area");
+            inBuildArea = true;
+        }
     }
 
     private void OnTriggerExit(Collider other)
@@ -192,6 +232,18 @@ public class PlayerController : MonoBehaviour
             inResArea = false;
             isGathering = false;
         }
+
+        if (other.CompareTag("BuildArea"))
+        {
+            Debug.Log("Exiting Build Area");
+            inBuildArea = false;
+            if (buildUI.popUp)
+            {
+                buildUI.ExitBuildPopup();
+            }
+        }
+
+
     }
     
 
@@ -231,23 +283,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    IEnumerator AddItemToInv(int itemID)
-    {
-        using (UnityWebRequest www = UnityWebRequest.Post("http://localhost:8002/inventory/post-inv",
-        "{ \"char_id\": \"" + charId + "\", \"item_id\": \"" + itemID + "\", \"item_amount\": \"" + 1 + "\" }", "application/json"))
-        {
-            www.SetRequestHeader("key", "1");
-            yield return www.SendWebRequest();
-
-            if (www.result != UnityWebRequest.Result.Success) 
-            {
-                Debug.Log(www.error);
-                CallInvItem(charId, itemID);
-            }
-        }
-    }
-
-        IEnumerator GetInvItem(int charId, int itemId)
+        IEnumerator CheckInvForDupe(int charId, int itemId)
     {
         using (UnityWebRequest www = UnityWebRequest.Get($"http://localhost:8002/inventory/get-inv-by-id?char_id={charId}&item_id={itemId}"))
         {
@@ -261,8 +297,38 @@ public class PlayerController : MonoBehaviour
             else
             {
                 invDh = www.downloadHandler.text;
+                Inventory inv = new Inventory();
+                inv = JsonUtility.FromJson<Inventory>(invDh);
                 Debug.Log(invDh);
-                AddMoreItem(itemId);
+                if (inv.data.Length == 0)
+                {
+                    AddNewInvItem(itemId);
+                    Debug.Log("Adding New Item");
+                }
+                else
+                {
+                    AddMoreItem(itemId);
+                    Debug.Log("Adding Existing Item");
+                }
+            }
+        }
+    }
+
+        IEnumerator AddNewItem(int itemID)
+    {
+        using (UnityWebRequest www = UnityWebRequest.Post("http://localhost:8002/inventory/post-inv",
+        "{ \"char_id\": \"" + charId + "\", \"item_id\": \"" + itemID + "\", \"item_amount\": \"" + 1 + "\" }", "application/json"))
+        {
+            www.SetRequestHeader("key", "1");
+            yield return www.SendWebRequest();
+
+            if (www.result != UnityWebRequest.Result.Success) 
+            {
+                Debug.Log(www.error);
+            }
+            else
+            {
+                Debug.Log("Added New Item");
             }
         }
     }

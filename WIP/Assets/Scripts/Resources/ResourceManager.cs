@@ -84,7 +84,7 @@ public class ResourceManager : MonoBehaviour
 
             resAmount--;
             playCont.playerInventory++;
-            playCont.AddItem(itemId);
+            playCont.CheckInv(playCont.charId, itemId);
 
             if (resAmount <= 0)
             {
