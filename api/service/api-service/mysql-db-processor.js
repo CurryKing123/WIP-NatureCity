@@ -222,6 +222,7 @@ async function postResNode(page = 1, req) {
   prepareStatement.push(req.body.resource_node_name);
   prepareStatement.push(req.body.resource_amount);
   prepareStatement.push(req.body.gathering_time);
+  prepareStatement.push(req.body.respawn_time);
   prepareStatement.push(req.body.resource_id);
   query = fs.readFileSync("./service/api-service/sql/resource_node/post-resource_node.sql");
   req.prepareStatement = prepareStatement;
@@ -233,6 +234,7 @@ async function putResNode(page = 1, req) {
   prepareStatement.push(req.body.resource_node_name);
   prepareStatement.push(req.body.resource_amount);
   prepareStatement.push(req.body.gathering_time);
+  prepareStatement.push(req.body.respawn_time);
   prepareStatement.push(req.body.resource_id);
   prepareStatement.push(req.query.resource_node_id);
   query = fs.readFileSync("./service/api-service/sql/resource_node/put-resource_node.sql");

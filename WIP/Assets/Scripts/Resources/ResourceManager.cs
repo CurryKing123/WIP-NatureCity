@@ -16,10 +16,13 @@ using Palmmedia.ReportGenerator.Core;
 public class ResourceManager : MonoBehaviour
 {
 
+    private ResourceRespawn resSpawn;
+
     public bool isBeingGathered = false;
     public int resNodeId;
     public int resAmount;
     public float gatherTime;
+    public float respawnTime;
     public int resId;
     public string resType;
     public int itemId;
@@ -29,6 +32,7 @@ public class ResourceManager : MonoBehaviour
 
     public void Start()
     {
+        resSpawn = GetComponent<ResourceRespawn>();
         StartCoroutine(GetResNode(resNodeId));
     }
 
@@ -88,10 +92,13 @@ public class ResourceManager : MonoBehaviour
 
             if (resAmount <= 0)
             {
-                // Resource depleted
-                Destroy(gameObject);
-                Debug.Log("Gathering Finished");
+                //Start Respawn
+                
+
+                Debug.Log("Resource Node Depleted");
                 isBeingGathered = false;
+
+                Destroy(gameObject);
                 return;
             }
             else if(playCont.playerInventory == playCont.carryAmount)
@@ -122,6 +129,8 @@ public class ResourceManager : MonoBehaviour
                 resNodes = JsonUtility.FromJson<ResourceNodes>(dH);
                 resAmount = resNodes.data[0].resource_amount;
                 gatherTime = resNodes.data[0].gathering_time;
+                respawnTime = resNodes.data[0].respawn_time;
+
                 resId = resNodes.data[0].resource_id;
                 StartCoroutine(GetResourceData(resId));
             }

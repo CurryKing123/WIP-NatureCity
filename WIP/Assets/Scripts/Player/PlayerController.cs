@@ -9,6 +9,7 @@ using UnityEngine.Networking;
 using UnityEngine.AI;
 using System.Threading;
 using System.Linq;
+using TMPro;
 
 public class PlayerController : MonoBehaviour
 {
@@ -26,6 +27,7 @@ public class PlayerController : MonoBehaviour
     private BuildingUI buildUI;
     private InventoryUI invUI;
     public Vector3 playerPos;
+    public TextMeshProUGUI pressB;
 
 
     public float speed;
@@ -219,6 +221,7 @@ public class PlayerController : MonoBehaviour
         {
             Debug.Log("Entering Build Area");
             inBuildArea = true;
+            pressB.gameObject.SetActive(true);
         }
     }
 
@@ -241,6 +244,7 @@ public class PlayerController : MonoBehaviour
             {
                 buildUI.ExitBuildPopup();
             }
+            pressB.gameObject.SetActive(false);
         }
 
 
@@ -283,7 +287,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-        IEnumerator CheckInvForDupe(int charId, int itemId)
+    IEnumerator CheckInvForDupe(int charId, int itemId)
     {
         using (UnityWebRequest www = UnityWebRequest.Get($"http://localhost:8002/inventory/get-inv-by-id?char_id={charId}&item_id={itemId}"))
         {

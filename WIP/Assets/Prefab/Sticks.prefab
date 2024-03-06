@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1959595351729217537}
   - component: {fileID: 9202449066463765185}
   - component: {fileID: 2635674105886349930}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cylinder.001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -94,8 +94,8 @@ GameObject:
   - component: {fileID: 4699666320411759931}
   - component: {fileID: 1422653231800384016}
   - component: {fileID: 1654246873907372368}
-  m_Layer: 0
-  m_Name: Wood
+  m_Layer: 6
+  m_Name: Sticks
   m_TagString: Resource
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -138,7 +138,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
+  m_Size: {x: 1.5, y: 1.5, z: 1.5}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &1654246873907372368
 MonoBehaviour:
@@ -152,10 +152,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 69e1f81cf570ae94799e3ec42f7c0f8e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <ResourceType>k__BackingField: {fileID: 11400000, guid: d24e54f3685d80b4091816816a5bee15, type: 2}
-  <Inventory>k__BackingField: {fileID: 2675855663737227054, guid: a77e3cc7f2faa604b9776a411c7da16b, type: 3}
-  resourceCount: 2
-  gatheringTime: 2
+  isBeingGathered: 0
+  resNodeId: 1
+  resAmount: 0
+  gatherTime: 0
+  resId: 0
+  resType: 
+  itemId: 0
 --- !u!1 &7222887862436926918
 GameObject:
   m_ObjectHideFlags: 0
@@ -167,7 +170,7 @@ GameObject:
   - component: {fileID: 7546480312781350268}
   - component: {fileID: 4109710521700077099}
   - component: {fileID: 3077970430818725419}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cylinder.002
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -250,7 +253,7 @@ GameObject:
   - component: {fileID: 1911951116698446049}
   - component: {fileID: 921625422389938837}
   - component: {fileID: 2684624050870699023}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cylinder
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3055444899278323461}
   - component: {fileID: 2546534223689261633}
   m_Layer: 6
-  m_Name: Stone
+  m_Name: Rocks
   m_TagString: Resource
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -58,7 +58,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 4.0840807, y: 1, z: 3.054266}
+  m_Size: {x: 6, y: 1, z: 4}
   m_Center: {x: -0.79449034, y: 0, z: -0.073755264}
 --- !u!114 &2546534223689261633
 MonoBehaviour:
@@ -72,10 +72,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 69e1f81cf570ae94799e3ec42f7c0f8e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <ResourceType>k__BackingField: {fileID: 11400000, guid: 5cb34eefd79b22942986bbb3aba80525, type: 2}
-  <Inventory>k__BackingField: {fileID: 2675855663737227054, guid: a77e3cc7f2faa604b9776a411c7da16b, type: 3}
-  resourceCount: 2
-  gatheringTime: 2
+  isBeingGathered: 0
+  resNodeId: 2
+  resAmount: 0
+  gatherTime: 0
+  resId: 0
+  resType: 
+  itemId: 0
 --- !u!1 &2029448180499718109
 GameObject:
   m_ObjectHideFlags: 0
