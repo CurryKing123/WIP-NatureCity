@@ -17,6 +17,7 @@ public class ResourceManager : MonoBehaviour
 {
 
     private ResourceRespawn resSpawn;
+    [SerializeField] GameObject resourceObj;
 
     public bool isBeingGathered = false;
     public int resNodeId;
@@ -92,16 +93,18 @@ public class ResourceManager : MonoBehaviour
 
             if (resAmount <= 0)
             {
-                //Start Respawn
-                
-
                 Debug.Log("Resource Node Depleted");
                 isBeingGathered = false;
 
-                Destroy(gameObject);
+                //Start Respawn
+                StartCoroutine(RespawnRes(respawnTime));
+
+                GetComponent<BoxCollider>().enabled = false;
+
+                resourceObj.SetActive(false);
                 return;
             }
-            else if(playCont.playerInventory == playCont.carryAmount)
+            else if(playCont.playerInventory >= playCont.carryAmount)
             {
                 Debug.Log("Inventory Full");
                 isBeingGathered = false;
@@ -176,5 +179,15 @@ public class ResourceManager : MonoBehaviour
                 itemId = item.data[0].item_id;
             }
         }
+    }
+
+    //Respawn Node
+    public IEnumerator RespawnRes(float respawnTime)
+    {
+        Debug.Log($"Respawning Resource in {respawnTime} seconds");
+        yield return new WaitForSeconds(respawnTime);
+        StartCoroutine(GetResNode(resId));
+        resourceObj.SetActive(true);
+        GetComponent<BoxCollider>().enabled = true;
     }
 }

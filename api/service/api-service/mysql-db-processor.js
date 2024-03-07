@@ -567,10 +567,10 @@ async function postInv(page = 1, req) {
 
 async function putInv(page = 1, req) {
   let prepareStatement = [];
-  prepareStatement.push(req.body.item_id);
   prepareStatement.push(req.body.item_amount);
-  prepareStatement.push(req.query.char_id);
   query = fs.readFileSync("./service/api-service/sql/inventory/put-inv.sql");
+  prepareStatement.push(req.query.char_id);
+  prepareStatement.push(req.query.item_id);
   req.prepareStatement = prepareStatement;
   return dbProcessor(page, query, req);
 }

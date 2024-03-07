@@ -18,7 +18,6 @@ public class ItemManagement : MonoBehaviour
     PlayerController playCont;
     public int resAmount;
     public string itemType;
-    public int resId;
 
     public void CallEquip(string equip1)
     {
@@ -33,17 +32,17 @@ public class ItemManagement : MonoBehaviour
         StartCoroutine(GetItemById(itemId));
     }
     //Remove Resource To Tree
-    public void RemResToTree(int itemId)
+    public void RemResToTree(int itemId, int resId)
     {
-        StartCoroutine(RemFromPlayerInv(itemId));
+        StartCoroutine(RemFromPlayerInv(itemId, resId));
     }
     public void RemoveItemFromInv(int charId, int itemId)
     {
         StartCoroutine(RemItem(charId, itemId));
     }
-    public void AddToHomeTree(string dH)
+    public void AddToHomeTree(string dH, int resId)
     {
-        StartCoroutine(AddToHome(dH));
+        StartCoroutine(AddToHome(dH, resId));
     }
     public void CallHomeTree(int resId)
     {
@@ -81,6 +80,7 @@ public class ItemManagement : MonoBehaviour
             }
         }
     }
+
     //Wait for ? seconds
     IEnumerator wait()
     {
@@ -125,23 +125,22 @@ public class ItemManagement : MonoBehaviour
             else
             {
                 string dH = www.downloadHandler.text;
-                Debug.Log(dH);
                 Items items = new Items();
                 items = JsonUtility.FromJson<Items>(dH);
                 itemType = items.data[0].item_type;
-                resId = items.data[0].res_id;
                 
 
                 if (itemType == "resource")
                 {
-                    RemResToTree(itemId);
+                    int resId = items.data[0].res_id;
+                    RemResToTree(itemId, resId);
                 }
             }
         }
     }
 
 
-    IEnumerator RemFromPlayerInv(int itemId)
+    IEnumerator RemFromPlayerInv(int itemId, int resId)
     {
         PlayerController player = gameObject.GetComponent<PlayerController>();
         int charId = player.charId;
@@ -157,12 +156,17 @@ public class ItemManagement : MonoBehaviour
             else
             {
                 string dH = www.downloadHandler.text;
+                Debug.Log($"Removing from inventory: {dH}");
                 Inventory inv = new Inventory();
                 inv = JsonUtility.FromJson<Inventory>(dH);
                 resAmount = inv.data[0].item_amount;
                 player.playerInventory -= resAmount;
-                RemoveItemFromInv(charId, itemId);
+
+                Debug.Log($"ResourceId: {resId}");
+                //Get Home Tree Data
                 CallHomeTree(resId);
+                //Remove From Player Inventory
+                RemoveItemFromInv(charId, itemId);
             }
         }
     }
@@ -200,13 +204,14 @@ public class ItemManagement : MonoBehaviour
             else
             {
                 string dH = www.downloadHandler.text;
-                AddToHomeTree(dH);
+                Debug.Log(dH);
+                AddToHomeTree(dH, resId);
             }
         }
     }
 
     //Add to global inventory
-    IEnumerator AddToHome(string dH)
+    IEnumerator AddToHome(string dH, int resId)
     {
         GlobalInventory globalInv = new GlobalInventory();
         globalInv = JsonUtility.FromJson<GlobalInventory>(dH);

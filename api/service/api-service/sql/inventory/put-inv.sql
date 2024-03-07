@@ -1,5 +1,4 @@
 UPDATE NATURE.inventory
-SET item_id=?,
-item_amount=?
+SET item_amount=?
 
-WHERE char_id=?;
+WHERE char_id=? and item_id=?;    

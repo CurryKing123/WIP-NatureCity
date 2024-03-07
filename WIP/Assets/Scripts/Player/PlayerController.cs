@@ -92,6 +92,13 @@ public class PlayerController : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
         InvokeRepeating("PlayerPosition", 0f, .3f);
     }
+
+
+    IEnumerator wait()
+    {
+        yield return new WaitForSeconds(1f);
+    }
+
     private void PlayerPosition()
     {
         playerPos = transform.position;
@@ -129,10 +136,10 @@ public class PlayerController : MonoBehaviour
                         MoveToResource(targetResource);
                         Debug.Log("Moving to resource");
 
-                        if (isMovingToResource && distFromRes < 5)
+                        if (isMovingToResource && distFromRes < 1 && inResArea)
                         {
 
-                            if (playerInventory == carryAmount)
+                            if (playerInventory >= carryAmount)
                             {
                                 Debug.Log("Inventory Full");
                             }
@@ -289,7 +296,7 @@ public class PlayerController : MonoBehaviour
 
     IEnumerator CheckInvForDupe(int charId, int itemId)
     {
-        using (UnityWebRequest www = UnityWebRequest.Get($"http://localhost:8002/inventory/get-inv-by-id?char_id={charId}&item_id={itemId}"))
+        using (UnityWebRequest www = UnityWebRequest.Get($"http://localhost:8002/inventory/get-inv-by-id2?char_id={charId}&item_id={itemId}"))
         {
             www.SetRequestHeader("key", "1");
             yield return www.SendWebRequest();
@@ -343,6 +350,7 @@ public class PlayerController : MonoBehaviour
         inv = JsonUtility.FromJson<Inventory>(invDh);
         inv.data[0].item_amount = inv.data[0].item_amount + 1;
         string jsonUse = JsonUtility.ToJson(inv.data[0], true);
+        Debug.Log(jsonUse);
         using (UnityWebRequest www = UnityWebRequest.Put($"http://localhost:8002/inventory/put-inv?char_id={charId}&item_id={itemId}", jsonUse))
         {
             www.SetRequestHeader("key", "1");
@@ -406,9 +414,9 @@ public class PlayerController : MonoBehaviour
                 inv = JsonUtility.FromJson<Inventory>(dH);
                 for(int i = 0; i < inv.data.Length; i++)
                 {
-                    Debug.Log("Depositing...");
                     ItemManagement itMan = gameObject.GetComponent<ItemManagement>();
                     int itemId = inv.data[i].item_id;
+                    Debug.Log($"Depositing itemId: {itemId}");
                     itMan.CallItem(itemId);
                 }
             }
