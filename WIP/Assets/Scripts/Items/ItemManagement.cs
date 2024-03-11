@@ -16,7 +16,6 @@ public class ItemManagement : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI carryCap;
     PlayerController playCont;
-    public int resAmount;
     public string itemType;
 
     public void CallEquip(string equip1)
@@ -40,13 +39,13 @@ public class ItemManagement : MonoBehaviour
     {
         StartCoroutine(RemItem(charId, itemId));
     }
-    public void AddToHomeTree(string dH, int resId)
+    public void AddToHomeTree(string dH, int resId, int resAmount)
     {
-        StartCoroutine(AddToHome(dH, resId));
+        StartCoroutine(AddToHome(dH, resId, resAmount));
     }
-    public void CallHomeTree(int resId)
+    public void CallHomeTree(int resId, int resAmount)
     {
-        StartCoroutine(GetHomeTree(resId));
+        StartCoroutine(GetHomeTree(resId, resAmount));
     }
 
     IEnumerator GetEquip(string equip1)
@@ -159,12 +158,11 @@ public class ItemManagement : MonoBehaviour
                 Debug.Log($"Removing from inventory: {dH}");
                 Inventory inv = new Inventory();
                 inv = JsonUtility.FromJson<Inventory>(dH);
-                resAmount = inv.data[0].item_amount;
+                int resAmount = inv.data[0].item_amount;
                 player.playerInventory -= resAmount;
 
-                Debug.Log($"ResourceId: {resId}");
                 //Get Home Tree Data
-                CallHomeTree(resId);
+                CallHomeTree(resId, resAmount);
                 //Remove From Player Inventory
                 RemoveItemFromInv(charId, itemId);
             }
@@ -189,7 +187,7 @@ public class ItemManagement : MonoBehaviour
         }
     }
 
-    IEnumerator GetHomeTree(int resId)
+    IEnumerator GetHomeTree(int resId, int resAmount)
     {
         using (UnityWebRequest www = UnityWebRequest.Get($"http://localhost:8002/global_inventory/get-global_inv-by-id?res_id={resId}"))
         {
@@ -204,14 +202,13 @@ public class ItemManagement : MonoBehaviour
             else
             {
                 string dH = www.downloadHandler.text;
-                Debug.Log(dH);
-                AddToHomeTree(dH, resId);
+                AddToHomeTree(dH, resId, resAmount);
             }
         }
     }
 
     //Add to global inventory
-    IEnumerator AddToHome(string dH, int resId)
+    IEnumerator AddToHome(string dH, int resId, int resAmount)
     {
         GlobalInventory globalInv = new GlobalInventory();
         globalInv = JsonUtility.FromJson<GlobalInventory>(dH);

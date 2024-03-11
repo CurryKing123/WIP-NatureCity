@@ -128,7 +128,6 @@ public class ResourceManager : MonoBehaviour
             {
                 ResourceNodes resNodes = new ResourceNodes();
                 string dH = www.downloadHandler.text;
-                Debug.Log(dH);
                 resNodes = JsonUtility.FromJson<ResourceNodes>(dH);
                 resAmount = resNodes.data[0].resource_amount;
                 gatherTime = resNodes.data[0].gathering_time;

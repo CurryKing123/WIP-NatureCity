@@ -112,6 +112,9 @@ public class PlayerController : MonoBehaviour
     }
     private void Update()
     {
+        CallInv(charId);
+
+        
         if (Input.GetMouseButtonDown(1))
         {
             agent.speed = speed;
@@ -368,7 +371,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    //Get Inventory At Start
+    //Get Inventory At Start and Update
     IEnumerator GetInv(int charId)
     {
         using (UnityWebRequest www = UnityWebRequest.Get($"http://localhost:8002/inventory/get-inv-by-id?char_id={charId}"))
@@ -388,7 +391,6 @@ public class PlayerController : MonoBehaviour
                 for(int i = 0; i < myInv.data.Length; i++)
                 {
                     playerInventory += myInv.data[i].item_amount;
-                    Debug.Log(myInv.data[i].item_amount);
                 }
             }
         }
