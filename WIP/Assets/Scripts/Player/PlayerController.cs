@@ -112,9 +112,7 @@ public class PlayerController : MonoBehaviour
     }
     private void Update()
     {
-        CallInv(charId);
-
-        
+        StartCoroutine(GetInvUpdate(charId));
         if (Input.GetMouseButtonDown(1))
         {
             agent.speed = speed;
@@ -313,7 +311,6 @@ public class PlayerController : MonoBehaviour
                 invDh = www.downloadHandler.text;
                 Inventory inv = new Inventory();
                 inv = JsonUtility.FromJson<Inventory>(invDh);
-                Debug.Log(invDh);
                 if (inv.data.Length == 0)
                 {
                     AddNewInvItem(itemId);
@@ -371,7 +368,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    //Get Inventory At Start and Update
+    //Get Inventory At Start
     IEnumerator GetInv(int charId)
     {
         using (UnityWebRequest www = UnityWebRequest.Get($"http://localhost:8002/inventory/get-inv-by-id?char_id={charId}"))
@@ -392,6 +389,25 @@ public class PlayerController : MonoBehaviour
                 {
                     playerInventory += myInv.data[i].item_amount;
                 }
+            }
+        }
+    }
+
+    IEnumerator GetInvUpdate(int charId)
+    {
+        using (UnityWebRequest www = UnityWebRequest.Get($"http://localhost:8002/inventory/get-inv-by-id?char_id={charId}"))
+        {
+            www.SetRequestHeader("key", "1");
+            yield return www.SendWebRequest();
+
+            if (www.result != UnityWebRequest.Result.Success) 
+            {
+                Debug.Log(www.error);
+            }
+            else
+            {
+                Inventory myInv = new Inventory();
+                invDh = www.downloadHandler.text;
             }
         }
     }

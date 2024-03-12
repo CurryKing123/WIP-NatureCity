@@ -1105,6 +1105,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   popUp: 0
+  sprites:
+  - {fileID: 21300000, guid: 7b58b99f8004dae4097e4bb1c506d9ee, type: 3}
+  - {fileID: 21300000, guid: c29b1d019f0a2a147872d366be9259b5, type: 3}
   inventoryUI: {fileID: 1557475849}
   invGrid: {fileID: 846513558}
   iconPrefab: {fileID: 4182691558537491861, guid: 9c9a7351dbc2f0242a537e72d567875b, type: 3}
