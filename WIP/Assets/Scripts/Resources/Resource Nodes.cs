@@ -18,4 +18,5 @@ public class ResNodeData
     public float gathering_time;
     public float respawn_time;
     public int resource_id;
+    public string req_tool;
 }

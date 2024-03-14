@@ -4,6 +4,7 @@ resource_amount=?,
 gathering_time=?,
 respawn_time=?,
 resource_node=?,
-resource_id=?
+resource_id=?,
+req_tool=?
 
 WHERE resource_node_id=?;

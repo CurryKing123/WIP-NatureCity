@@ -4,6 +4,7 @@ INSERT INTO `NATURE`.`resource_node`
 `gathering_time`,
 `respawn_time`,
 `resource_node`,
-`resource_id`)
+`resource_id`,
+`req_tool`)
 VALUES
-(?,?,?,?,?,?);
+(?,?,?,?,?,?,?);

@@ -9,6 +9,7 @@ TagManager:
   - UserData
   - HomeTree
   - BuildArea
+  - ResourceNode
   layers:
   - Default
   - TransparentFX

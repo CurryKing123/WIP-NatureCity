@@ -18,9 +18,9 @@ public class ItemManagement : MonoBehaviour
     PlayerController playCont;
     public string itemType;
 
-    public void CallEquip(string equip1)
+    public void CallEquip(string equip)
     {
-        StartCoroutine(GetEquip(equip1));
+        StartCoroutine(GetEquip(equip));
     }
     public void CallBag(string bagName)
     {
@@ -48,35 +48,42 @@ public class ItemManagement : MonoBehaviour
         StartCoroutine(GetHomeTree(resId, resAmount));
     }
 
-    IEnumerator GetEquip(string equip1)
+    IEnumerator GetEquip(string equip)
     {
-        using (UnityWebRequest www = UnityWebRequest.Get($"http://localhost:8002/item/get-item-by-name?item_name={equip1}"))
+        if(equip != "")
         {
-            www.SetRequestHeader("key", "1");
-            yield return www.SendWebRequest();
-
-            if (www.result != UnityWebRequest.Result.Success)
+            using (UnityWebRequest www = UnityWebRequest.Get($"http://localhost:8002/item/get-item-by-name?item_name={equip}"))
             {
-                Debug.Log(www.error);
-            }
-            else
-            {
-                string dH = www.downloadHandler.text;
-                Items items = new Items();
-                items = JsonUtility.FromJson<Items>(dH);
-                if(items.data.Length == 0)
-                {
-                    StartCoroutine(wait());
-                    PlayerController player = gameObject.GetComponent<PlayerController>();
-                    carryCap.text = "Capacity: " + player.carryAmount;
-                    Debug.Log("No Equipment Found");
-                }
-                else if(items.data[0].item_type == "bag")
-                {
-                    CallBag(items.data[0].item_name);
-                }
+                www.SetRequestHeader("key", "1");
+                yield return www.SendWebRequest();
 
+                if (www.result != UnityWebRequest.Result.Success)
+                {
+                    Debug.Log(www.error);
+                }
+                else
+                {
+                    string dH = www.downloadHandler.text;
+                    Items items = new Items();
+                    items = JsonUtility.FromJson<Items>(dH);
+                    
+                    if(items.data[0].item_type == "bag")
+                    {
+                        CallBag(items.data[0].item_name);
+                        Debug.Log("Getting bag");
+                    }
+                    else
+                    {
+                        PlayerController player = gameObject.GetComponent<PlayerController>();
+                        carryCap.text = "Capacity: " + player.carryAmount;
+                    }
+
+                }
             }
+        }
+        else
+        {
+            Debug.Log("Nothing There");
         }
     }
 

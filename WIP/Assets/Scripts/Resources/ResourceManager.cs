@@ -27,6 +27,8 @@ public class ResourceManager : MonoBehaviour
     public int resId;
     public string resType;
     public int itemId;
+    private string reqTool;
+
     private float localTime = 0f;
     private float waitTime = 0f;
     private Transform player;
@@ -56,6 +58,10 @@ public class ResourceManager : MonoBehaviour
             localTime = 0;
             isBeingGathered = false;
         }
+        else
+        {
+            localTime = 0;
+        }
     }
 
     void Update()
@@ -66,6 +72,10 @@ public class ResourceManager : MonoBehaviour
             localTime += Time.deltaTime;
             GatherResource(player);
         }
+        else
+        {
+            StopGathering();
+        }
     }
 
     private void GatherResource(Transform player)
@@ -73,7 +83,7 @@ public class ResourceManager : MonoBehaviour
         PlayerController playCont = player.GetComponent<PlayerController>();
         if(resAmount > 0 && playCont.inResArea)
         {
-            if (localTime < waitTime) 
+            if (localTime < waitTime)
             {
                 //Checking to see if Player is gathering
                 if (playCont.isGathering == false)
@@ -132,6 +142,7 @@ public class ResourceManager : MonoBehaviour
                 resAmount = resNodes.data[0].resource_amount;
                 gatherTime = resNodes.data[0].gathering_time;
                 respawnTime = resNodes.data[0].respawn_time;
+                reqTool = resNodes.data[0].req_tool;
 
                 resId = resNodes.data[0].resource_id;
                 StartCoroutine(GetResourceData(resId));

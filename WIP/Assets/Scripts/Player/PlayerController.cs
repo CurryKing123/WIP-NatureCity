@@ -28,6 +28,7 @@ public class PlayerController : MonoBehaviour
     private InventoryUI invUI;
     public Vector3 playerPos;
     public TextMeshProUGUI pressB;
+    private ItemManagement itMan;
 
 
     public float speed;
@@ -36,11 +37,11 @@ public class PlayerController : MonoBehaviour
     public int charId;
     public string charRace;
     public string invDh;
-    public string equip1;
-    public string equip2;
-    public string equip3;
-    public string equip4;
-    public string equip5;
+    public string[] equip;
+    //public string equip2;
+    //public string equip3;
+    //public string equip4;
+    //public string equip5;
 
 
 
@@ -72,21 +73,29 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
-        ItemManagement itMan = gameObject.GetComponent<ItemManagement>();
+        itMan = gameObject.GetComponent<ItemManagement>();
         string dH = (File.ReadAllText(Application.persistentDataPath + "CharData.json"));
         CharArray myChar = new CharArray();
         myChar = JsonUtility.FromJson<CharArray>(dH);
         charRace = myChar.data[0].character_race;
         charId = myChar.data[0].char_id;
-        equip1 = myChar.data[0].equip_item_1;
 
         buildUI = GetComponent<BuildingUI>();
         invUI = GetComponent<InventoryUI>();
         
         CallRace(charRace);
         CallInv(charId);
-        itMan.CallEquip(equip1);
 
+        equip = new string[]{myChar.data[0].equip_item_1,
+        myChar.data[0].equip_item_2,
+        myChar.data[0].equip_item_3,
+        myChar.data[0].equip_item_4,
+        myChar.data[0].equip_item_5};
+
+        for(int i=0; i<5; i++)
+        {
+            itMan.CallEquip(equip[i]);
+        }
 
 
         agent = GetComponent<NavMeshAgent>();
@@ -124,11 +133,13 @@ public class PlayerController : MonoBehaviour
             {
                 
 
-                if (hit.collider.CompareTag("Resource"))
+                if (hit.collider.CompareTag("ResourceNode"))
                 {
                     ResourceManager resource = hit.collider.GetComponent<ResourceManager>();
                     targetResource = hit.transform;
                     isMovingToResource = true;
+
+                    //updates distance between player and resource
                     InvokeRepeating("DistanceFromResource", 0f, .3f);
                     
                     
@@ -136,13 +147,14 @@ public class PlayerController : MonoBehaviour
                     {
                         MoveToResource(targetResource);
                         Debug.Log("Moving to resource");
-
+                        resMan.isBeingGathered = false;
                         if (isMovingToResource && distFromRes < 1 && inResArea)
                         {
 
                             if (playerInventory >= carryAmount)
                             {
                                 Debug.Log("Inventory Full");
+                                isGathering = false;
                             }
                             else
                             {
@@ -200,13 +212,14 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Resource"))
+        if (other.CompareTag("ResourceNode"))
         {
+            
             Debug.Log("In Resource Area");
             inResArea = true;
             if (isMovingToResource && distFromRes < 5)
                 {
-                    if (playerInventory == carryAmount)
+                    if (playerInventory >= carryAmount)
                     {
                         Debug.Log("Inventory Full");
                     }
@@ -264,6 +277,7 @@ public class PlayerController : MonoBehaviour
     
     private void MoveToResource(Transform resource)
     {
+        isGathering = false;
         agent.SetDestination(resource.position);
     }
     void MovePlayer(Vector3 destination)
@@ -384,6 +398,7 @@ public class PlayerController : MonoBehaviour
             {
                 Inventory myInv = new Inventory();
                 invDh = www.downloadHandler.text;
+                Debug.Log(invDh);
                 myInv = JsonUtility.FromJson<Inventory>(invDh);
                 for(int i = 0; i < myInv.data.Length; i++)
                 {
