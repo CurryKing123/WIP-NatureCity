@@ -37,7 +37,7 @@ public class MainMenu : MonoBehaviour
     }
     public void GoToRegister()
     {
-        SceneManager.LoadScene(1);
+        SceneManager.LoadScene(2);
     }
 
     public void LogInOut()
@@ -49,13 +49,13 @@ public class MainMenu : MonoBehaviour
         }
         else
         {
-            SceneManager.LoadScene(2);
+            SceneManager.LoadScene(3);
         }
     }
 
     public void GoBack()
     {
-        SceneManager.LoadScene(0);
+        SceneManager.LoadScene(1);
     }
 
     public void GoPlay()
@@ -74,7 +74,7 @@ public class MainMenu : MonoBehaviour
         else
         {
             Debug.Log($"Welcome Back {myChar.data[0].user_name}");
-            SceneManager.LoadScene(3);
+            SceneManager.LoadScene(5);
         }
     }
 }

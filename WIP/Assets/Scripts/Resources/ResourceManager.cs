@@ -10,7 +10,6 @@ using System;
 using System.IO;
 using System.Threading;
 using Unity.VisualScripting;
-using Palmmedia.ReportGenerator.Core;
 
 
 public class ResourceManager : MonoBehaviour
