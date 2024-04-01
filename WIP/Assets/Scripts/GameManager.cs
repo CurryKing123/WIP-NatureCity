@@ -10,7 +10,7 @@ public class GameManager : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI wood;
     [SerializeField] private TextMeshProUGUI stone;
-    void Update()
+    void FixedUpdate()
     {
         CallGlobalInv();
     }

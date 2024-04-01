@@ -53,6 +53,10 @@ PrefabInstance:
       value: Player
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: d34c316b5200d234dbb914cffac18f44, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: d34c316b5200d234dbb914cffac18f44, type: 3}
       propertyPath: m_TagString
       value: Player
       objectReference: {fileID: 0}
@@ -81,6 +85,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: d34c316b5200d234dbb914cffac18f44, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1752959938512586830}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: d34c316b5200d234dbb914cffac18f44, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3908237779279770692}
   m_SourcePrefab: {fileID: 100100000, guid: d34c316b5200d234dbb914cffac18f44, type: 3}
 --- !u!1 &8271953862511910201 stripped
 GameObject:
@@ -229,3 +236,20 @@ MonoBehaviour:
   inventoryUI: {fileID: 0}
   invGrid: {fileID: 0}
   iconPrefab: {fileID: 4182691558537491861, guid: 9c9a7351dbc2f0242a537e72d567875b, type: 3}
+--- !u!114 &3908237779279770692
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8271953862511910201}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneId: 0
+  _assetId: 2148235918
+  serverOnly: 0
+  visibility: 0
+  hasSpawned: 0

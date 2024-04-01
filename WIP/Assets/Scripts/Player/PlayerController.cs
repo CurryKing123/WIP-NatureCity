@@ -27,6 +27,7 @@ public class PlayerController : MonoBehaviour
     private BuildingUI buildUI;
     private InventoryUI invUI;
     public Vector3 playerPos;
+    public TextMeshProUGUI playerName;
     public TextMeshProUGUI pressB;
     private ItemManagement itMan;
 
@@ -36,6 +37,7 @@ public class PlayerController : MonoBehaviour
     public int playerInventory;
     public int charId;
     public string charRace;
+    public string userName;
     public string invDh;
     public string[] equip;
     //public string equip2;
@@ -79,6 +81,9 @@ public class PlayerController : MonoBehaviour
         myChar = JsonUtility.FromJson<CharArray>(dH);
         charRace = myChar.data[0].character_race;
         charId = myChar.data[0].char_id;
+        userName = myChar.data[0].user_name;
+
+        playerName.text = userName;
 
         buildUI = GetComponent<BuildingUI>();
         invUI = GetComponent<InventoryUI>();
