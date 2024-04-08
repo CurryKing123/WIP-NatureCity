@@ -9,13 +9,33 @@ using System.Text;
 using System;
 using System.IO;
 using System.Threading;
+using Unity.VisualScripting;
 
 public class AccountCreation : MonoBehaviour
 {
+    MainMenu mainMenu;
+
     [SerializeField] private InputField usernameField;
     [SerializeField] private InputField passwordField;
     [SerializeField] private Button reglogButton;
     [SerializeField] private Button backButton;
+
+    private void Start()
+    {
+        mainMenu = GetComponent<MainMenu>();
+    }
+    public void RegOrLog()
+    {
+        if (mainMenu.menuState == MainMenu.MenuState.Register)
+        {
+            CallRegister();
+        }
+        else
+        {
+            CallLogin();
+        }
+    }
+
     public void CallRegister()
     {
         StartCoroutine(Register());
@@ -54,6 +74,7 @@ public class AccountCreation : MonoBehaviour
             else
             {
                 Debug.Log("Registration Complete");
+                mainMenu.menuState = MainMenu.MenuState.Main;
             }
         }
         
@@ -80,6 +101,7 @@ public class AccountCreation : MonoBehaviour
             {
                 if(dH.Contains($"{usernameField.text}"))
                 {
+                    mainMenu.accountState = MainMenu.AccountState.LoggedIn;
                     int myAccountID = myAccount.data[0].user_id;
                     Debug.Log("Login Successful!");
                     Debug.Log($"User: {myAccountID}");

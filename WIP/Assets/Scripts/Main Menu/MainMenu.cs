@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UnityEngine.Networking;
 using System.IO;
+using UnityEditor;
 
 public class MainMenu : MonoBehaviour
 {
@@ -13,11 +14,29 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private Button playButton;
     [SerializeField] private Button logButton;
     [SerializeField] private Button regButton;
+    [SerializeField] private Button backButton;
+    [SerializeField] private Button reglogButton;
 
+    [SerializeField] private GameObject mainMenu;
+    [SerializeField] private GameObject reglogScreen;
 
-    void Awake()
+    public enum AccountState {LoggedIn, LoggedOut}
+    public AccountState accountState;
+    public enum MenuState {Main, Register, Login}
+    public MenuState menuState;
+
+    void Start()
     {
-        if (File.Exists(Application.persistentDataPath + "CharData.json"))
+        AccountStateSetup();
+        MenuStateSetup();
+
+        menuState = MenuState.Main;
+        accountState = AccountState.LoggedOut;
+    }
+
+    void Update()
+    {
+        if (accountState == AccountState.LoggedIn)
         {
             string dH = (File.ReadAllText(Application.persistentDataPath + "CharData.json"));
             CharArray myChar = new CharArray();
@@ -29,15 +48,38 @@ public class MainMenu : MonoBehaviour
         }
         else
         {
-            alertText.text = "No User Found";
-            playButton.gameObject.SetActive(false);
-            regButton.gameObject.SetActive(true);
-            logButton.GetComponentInChildren<Text>().text = "Login";
+
+            if (menuState == MenuState.Register)
+            {
+                mainMenu.SetActive(false);
+                backButton.gameObject.SetActive(true);
+                reglogScreen.SetActive(true);
+                reglogButton.GetComponentInChildren<Text>().text = "Register";
+            }
+            else if (menuState == MenuState.Login)
+            {
+                mainMenu.SetActive(false);
+                backButton.gameObject.SetActive(true);
+                reglogScreen.SetActive(true);
+                reglogButton.GetComponentInChildren<Text>().text = "Login";
+            }
+            else if (menuState == MenuState.Main)
+            {
+                reglogScreen.SetActive(false);
+                alertText.text = "No User Found";
+                playButton.gameObject.SetActive(false);
+                regButton.gameObject.SetActive(true);
+                logButton.GetComponentInChildren<Text>().text = "Login";
+            }
+
         }
     }
+
     public void GoToRegister()
     {
-        SceneManager.LoadScene(1);
+        menuState = MenuState.Register;
+        mainMenu.SetActive(false);
+        backButton.gameObject.SetActive(true);
     }
 
     public void LogInOut()
@@ -45,17 +87,18 @@ public class MainMenu : MonoBehaviour
         if (File.Exists(Application.persistentDataPath + "CharData.json"))
         {
             File.Delete(Application.persistentDataPath + "CharData.json");
-            Awake();
         }
         else
         {
-            SceneManager.LoadScene(2);
+            menuState = MenuState.Login;
         }
     }
 
     public void GoBack()
     {
-        SceneManager.LoadScene(0);
+        menuState = MenuState.Main;
+        mainMenu.SetActive(true);
+        backButton.gameObject.SetActive(false);
     }
 
     public void GoPlay()
@@ -75,6 +118,32 @@ public class MainMenu : MonoBehaviour
         {
             Debug.Log($"Welcome Back {myChar.data[0].user_name}");
             SceneManager.LoadScene(4);
+        }
+    }
+    private void AccountStateSetup()
+    {
+        switch (accountState)
+        {
+            case AccountState.LoggedIn:
+                break;
+            
+            case AccountState.LoggedOut:
+                break;
+        }
+    }
+
+    private void MenuStateSetup()
+    {
+        switch (menuState)
+        {
+            case MenuState.Main:
+                break;
+            
+            case MenuState.Register:
+                break;
+
+            case MenuState.Login:
+                break;
         }
     }
 }
