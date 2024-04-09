@@ -654,6 +654,7 @@ GameObject:
   - component: {fileID: 281501810}
   - component: {fileID: 281501814}
   - component: {fileID: 281501815}
+  - component: {fileID: 281501816}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -780,10 +781,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 99b02387a0051c243843743e5b3897e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  userId: 0
   usernameField: {fileID: 1486675820}
   passwordField: {fileID: 1352798196}
   reglogButton: {fileID: 469720953}
   backButton: {fileID: 269168523}
+--- !u!114 &281501816
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 281501809}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a49cc3478ad5504787838a6184dfc10, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &282267691
 GameObject:
   m_ObjectHideFlags: 0
@@ -1932,8 +1946,8 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: Registration, Assembly-CSharp
+      - m_Target: {fileID: 281501815}
+        m_TargetAssemblyTypeName: AccountCreation, Assembly-CSharp
         m_MethodName: VerifyInputs
         m_Mode: 1
         m_Arguments:
@@ -2254,8 +2268,8 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: Registration, Assembly-CSharp
+      - m_Target: {fileID: 281501815}
+        m_TargetAssemblyTypeName: AccountCreation, Assembly-CSharp
         m_MethodName: VerifyInputs
         m_Mode: 1
         m_Arguments:
@@ -2391,51 +2405,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1531839097}
   m_CullTransparentMesh: 1
---- !u!1 &1700624636
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1700624638}
-  - component: {fileID: 1700624637}
-  m_Layer: 0
-  m_Name: UserId
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1700624637
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1700624636}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0a49cc3478ad5504787838a6184dfc10, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  user_id: 0
---- !u!4 &1700624638
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1700624636}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 359.72092, y: 212.03665, z: -4.3201323}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1766123143
 GameObject:
   m_ObjectHideFlags: 0
@@ -2889,4 +2858,3 @@ SceneRoots:
   - {fileID: 1364679775}
   - {fileID: 281501813}
   - {fileID: 289281719}
-  - {fileID: 1700624638}

@@ -31,48 +31,52 @@ public class MainMenu : MonoBehaviour
         MenuStateSetup();
 
         menuState = MenuState.Main;
-        accountState = AccountState.LoggedOut;
+
+        if (UserId.user_id == 0)
+        {
+            accountState = AccountState.LoggedOut;
+        }
+        else
+        {
+            accountState = AccountState.LoggedIn;
+        }
     }
 
     void Update()
     {
-        if (accountState == AccountState.LoggedIn)
+        if (menuState == MenuState.Register)
         {
-            string dH = (File.ReadAllText(Application.persistentDataPath + "CharData.json"));
-            CharArray myChar = new CharArray();
-            myChar = JsonUtility.FromJson<CharArray>(dH);
-            alertText.text = "Welcome Back " + myChar.data[0].user_name;
-            playButton.gameObject.SetActive(true);
-            regButton.gameObject.SetActive(false);
-            logButton.GetComponentInChildren<Text>().text = "Logout";
+            mainMenu.SetActive(false);
+            backButton.gameObject.SetActive(true);
+            reglogScreen.SetActive(true);
+            reglogButton.GetComponentInChildren<Text>().text = "Register";
         }
-        else
+        else if (menuState == MenuState.Login)
         {
-
-            if (menuState == MenuState.Register)
+            mainMenu.SetActive(false);
+            backButton.gameObject.SetActive(true);
+            reglogScreen.SetActive(true);
+            reglogButton.GetComponentInChildren<Text>().text = "Login";
+        }
+        else if (menuState == MenuState.Main)
+        {
+            reglogScreen.SetActive(false);
+            mainMenu.SetActive(true);
+            if (accountState == AccountState.LoggedIn)
             {
-                mainMenu.SetActive(false);
-                backButton.gameObject.SetActive(true);
-                reglogScreen.SetActive(true);
-                reglogButton.GetComponentInChildren<Text>().text = "Register";
+                playButton.gameObject.SetActive(true);
+                regButton.gameObject.SetActive(false);
+                logButton.GetComponentInChildren<Text>().text = "Logout";
             }
-            else if (menuState == MenuState.Login)
+            else
             {
-                mainMenu.SetActive(false);
-                backButton.gameObject.SetActive(true);
-                reglogScreen.SetActive(true);
-                reglogButton.GetComponentInChildren<Text>().text = "Login";
-            }
-            else if (menuState == MenuState.Main)
-            {
-                reglogScreen.SetActive(false);
                 alertText.text = "No User Found";
                 playButton.gameObject.SetActive(false);
                 regButton.gameObject.SetActive(true);
                 logButton.GetComponentInChildren<Text>().text = "Login";
             }
-
         }
+
     }
 
     public void GoToRegister()
@@ -84,9 +88,11 @@ public class MainMenu : MonoBehaviour
 
     public void LogInOut()
     {
-        if (File.Exists(Application.persistentDataPath + "CharData.json"))
+        if (UserId.user_id > 0)
         {
-            File.Delete(Application.persistentDataPath + "CharData.json");
+            accountState = AccountState.LoggedOut;
+            Debug.Log("Logged Out");
+            UserId.user_id = 0;
         }
         else
         {

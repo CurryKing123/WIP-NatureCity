@@ -4,9 +4,5 @@ using UnityEngine;
 
 public class UserId : MonoBehaviour
 {
-    public int user_id;
-    void Awake()
-    {
-        DontDestroyOnLoad(this.gameObject);
-    }
+    public static int user_id;
 }

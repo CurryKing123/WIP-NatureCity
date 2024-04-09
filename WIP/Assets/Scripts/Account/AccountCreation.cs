@@ -13,7 +13,8 @@ using Unity.VisualScripting;
 
 public class AccountCreation : MonoBehaviour
 {
-    MainMenu mainMenu;
+    private MainMenu mainMenu;
+    public int userId;
 
     [SerializeField] private InputField usernameField;
     [SerializeField] private InputField passwordField;
@@ -44,13 +45,13 @@ public class AccountCreation : MonoBehaviour
     {
         StartCoroutine(Login());
     }
-    private void CallChar(int myAccountID)
+    private void CallChar(int userId)
     {
-        StartCoroutine(GetChar(myAccountID));
+        StartCoroutine(GetChar(userId));
     }
-    private void PostChar(int myAccountID)
+    private void PostChar(int userId)
     {
-        StartCoroutine(MakeChar(myAccountID));
+        StartCoroutine(MakeChar(userId));
     }
     public static void GetAccData(string dH)
     {
@@ -101,11 +102,13 @@ public class AccountCreation : MonoBehaviour
             {
                 if(dH.Contains($"{usernameField.text}"))
                 {
-                    mainMenu.accountState = MainMenu.AccountState.LoggedIn;
-                    int myAccountID = myAccount.data[0].user_id;
+                    userId = myAccount.data[0].user_id;
                     Debug.Log("Login Successful!");
-                    Debug.Log($"User: {myAccountID}");
-                    CallChar(myAccountID);
+                    Debug.Log($"User: {userId}");
+                    UserId.user_id = userId;
+                    mainMenu.accountState = MainMenu.AccountState.LoggedIn;
+                    mainMenu.menuState = MainMenu.MenuState.Main;
+
                 }
                 else
                 {
@@ -115,9 +118,9 @@ public class AccountCreation : MonoBehaviour
         }
     }
 
-    IEnumerator GetChar(int myAccountID)
+    IEnumerator GetChar(int userId)
     {
-        using (UnityWebRequest www = UnityWebRequest.Get($"http://localhost:8002/char/get-char-by-id?user_id={myAccountID}"))
+        using (UnityWebRequest www = UnityWebRequest.Get($"http://localhost:8002/char/get-char-by-id?user_id={userId}"))
         {
             www.SetRequestHeader("key", "1");
             yield return www.SendWebRequest();
@@ -138,22 +141,20 @@ public class AccountCreation : MonoBehaviour
                 {
                     Debug.Log("Logging in to new account");
                     Debug.Log(Application.persistentDataPath);
-                    PostChar(myAccountID);
-                    Thread.Sleep(1000);
-                    yield return GetChar(myAccountID);
+                    PostChar(userId);
+                    SceneManager.LoadScene("Character Creation");
                 }
                 else
                 {
                     Debug.Log("Logged in to something");
-                    GetAccData(dH);
-                    SceneManager.LoadScene(0);
+                    SceneManager.LoadScene("Game Test");
                 }
             }
         }
     }
-    IEnumerator MakeChar(int myAccountID)
+    IEnumerator MakeChar(int userId)
     {
-        using (UnityWebRequest www = UnityWebRequest.Post($"http://localhost:8002/char/post-char", "{ \"user_id\": \"" + myAccountID + "\"}", "application/json"))
+        using (UnityWebRequest www = UnityWebRequest.Post($"http://localhost:8002/char/post-char", "{ \"user_id\": \"" + userId + "\"}", "application/json"))
         {
             www.SetRequestHeader("key", "1");
             yield return www.SendWebRequest();
