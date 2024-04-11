@@ -64,6 +64,7 @@ public class MainMenu : MonoBehaviour
             mainMenu.SetActive(true);
             if (accountState == AccountState.LoggedIn)
             {
+                alertText.text = $"{UserId.user_id}";
                 playButton.gameObject.SetActive(true);
                 regButton.gameObject.SetActive(false);
                 logButton.GetComponentInChildren<Text>().text = "Logout";
@@ -109,22 +110,7 @@ public class MainMenu : MonoBehaviour
 
     public void GoPlay()
     {
-        string dH = (File.ReadAllText(Application.persistentDataPath + "CharData.json"));
-        Debug.Log(dH);
-        CharArray myChar = new CharArray();
-        myChar = JsonUtility.FromJson<CharArray>(dH);
-        Debug.Log($"{myChar.data[0].user_name}");
-        
-        if (myChar.data[0].user_name == "")
-        {
-            Debug.Log("New Character");
-            SceneManager.LoadScene(3);
-        }
-        else
-        {
-            Debug.Log($"Welcome Back {myChar.data[0].user_name}");
-            SceneManager.LoadScene(4);
-        }
+        SceneManager.LoadScene("GameTest");
     }
     private void AccountStateSetup()
     {

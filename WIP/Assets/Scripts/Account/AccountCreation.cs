@@ -45,19 +45,6 @@ public class AccountCreation : MonoBehaviour
     {
         StartCoroutine(Login());
     }
-    private void CallChar(int userId)
-    {
-        StartCoroutine(GetChar(userId));
-    }
-    private void PostChar(int userId)
-    {
-        StartCoroutine(MakeChar(userId));
-    }
-    public static void GetAccData(string dH)
-    {
-        File.WriteAllText(Application.persistentDataPath + "CharData.json", dH);
-        Debug.Log(Application.persistentDataPath);
-    }
     
     ///Register Button Interaction
     IEnumerator Register()
@@ -118,48 +105,7 @@ public class AccountCreation : MonoBehaviour
         }
     }
 
-    IEnumerator GetChar(int userId)
-    {
-        using (UnityWebRequest www = UnityWebRequest.Get($"http://localhost:8002/char/get-char-by-id?user_id={userId}"))
-        {
-            www.SetRequestHeader("key", "1");
-            yield return www.SendWebRequest();
 
-            CharArray myChar = new CharArray();
-            string dH = www.downloadHandler.text;
-            Debug.Log(dH);
-            myChar = JsonUtility.FromJson<CharArray>(dH);
-
-            if (www.result != UnityWebRequest.Result.Success) 
-            {
-                Debug.Log(www.error);
-            }
-            
-            else
-            {
-                if(myChar.data.Length == 0)
-                {
-                    Debug.Log("Logging in to new account");
-                    Debug.Log(Application.persistentDataPath);
-                    PostChar(userId);
-                    SceneManager.LoadScene("Character Creation");
-                }
-                else
-                {
-                    Debug.Log("Logged in to something");
-                    SceneManager.LoadScene("Game Test");
-                }
-            }
-        }
-    }
-    IEnumerator MakeChar(int userId)
-    {
-        using (UnityWebRequest www = UnityWebRequest.Post($"http://localhost:8002/char/post-char", "{ \"user_id\": \"" + userId + "\"}", "application/json"))
-        {
-            www.SetRequestHeader("key", "1");
-            yield return www.SendWebRequest();
-        }
-    }
     
 
     

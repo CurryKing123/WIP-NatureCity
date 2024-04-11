@@ -1153,10 +1153,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 287415095969123838, guid: 559de6bbbe374844380202f3357fdac4, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 1019899985048201102, guid: 559de6bbbe374844380202f3357fdac4, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -1239,10 +1235,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6263617855819559978, guid: 559de6bbbe374844380202f3357fdac4, type: 3}
       propertyPath: m_Name
-      value: Screen Canvas
+      value: Canvas
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 5984912661996707888, guid: 559de6bbbe374844380202f3357fdac4, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 559de6bbbe374844380202f3357fdac4, type: 3}
@@ -1251,6 +1248,7 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 705507995}
+  - {fileID: 7881845916420655982}
   - {fileID: 395550601}
   - {fileID: 1924727392}
   - {fileID: 682159523}
@@ -1259,4 +1257,3 @@ SceneRoots:
   - {fileID: 647079249}
   - {fileID: 782628376}
   - {fileID: 1549619546}
-  - {fileID: 7881845916420655982}

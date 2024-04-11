@@ -30,6 +30,8 @@ public class PlayerController : MonoBehaviour
     public TextMeshProUGUI playerName;
     public TextMeshProUGUI pressB;
     private ItemManagement itMan;
+    private GetPlayerData getPlayerData;
+
 
 
     public float speed;
@@ -38,6 +40,7 @@ public class PlayerController : MonoBehaviour
     public int charId;
     public string charRace;
     public string userName;
+    private string dH;
     public string invDh;
     public string[] equip;
     //public string equip2;
@@ -73,10 +76,15 @@ public class PlayerController : MonoBehaviour
         StartCoroutine(DepoRes(charId));
     }
 
+
     private void Start()
     {
+        getPlayerData = gameObject.GetComponent<GetPlayerData>();
+        getPlayerData.CallChar();
+        dH = getPlayerData.dH;
+        Debug.Log(dH);
+
         itMan = gameObject.GetComponent<ItemManagement>();
-        string dH = (File.ReadAllText(Application.persistentDataPath + "CharData.json"));
         CharArray myChar = new CharArray();
         myChar = JsonUtility.FromJson<CharArray>(dH);
         charRace = myChar.data[0].character_race;
@@ -106,6 +114,8 @@ public class PlayerController : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
         InvokeRepeating("PlayerPosition", 0f, .3f);
     }
+
+
 
 
     IEnumerator wait()

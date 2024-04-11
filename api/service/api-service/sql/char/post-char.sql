@@ -12,7 +12,7 @@ INSERT INTO `NATURE`.`user`
              `player_status`)
 VALUES      (?,
             ?,
-             ?,
+             'fox',
              ?,
              ?,
              ?,
