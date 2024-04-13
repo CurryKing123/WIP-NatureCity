@@ -12,31 +12,51 @@ public class GetPlayerData : MonoBehaviour
     [SerializeField] private GameObject namePrompt;
 
     private int userId;
-    private int charId;
+    public int charId;
+    public float speed;
+    public int carryAmount;
+    public int playerInventory;
+    public string charRace;
+    public string userName;
     public string dH;
+    public string invDh;
+    public string[] equip;
 
     private CharArray myChar;
+    private ItemManagement itMan;
+    private PlayerController playCont;
 
     void Start()
     {
         userId = UserId.user_id;
         myChar = new CharArray();
+        itMan = gameObject.GetComponent<ItemManagement>();
+        playCont = gameObject.GetComponent<PlayerController>();
     }
 
-    public void CallChar()
+    public void CallChar(int userId)
     {
-        StartCoroutine(GetChar());
+        StartCoroutine(GetChar(userId));
     }
     private void PostChar(int userId)
     {
         StartCoroutine(MakeChar(userId));
     }
-    private void ConfirmName(string dH)
+    public void ConfirmName(string dH)
     {
         StartCoroutine(CreateName(dH));
     }
 
-    IEnumerator GetChar()
+    public void CallRace(string race)
+    {
+        StartCoroutine(GetRace(race));
+    }
+    public void CallInv(int charId)
+    {
+        StartCoroutine(GetInv(charId));
+    }
+
+    IEnumerator GetChar(int userId)
     {
         using (UnityWebRequest www = UnityWebRequest.Get($"http://localhost:8002/char/get-char-by-id?user_id={userId}"))
         {
@@ -58,15 +78,33 @@ public class GetPlayerData : MonoBehaviour
                 {
                     Debug.Log("New Character");
                     PostChar(userId);
-                    yield return GetChar();
                 }
                 else
                 {
+                    Debug.Log("Found Character");
                     if (myChar.data[0].user_name == "")
                     {
                         namePrompt.SetActive(true);
                     }
-                    Debug.Log("Found Character");
+
+                    charId = myChar.data[0].char_id;
+                    charRace = myChar.data[0].character_race;
+                    CallRace(charRace);
+
+                    equip = new string[]{myChar.data[0].equip_item_1,
+                    myChar.data[0].equip_item_2,
+                    myChar.data[0].equip_item_3,
+                    myChar.data[0].equip_item_4,
+                    myChar.data[0].equip_item_5};
+
+                    for(int i=0; i<5; i++)
+                    {
+                        itMan.CallEquip(equip[i]);
+                    }
+
+                    CallInv(charId);
+
+                    playCont.GetPlayerData();
                 }
             }
         }
@@ -77,6 +115,39 @@ public class GetPlayerData : MonoBehaviour
         {
             www.SetRequestHeader("key", "1");
             yield return www.SendWebRequest();
+
+            if (www.result != UnityWebRequest.Result.Success) 
+            {
+                Debug.Log(www.error);
+            }
+            else
+            {
+                CallChar(userId);
+            }
+        }
+    }
+
+    //Get Race Info
+    IEnumerator GetRace(string race)
+    {
+        using (UnityWebRequest www = UnityWebRequest.Get($"http://localhost:8002/race/get-race-by-name?race_name={race}"))
+        {
+            www.SetRequestHeader("key", "1");
+            yield return www.SendWebRequest();
+
+            if (www.result != UnityWebRequest.Result.Success) 
+            {
+                Debug.Log(www.error);
+            }
+            else
+            {
+                Races charRace = new Races();
+                string dH = www.downloadHandler.text;
+                charRace = JsonUtility.FromJson<Races>(dH);
+                speed = charRace.data[0].move_speed;
+                carryAmount = charRace.data[0].carry_amount;
+                playCont.GetPlayerData();
+            }
         }
     }
 
@@ -101,6 +172,35 @@ public class GetPlayerData : MonoBehaviour
             else
             {
                 namePrompt.SetActive(false);
+                playCont.userName = nameField.text;
+                playCont.GetPlayerData();
+            }
+        }
+    }
+
+    //Get Inventory At Start
+    IEnumerator GetInv(int charId)
+    {
+        using (UnityWebRequest www = UnityWebRequest.Get($"http://localhost:8002/inventory/get-inv-by-id?char_id={charId}"))
+        {
+            www.SetRequestHeader("key", "1");
+            yield return www.SendWebRequest();
+
+            if (www.result != UnityWebRequest.Result.Success) 
+            {
+                Debug.Log(www.error);
+            }
+            else
+            {
+                Inventory myInv = new Inventory();
+                invDh = www.downloadHandler.text;
+                Debug.Log(invDh);
+                myInv = JsonUtility.FromJson<Inventory>(invDh);
+                for(int i = 0; i < myInv.data.Length; i++)
+                {
+                    playerInventory += myInv.data[i].item_amount;
+                }
+                playCont.GetPlayerData();
             }
         }
     }

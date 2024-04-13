@@ -33,7 +33,7 @@ public class PlayerController : MonoBehaviour
     private GetPlayerData getPlayerData;
 
 
-
+    private int userId;
     public float speed;
     public int carryAmount;
     public int playerInventory;
@@ -51,17 +51,10 @@ public class PlayerController : MonoBehaviour
 
 
 
-    public void CallRace(string race)
-    {
-        StartCoroutine(GetRace(race));
-    }
+    
     public void CheckInv(int charId, int itemId)
     {
         StartCoroutine(CheckInvForDupe(charId, itemId));
-    }
-    public void CallInv(int charId)
-    {
-        StartCoroutine(GetInv(charId));
     }
     public void AddMoreItem(int itemID)
     {
@@ -79,40 +72,30 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
+        userId = UserId.user_id;
         getPlayerData = gameObject.GetComponent<GetPlayerData>();
-        getPlayerData.CallChar();
-        dH = getPlayerData.dH;
-        Debug.Log(dH);
+        getPlayerData.CallChar(userId);
 
+        
+        
         itMan = gameObject.GetComponent<ItemManagement>();
-        CharArray myChar = new CharArray();
-        myChar = JsonUtility.FromJson<CharArray>(dH);
-        charRace = myChar.data[0].character_race;
-        charId = myChar.data[0].char_id;
-        userName = myChar.data[0].user_name;
+        buildUI = GetComponent<BuildingUI>();
+        invUI = GetComponent<InventoryUI>();
+        agent = GetComponent<NavMeshAgent>();
+        InvokeRepeating("PlayerPosition", 0f, .3f);
+    }
+
+    public void GetPlayerData()
+    {
+        charRace = getPlayerData.charRace;
+        charId = getPlayerData.charId;
+        userName = getPlayerData.userName;
+        speed = getPlayerData.speed;
+        carryAmount = getPlayerData.carryAmount;
 
         playerName.text = userName;
 
-        buildUI = GetComponent<BuildingUI>();
-        invUI = GetComponent<InventoryUI>();
-        
-        CallRace(charRace);
-        CallInv(charId);
-
-        equip = new string[]{myChar.data[0].equip_item_1,
-        myChar.data[0].equip_item_2,
-        myChar.data[0].equip_item_3,
-        myChar.data[0].equip_item_4,
-        myChar.data[0].equip_item_5};
-
-        for(int i=0; i<5; i++)
-        {
-            itMan.CallEquip(equip[i]);
-        }
-
-
-        agent = GetComponent<NavMeshAgent>();
-        InvokeRepeating("PlayerPosition", 0f, .3f);
+        equip = getPlayerData.equip;
     }
 
 
@@ -120,7 +103,7 @@ public class PlayerController : MonoBehaviour
 
     IEnumerator wait()
     {
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(3f);
     }
 
     private void PlayerPosition()
@@ -301,28 +284,6 @@ public class PlayerController : MonoBehaviour
         isMoving = true;
     }
 
-    //Get race data for current player
-    IEnumerator GetRace(string race)
-    {
-        using (UnityWebRequest www = UnityWebRequest.Get($"http://localhost:8002/race/get-race-by-name?race_name={race}"))
-        {
-            www.SetRequestHeader("key", "1");
-            yield return www.SendWebRequest();
-
-            if (www.result != UnityWebRequest.Result.Success) 
-            {
-                Debug.Log(www.error);
-            }
-            else
-            {
-                Races charRace = new Races();
-                string dH = www.downloadHandler.text;
-                charRace = JsonUtility.FromJson<Races>(dH);
-                speed = charRace.data[0].move_speed;
-                carryAmount = charRace.data[0].carry_amount;
-            }
-        }
-    }
 
     IEnumerator CheckInvForDupe(int charId, int itemId)
     {
@@ -393,32 +354,6 @@ public class PlayerController : MonoBehaviour
             else
             {
                 Debug.Log(www.downloadHandler.text);
-            }
-        }
-    }
-
-    //Get Inventory At Start
-    IEnumerator GetInv(int charId)
-    {
-        using (UnityWebRequest www = UnityWebRequest.Get($"http://localhost:8002/inventory/get-inv-by-id?char_id={charId}"))
-        {
-            www.SetRequestHeader("key", "1");
-            yield return www.SendWebRequest();
-
-            if (www.result != UnityWebRequest.Result.Success) 
-            {
-                Debug.Log(www.error);
-            }
-            else
-            {
-                Inventory myInv = new Inventory();
-                invDh = www.downloadHandler.text;
-                Debug.Log(invDh);
-                myInv = JsonUtility.FromJson<Inventory>(invDh);
-                for(int i = 0; i < myInv.data.Length; i++)
-                {
-                    playerInventory += myInv.data[i].item_amount;
-                }
             }
         }
     }

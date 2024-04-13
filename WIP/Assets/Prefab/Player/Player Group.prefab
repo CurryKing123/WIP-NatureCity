@@ -1901,7 +1901,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2865191267694654108}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2533194482995866113}
+        m_TargetAssemblyTypeName: GetPlayerData, Assembly-CSharp
+        m_MethodName: ConfirmName
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &5538928544441940113
 GameObject:
   m_ObjectHideFlags: 0
@@ -2863,7 +2875,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nameField: {fileID: 4239175386834545686}
   namePrompt: {fileID: 2897734442257300999}
+  charId: 0
+  speed: 0
+  carryAmount: 0
+  playerInventory: 0
+  charRace: 
+  userName: 
   dH: 
+  invDh: 
+  equip: []
 --- !u!114 &8617358218368872754
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -10,6 +10,7 @@ public class InventoryUI : MonoBehaviour
 {
     private PlayerController playCont;
     private Inventory inv;
+    private GetPlayerData getPlayerData;
     public bool popUp = false;
 
     [SerializeField] private Sprite[] sprites;
@@ -22,6 +23,7 @@ public class InventoryUI : MonoBehaviour
     void Start()
     {
         playCont = GetComponent<PlayerController>();
+        getPlayerData = GetComponent<GetPlayerData>();
         inv = new Inventory();
     }
 
