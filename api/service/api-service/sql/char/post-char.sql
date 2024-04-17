@@ -11,15 +11,15 @@ INSERT INTO `NATURE`.`user`
              `player_stamina`,
              `player_status`)
 VALUES      (?,
-            ?,
+            '',
              'fox',
-             ?,
-             ?,
-             ?,
-             ?,
-             ?,
-             ?,
-             ?,
-             ?); 
+             '',
+             '',
+             '',
+             '',
+             '',
+             3,
+             5,
+             ''); 
 
 

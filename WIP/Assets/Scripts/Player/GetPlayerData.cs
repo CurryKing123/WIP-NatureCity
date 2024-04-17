@@ -8,7 +8,7 @@ using TMPro;
 
 public class GetPlayerData : MonoBehaviour
 {
-    [SerializeField] private TMP_InputField nameField;
+    [SerializeField] private InputField nameField;
     [SerializeField] private GameObject namePrompt;
 
     private int userId;
@@ -42,9 +42,10 @@ public class GetPlayerData : MonoBehaviour
     {
         StartCoroutine(MakeChar(userId));
     }
-    public void ConfirmName(string dH)
+
+    public void ConfirmName()
     {
-        StartCoroutine(CreateName(dH));
+        StartCoroutine(CreateName());
     }
 
     public void CallRace(string race)
@@ -151,15 +152,17 @@ public class GetPlayerData : MonoBehaviour
         }
     }
 
+
     //Create New Name For Character
-    IEnumerator CreateName(string dH)
+    IEnumerator CreateName()
     {  
         myChar = JsonUtility.FromJson<CharArray>(dH);
-        myChar.data[0].user_name = nameField.text;
-        charId = myChar.data[0].char_id;
+        userName = nameField.text;
+
+        myChar.data[0].user_name = userName;
         string jsonUse = JsonUtility.ToJson(myChar.data[0], true);
 
-        using (UnityWebRequest www = UnityWebRequest.Put($"http://localhost:8002/char/put-char?{charId}", jsonUse))
+        using (UnityWebRequest www = UnityWebRequest.Put($"http://localhost:8002/char/put-char?char_id={charId}", jsonUse))
         {
             www.SetRequestHeader("key", "1");
             www.SetRequestHeader("content-type", "application/json");
@@ -171,9 +174,9 @@ public class GetPlayerData : MonoBehaviour
             }
             else
             {
-                namePrompt.SetActive(false);
-                playCont.userName = nameField.text;
+                Debug.Log("New Name Created");
                 playCont.GetPlayerData();
+                namePrompt.SetActive(false);
             }
         }
     }
