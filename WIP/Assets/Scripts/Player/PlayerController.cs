@@ -31,6 +31,10 @@ public class PlayerController : MonoBehaviour
     public TextMeshProUGUI pressB;
     private ItemManagement itMan;
     private GetPlayerData getPlayerData;
+    private Animator anim;
+
+    public enum ActionState {Walking, NotMoving}
+    public ActionState actionState;
 
 
     private int userId;
@@ -72,9 +76,14 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
+        ActionStateSetup();
+
         userId = UserId.user_id;
         getPlayerData = gameObject.GetComponent<GetPlayerData>();
         getPlayerData.CallChar(userId);
+        anim = GetComponent<Animator>();
+
+        actionState = ActionState.NotMoving;
 
         
         
@@ -120,12 +129,23 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
         StartCoroutine(GetInvUpdate(charId));
+        
+        if (agent.velocity.sqrMagnitude > 0)
+        {
+            actionState = ActionState.Walking;
+            anim.SetBool("Walking", true);
+        }
+        else
+        {
+            actionState = ActionState.NotMoving;
+            anim.SetBool("Walking", false);
+        }
+
         if (Input.GetMouseButtonDown(1))
         {
             agent.speed = speed;
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
-            
 
             if (Physics.Raycast(ray, out hit))
             {
@@ -403,6 +423,18 @@ public class PlayerController : MonoBehaviour
                     itMan.CallItem(itemId);
                 }
             }
+        }
+    }
+
+    private void ActionStateSetup()
+    {
+        switch (actionState)
+        {
+            case ActionState.Walking:
+            break;
+
+            case ActionState.NotMoving:
+            break;
         }
     }
 

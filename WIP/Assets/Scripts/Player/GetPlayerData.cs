@@ -90,6 +90,8 @@ public class GetPlayerData : MonoBehaviour
 
                     charId = myChar.data[0].char_id;
                     charRace = myChar.data[0].character_race;
+                    userName = myChar.data[0].user_name;
+                    
                     CallRace(charRace);
 
                     equip = new string[]{myChar.data[0].equip_item_1,
