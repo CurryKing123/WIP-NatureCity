@@ -32,6 +32,7 @@ public class PlayerController : MonoBehaviour
     private ItemManagement itMan;
     private GetPlayerData getPlayerData;
     private Animator anim;
+    public Camera cam;
 
     public enum ActionState {Walking, NotMoving}
     public ActionState actionState;
@@ -144,7 +145,7 @@ public class PlayerController : MonoBehaviour
         if (Input.GetMouseButtonDown(1))
         {
             agent.speed = speed;
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            Ray ray = cam.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
 
             if (Physics.Raycast(ray, out hit))
