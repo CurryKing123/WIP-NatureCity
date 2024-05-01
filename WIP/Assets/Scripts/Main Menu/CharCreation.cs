@@ -15,6 +15,9 @@ public class CharCreation : MonoBehaviour
     [SerializeField] private InputField nameField;
     [SerializeField] private Button createButton;
     [SerializeField] private Button backButton;
+
+
+
     public void CreateUser()
     {
         StartCoroutine(CreateUsername());

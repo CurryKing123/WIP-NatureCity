@@ -5,20 +5,17 @@ using UnityEngine;
 public class FloatingText : MonoBehaviour
 {
     public GameObject nameText;
+    public Transform player;
+    public Vector3 offset;
+    private Vector3 rotOffset = new Vector3(0, 180, 0);
     public Camera cam;
 
-
-    void Start()
-    {
-
-    }
 
     void Update()
     {
         if (nameText != null)
         {
-            nameText.transform.LookAt(cam.transform.position);
-            nameText.transform.Rotate(0,180,0);
+            nameText.transform.position = player.position + offset;
         }
     }
 }

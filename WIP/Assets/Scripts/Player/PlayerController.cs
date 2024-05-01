@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.Networking;
 using UnityEngine.AI;
 using System.Threading;
@@ -28,7 +29,7 @@ public class PlayerController : MonoBehaviour
     private InventoryUI invUI;
     public Vector3 playerPos;
     public TextMeshProUGUI playerName;
-    public TextMeshProUGUI pressB;
+    public GameObject pressB;
     private ItemManagement itMan;
     private GetPlayerData getPlayerData;
     private Animator anim;
@@ -93,6 +94,9 @@ public class PlayerController : MonoBehaviour
         invUI = GetComponent<InventoryUI>();
         agent = GetComponent<NavMeshAgent>();
         InvokeRepeating("PlayerPosition", 0f, .3f);
+
+        pressB = GameObject.Find("Press B");
+        pressB.GetComponent<TextMeshProUGUI>().enabled = false;
     }
 
     public void GetPlayerData()
@@ -261,7 +265,7 @@ public class PlayerController : MonoBehaviour
         {
             Debug.Log("Entering Build Area");
             inBuildArea = true;
-            pressB.gameObject.SetActive(true);
+            pressB.GetComponent<TextMeshProUGUI>().enabled = true;
         }
     }
 
@@ -284,7 +288,7 @@ public class PlayerController : MonoBehaviour
             {
                 buildUI.ExitBuildPopup();
             }
-            pressB.gameObject.SetActive(false);
+            pressB.GetComponent<TextMeshProUGUI>().enabled = false;
         }
 
 

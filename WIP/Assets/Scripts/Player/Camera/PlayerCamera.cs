@@ -3,24 +3,21 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Mirror;
+using Cinemachine;
 
 public class PlayerCamera : NetworkBehaviour
 {
+    [SerializeField] private CinemachineVirtualCamera vCam;
     public Transform player;
-    public GameObject cameraHolder;
-    public Vector3 offset;
-
-    public override void OnStartAuthority()
-    {
-        cameraHolder.SetActive(true);
-    }
 
 
-    void Update()
+    private void Start()
     {
         if (isLocalPlayer)
         {
-            cameraHolder.transform.position = player.transform.position + offset;
+            vCam = CinemachineVirtualCamera.FindAnyObjectByType<CinemachineVirtualCamera>();
+            vCam.LookAt = player.gameObject.transform;
+            vCam.Follow = player.gameObject.transform;
         }
     }
 }
