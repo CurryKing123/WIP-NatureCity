@@ -13,18 +13,18 @@ public class BuildingUI : MonoBehaviour
     private void Start()
     {
         panelSet = GameObject.Find("UI Popup");
-        panelSet.GetComponent<Image>().enabled = false;
+        panelSet.SetActive(false);
     }
 
     public void BuildPopup()
     {
-        panelSet.GetComponent<Image>().enabled = true;
+        panelSet.SetActive(true);
         popUp = true;
     }
 
     public void ExitBuildPopup()
     {
-        panelSet.GetComponent<Image>().enabled = false;
+        panelSet.SetActive(false);
         popUp = false;
     }
 }

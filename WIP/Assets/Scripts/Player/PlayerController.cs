@@ -46,7 +46,7 @@ public class PlayerController : MonoBehaviour
     public int charId;
     public string charRace;
     public string userName;
-    private string dH;
+    public string dH;
     public string invDh;
     public string[] equip;
     //public string equip2;

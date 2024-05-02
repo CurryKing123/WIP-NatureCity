@@ -627,6 +627,7 @@ MonoBehaviour:
   charId: 0
   charRace: 
   userName: 
+  dH: 
   invDh: 
   equip: []
 --- !u!65 &4042619707630403076
@@ -736,8 +737,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e3a036f89afa18429bbf145b74e8776, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nameField: {fileID: 0}
-  namePrompt: {fileID: 0}
   charId: 0
   speed: 0
   carryAmount: 0
@@ -747,6 +746,7 @@ MonoBehaviour:
   dH: 
   invDh: 
   equip: []
+  playerUI: {fileID: 0}
 --- !u!114 &8617358218368872754
 MonoBehaviour:
   m_ObjectHideFlags: 0

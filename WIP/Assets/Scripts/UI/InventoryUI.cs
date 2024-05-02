@@ -27,8 +27,8 @@ public class InventoryUI : MonoBehaviour
         inv = new Inventory();
 
         inventoryUI = GameObject.Find("Inventory UI");
-        inventoryUI.GetComponent<Image>().enabled = false;
         invGrid = GameObject.Find("Inventory Grid");
+        inventoryUI.SetActive(false);
         
     }
 
@@ -79,14 +79,14 @@ public class InventoryUI : MonoBehaviour
 
     public void InvPopUp()
     {
-        inventoryUI.GetComponent<Image>().enabled = true;
+        inventoryUI.SetActive(true);
         popUp = true;
 
     }
 
     public void ExitInvPopUp()
     {
-        inventoryUI.GetComponent<Image>().enabled = false;
+        inventoryUI.SetActive(false);
         popUp = false;
     }
 }

@@ -8,8 +8,6 @@ using TMPro;
 
 public class GetPlayerData : MonoBehaviour
 {
-    [SerializeField] private InputField nameField;
-    [SerializeField] private GameObject namePrompt;
 
     private int userId;
     public int charId;
@@ -25,6 +23,7 @@ public class GetPlayerData : MonoBehaviour
     private CharArray myChar;
     private ItemManagement itMan;
     private PlayerController playCont;
+    [SerializeField] private GameObject playerUI;
 
     void Start()
     {
@@ -32,6 +31,8 @@ public class GetPlayerData : MonoBehaviour
         myChar = new CharArray();
         itMan = gameObject.GetComponent<ItemManagement>();
         playCont = gameObject.GetComponent<PlayerController>();
+
+        playerUI = GameObject.Find("Player UI");
     }
 
     public void CallChar(int userId)
@@ -43,11 +44,6 @@ public class GetPlayerData : MonoBehaviour
         StartCoroutine(MakeChar(userId));
     }
 
-    public void ConfirmName()
-    {
-        StartCoroutine(CreateName());
-    }
-
     public void CallRace(string race)
     {
         StartCoroutine(GetRace(race));
@@ -57,6 +53,7 @@ public class GetPlayerData : MonoBehaviour
         StartCoroutine(GetInv(charId));
     }
 
+    //Get Character Data From UserId
     IEnumerator GetChar(int userId)
     {
         using (UnityWebRequest www = UnityWebRequest.Get($"http://localhost:8002/char/get-char-by-id?user_id={userId}"))
@@ -65,7 +62,9 @@ public class GetPlayerData : MonoBehaviour
             yield return www.SendWebRequest();
 
             dH = www.downloadHandler.text;
-            Debug.Log(dH);
+
+            //Save Download Handler in Static Class
+            DownloadHandler.dH = dH;
             myChar = JsonUtility.FromJson<CharArray>(dH);
 
             if (www.result != UnityWebRequest.Result.Success) 
@@ -83,10 +82,6 @@ public class GetPlayerData : MonoBehaviour
                 else
                 {
                     Debug.Log("Found Character");
-                    if (myChar.data[0].user_name == "")
-                    {
-                        namePrompt.SetActive(true);
-                    }
 
                     charId = myChar.data[0].char_id;
                     charRace = myChar.data[0].character_race;
@@ -104,6 +99,8 @@ public class GetPlayerData : MonoBehaviour
                     {
                         itMan.CallEquip(equip[i]);
                     }
+
+                    playerUI.GetComponent<CreateIGN>().FindPlayer();
 
                     CallInv(charId);
 
@@ -150,35 +147,6 @@ public class GetPlayerData : MonoBehaviour
                 speed = charRace.data[0].move_speed;
                 carryAmount = charRace.data[0].carry_amount;
                 playCont.GetPlayerData();
-            }
-        }
-    }
-
-
-    //Create New Name For Character
-    IEnumerator CreateName()
-    {  
-        myChar = JsonUtility.FromJson<CharArray>(dH);
-        userName = nameField.text;
-
-        myChar.data[0].user_name = userName;
-        string jsonUse = JsonUtility.ToJson(myChar.data[0], true);
-
-        using (UnityWebRequest www = UnityWebRequest.Put($"http://localhost:8002/char/put-char?char_id={charId}", jsonUse))
-        {
-            www.SetRequestHeader("key", "1");
-            www.SetRequestHeader("content-type", "application/json");
-            yield return www.SendWebRequest();
-
-            if (www.result != UnityWebRequest.Result.Success) 
-            {
-                Debug.Log(www.error);
-            }
-            else
-            {
-                Debug.Log("New Name Created");
-                playCont.GetPlayerData();
-                namePrompt.SetActive(false);
             }
         }
     }

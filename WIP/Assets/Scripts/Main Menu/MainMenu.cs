@@ -44,6 +44,7 @@ public class MainMenu : MonoBehaviour
 
     void Update()
     {
+        //States to change the main menu layout
         if (menuState == MenuState.Register)
         {
             mainMenu.SetActive(false);
