@@ -108,10 +108,10 @@ public class ItemManagement : MonoBehaviour
                 Bag bag = new Bag();
                 bag = JsonUtility.FromJson<Bag>(dH);
 
-                PlayerController player = gameObject.GetComponent<PlayerController>();
-                player.carryAmount += bag.data[0].item_bag_capacity;
+                CharacterInfo.bagCarryAmount += bag.data[0].item_bag_capacity;
+                Debug.Log(CharacterInfo.bagCarryAmount);
 
-                carryCap.text = "Capacity: " + player.carryAmount;
+                carryCap.text = "Capacity: " + CharacterInfo.carryAmount;
             }
         }
     }

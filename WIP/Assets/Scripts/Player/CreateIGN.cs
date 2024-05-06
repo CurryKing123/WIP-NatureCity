@@ -30,7 +30,7 @@ public class CreateIGN : MonoBehaviour
 
     public void FindPlayer()
     {
-        dH = DownloadHandler.dH;
+        dH = CharacterInfo.dH;
         if (dH == "")
         {
             FindPlayer();

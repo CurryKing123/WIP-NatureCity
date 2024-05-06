@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
 using TMPro;
+using UnityEngine.TextCore.Text;
 
 public class GetPlayerData : MonoBehaviour
 {
@@ -16,28 +17,23 @@ public class GetPlayerData : MonoBehaviour
     public int playerInventory;
     public string charRace;
     public string userName;
-    public string dH;
     public string invDh;
     public string[] equip;
 
     private CharArray myChar;
     private ItemManagement itMan;
-    private PlayerController playCont;
-    [SerializeField] private GameObject playerUI;
+    private CharacterInfo charInfo;
+
 
     void Start()
     {
-        userId = UserId.user_id;
         myChar = new CharArray();
         itMan = gameObject.GetComponent<ItemManagement>();
-        playCont = gameObject.GetComponent<PlayerController>();
-
-        playerUI = GameObject.Find("Player UI");
     }
 
     public void CallChar(int userId)
     {
-        StartCoroutine(GetChar(userId));
+        StartCoroutine(GetChar(UserId.user_id));
     }
     private void PostChar(int userId)
     {
@@ -61,10 +57,11 @@ public class GetPlayerData : MonoBehaviour
             www.SetRequestHeader("key", "1");
             yield return www.SendWebRequest();
 
-            dH = www.downloadHandler.text;
+            string dH = www.downloadHandler.text;
 
             //Save Download Handler in Static Class
-            DownloadHandler.dH = dH;
+            CharacterInfo.dH = dH;
+            Debug.Log(CharacterInfo.dH);
             myChar = JsonUtility.FromJson<CharArray>(dH);
 
             if (www.result != UnityWebRequest.Result.Success) 
@@ -83,9 +80,10 @@ public class GetPlayerData : MonoBehaviour
                 {
                     Debug.Log("Found Character");
 
-                    charId = myChar.data[0].char_id;
+                    CharacterInfo.charId = myChar.data[0].char_id;
                     charRace = myChar.data[0].character_race;
-                    userName = myChar.data[0].user_name;
+                    CharacterInfo.charRace = charRace;
+                    CharacterInfo.userName = myChar.data[0].user_name;
                     
                     CallRace(charRace);
 
@@ -95,16 +93,14 @@ public class GetPlayerData : MonoBehaviour
                     myChar.data[0].equip_item_4,
                     myChar.data[0].equip_item_5};
 
+                    CharacterInfo.equip = equip;
+
                     for(int i=0; i<5; i++)
                     {
                         itMan.CallEquip(equip[i]);
                     }
 
-                    playerUI.GetComponent<CreateIGN>().FindPlayer();
-
                     CallInv(charId);
-
-                    playCont.GetPlayerData();
                 }
             }
         }
@@ -143,10 +139,10 @@ public class GetPlayerData : MonoBehaviour
             {
                 Races charRace = new Races();
                 string dH = www.downloadHandler.text;
+                Debug.Log(dH);
                 charRace = JsonUtility.FromJson<Races>(dH);
-                speed = charRace.data[0].move_speed;
-                carryAmount = charRace.data[0].carry_amount;
-                playCont.GetPlayerData();
+                CharacterInfo.speed = charRace.data[0].move_speed;
+                CharacterInfo.carryAmount = charRace.data[0].carry_amount;
             }
         }
     }
@@ -167,13 +163,13 @@ public class GetPlayerData : MonoBehaviour
             {
                 Inventory myInv = new Inventory();
                 invDh = www.downloadHandler.text;
+                CharacterInfo.invDh = invDh;
                 Debug.Log(invDh);
                 myInv = JsonUtility.FromJson<Inventory>(invDh);
                 for(int i = 0; i < myInv.data.Length; i++)
                 {
-                    playerInventory += myInv.data[i].item_amount;
+                    CharacterInfo.playerInventory += myInv.data[i].item_amount;
                 }
-                playCont.GetPlayerData();
             }
         }
     }

@@ -13,6 +13,7 @@ public class PlayerCamera : NetworkBehaviour
 
     private void Start()
     {
+        vCam = FindAnyObjectByType<CinemachineVirtualCamera>();
         if (isLocalPlayer)
         {
             vCam = CinemachineVirtualCamera.FindAnyObjectByType<CinemachineVirtualCamera>();

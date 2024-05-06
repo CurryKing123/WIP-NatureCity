@@ -15,6 +15,7 @@ public class AccountCreation : MonoBehaviour
 {
     private MainMenu mainMenu;
     public int userId;
+    private GetPlayerData getPlayerData;
 
     [SerializeField] private InputField usernameField;
     [SerializeField] private InputField passwordField;
@@ -24,6 +25,7 @@ public class AccountCreation : MonoBehaviour
     private void Start()
     {
         mainMenu = GetComponent<MainMenu>();
+        getPlayerData = GetComponent<GetPlayerData>();
     }
     public void RegOrLog()
     {
@@ -78,7 +80,6 @@ public class AccountCreation : MonoBehaviour
             MyAccount myAccount = new MyAccount();
             string dH = www.downloadHandler.text;
             myAccount = JsonUtility.FromJson<MyAccount>(dH);
-            Debug.Log(dH);
             
 
             if (www.result != UnityWebRequest.Result.Success) 
@@ -95,6 +96,7 @@ public class AccountCreation : MonoBehaviour
                     UserId.user_id = userId;
                     mainMenu.accountState = MainMenu.AccountState.LoggedIn;
                     mainMenu.menuState = MainMenu.MenuState.Main;
+                    getPlayerData.CallChar(userId);
 
                 }
                 else

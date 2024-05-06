@@ -15,6 +15,7 @@ public class InventoryUI : MonoBehaviour
 
     [SerializeField] private Sprite[] sprites;
     [SerializeField] private GameObject inventoryUI;
+    [SerializeField] private GameObject invUI;
     [SerializeField] private GameObject invGrid;
     [SerializeField] private Button iconPrefab;
 
@@ -26,10 +27,9 @@ public class InventoryUI : MonoBehaviour
         getPlayerData = GetComponent<GetPlayerData>();
         inv = new Inventory();
 
-        inventoryUI = GameObject.Find("Inventory UI");
-        invGrid = GameObject.Find("Inventory Grid");
-        inventoryUI.SetActive(false);
-        
+        inventoryUI = GameObject.Find("Inventory");
+        invGrid = inventoryUI.GetComponent<InventoryUIGroup>().invGrid;
+        invUI = inventoryUI.GetComponent<InventoryUIGroup>().invUI;
     }
 
     void FixedUpdate()
@@ -79,14 +79,14 @@ public class InventoryUI : MonoBehaviour
 
     public void InvPopUp()
     {
-        inventoryUI.SetActive(true);
+        invUI.SetActive(true);
         popUp = true;
 
     }
 
     public void ExitInvPopUp()
     {
-        inventoryUI.SetActive(false);
+        invUI.SetActive(false);
         popUp = false;
     }
 }

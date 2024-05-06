@@ -27,9 +27,9 @@ public class PlayerController : MonoBehaviour
     private ResourceManager resMan;
     private BuildingUI buildUI;
     private InventoryUI invUI;
+    private GameObject createIGN;
     public Vector3 playerPos;
     public TextMeshProUGUI playerName;
-    public GameObject pressB;
     private ItemManagement itMan;
     private GetPlayerData getPlayerData;
     private Animator anim;
@@ -37,6 +37,8 @@ public class PlayerController : MonoBehaviour
 
     public enum ActionState {Walking, NotMoving}
     public ActionState actionState;
+    public enum AreaState {BuildArea, ResourceArea, None}
+    public AreaState areaState;
 
 
     private int userId;
@@ -79,39 +81,41 @@ public class PlayerController : MonoBehaviour
     private void Start()
     {
         ActionStateSetup();
+        AreaStateSetup();
 
         userId = UserId.user_id;
-        getPlayerData = gameObject.GetComponent<GetPlayerData>();
-        getPlayerData.CallChar(userId);
+
         anim = GetComponent<Animator>();
 
         actionState = ActionState.NotMoving;
+        areaState = AreaState.None;
 
         
-        
+        cam = FindAnyObjectByType<Camera>();
         itMan = gameObject.GetComponent<ItemManagement>();
         buildUI = GetComponent<BuildingUI>();
         invUI = GetComponent<InventoryUI>();
         agent = GetComponent<NavMeshAgent>();
         InvokeRepeating("PlayerPosition", 0f, .3f);
 
-        pressB = GameObject.Find("Press B");
-        pressB.GetComponent<TextMeshProUGUI>().enabled = false;
+
+        createIGN = GameObject.Find("Player UI");
+        createIGN.GetComponent<CreateIGN>().FindPlayer();
+        GetCharData();
     }
 
-    public void GetPlayerData()
+
+    private void GetCharData()
     {
-        charRace = getPlayerData.charRace;
-        charId = getPlayerData.charId;
-        userName = getPlayerData.userName;
-        speed = getPlayerData.speed;
-        carryAmount = getPlayerData.carryAmount;
-
+        charRace = CharacterInfo.charRace;
+        charId = CharacterInfo.charId;
+        userName = CharacterInfo.userName;
+        speed = CharacterInfo.speed;
+        carryAmount = CharacterInfo.bagCarryAmount + CharacterInfo.carryAmount;
         playerName.text = userName;
-
-        equip = getPlayerData.equip;
+        equip = CharacterInfo.equip;
+        invDh = CharacterInfo.invDh;
     }
-
 
 
 
@@ -133,6 +137,7 @@ public class PlayerController : MonoBehaviour
     }
     private void Update()
     {
+
         StartCoroutine(GetInvUpdate(charId));
         
         if (agent.velocity.sqrMagnitude > 0)
@@ -170,7 +175,7 @@ public class PlayerController : MonoBehaviour
                     {
                         MoveToResource(targetResource);
                         Debug.Log("Moving to resource");
-                        resMan.isBeingGathered = false;
+                        resource.isBeingGathered = false;
                         if (isMovingToResource && distFromRes < 1 && inResArea)
                         {
 
@@ -203,7 +208,7 @@ public class PlayerController : MonoBehaviour
         }
 
         //Build UI Popup
-        if (Input.GetKeyDown(KeyCode.B) && inBuildArea)
+        if (Input.GetKeyDown(KeyCode.B) && areaState == AreaState.BuildArea)
         {
             if (buildUI.popUp == false)
             {
@@ -239,7 +244,7 @@ public class PlayerController : MonoBehaviour
         {
             
             Debug.Log("In Resource Area");
-            inResArea = true;
+            areaState = AreaState.ResourceArea;
             if (isMovingToResource && distFromRes < 5)
                 {
                     if (playerInventory >= carryAmount)
@@ -264,31 +269,29 @@ public class PlayerController : MonoBehaviour
         else if (other.CompareTag("BuildArea"))
         {
             Debug.Log("Entering Build Area");
-            inBuildArea = true;
-            pressB.GetComponent<TextMeshProUGUI>().enabled = true;
+            areaState = AreaState.BuildArea;
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
+        areaState = AreaState.None;
         if (other.CompareTag("Resource"))
         {
             ResourceManager resMan = other.GetComponent<ResourceManager>();
             resMan.StopGathering();
             Debug.Log("Out of Resource Area");
-            inResArea = false;
             isGathering = false;
         }
 
         if (other.CompareTag("BuildArea"))
         {
             Debug.Log("Exiting Build Area");
-            inBuildArea = false;
             if (buildUI.popUp)
             {
                 buildUI.ExitBuildPopup();
             }
-            pressB.GetComponent<TextMeshProUGUI>().enabled = false;
+            buildUI.ExitPressPopup();
         }
 
 
@@ -365,7 +368,6 @@ public class PlayerController : MonoBehaviour
         inv = JsonUtility.FromJson<Inventory>(invDh);
         inv.data[0].item_amount = inv.data[0].item_amount + 1;
         string jsonUse = JsonUtility.ToJson(inv.data[0], true);
-        Debug.Log(jsonUse);
         using (UnityWebRequest www = UnityWebRequest.Put($"http://localhost:8002/inventory/put-inv?char_id={charId}&item_id={itemId}", jsonUse))
         {
             www.SetRequestHeader("key", "1");
@@ -439,6 +441,21 @@ public class PlayerController : MonoBehaviour
             break;
 
             case ActionState.NotMoving:
+            break;
+        }
+    }
+
+    private void AreaStateSetup()
+    {
+        switch (areaState)
+        {
+            case AreaState.BuildArea:
+            break;
+
+            case AreaState.ResourceArea:
+            break;
+
+            case AreaState.None:
             break;
         }
     }

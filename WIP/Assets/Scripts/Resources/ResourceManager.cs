@@ -80,7 +80,7 @@ public class ResourceManager : MonoBehaviour
     private void GatherResource(Transform player)
     {
         PlayerController playCont = player.GetComponent<PlayerController>();
-        if(resAmount > 0 && playCont.inResArea)
+        if(resAmount > 0 && playCont.areaState == PlayerController.AreaState.ResourceArea)
         {
             if (localTime < waitTime)
             {
