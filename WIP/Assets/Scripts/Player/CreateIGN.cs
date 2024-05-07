@@ -12,6 +12,7 @@ public class CreateIGN : MonoBehaviour
     [SerializeField] private GameObject namePrompt;
     [SerializeField] private GameObject createButton;
     [SerializeField] private GameObject playerName;
+    [SerializeField] private GameObject player;
 
 
     private CharArray myChar;
@@ -23,32 +24,23 @@ public class CreateIGN : MonoBehaviour
     private void Start()
     {
         myChar = new CharArray();
-
+        namePrompt = GameObject.Find("IGN").GetComponent<IGN>().namePrompt;
     }
 
 
 
     public void FindPlayer()
     {
-        dH = CharacterInfo.dH;
-        if (dH == "")
+
+        player = GameObject.Find("Player");
+        userName = player.GetComponent<PlayerController>().userName;
+        if (userName == "" )
         {
-            FindPlayer();
+            namePrompt.SetActive(true);
         }
         else
         {
-            playerName = GameObject.Find("Player Name");
-            myChar = JsonUtility.FromJson<CharArray>(dH);
-            userName = myChar.data[0].user_name;
-
-            if (userName == "" )
-            {
-                namePrompt.SetActive(true);
-            }
-            else
-            {
-                namePrompt.SetActive(false);
-            }
+            namePrompt.SetActive(false);
         }
     }
 

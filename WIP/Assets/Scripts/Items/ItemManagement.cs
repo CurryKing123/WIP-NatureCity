@@ -14,8 +14,9 @@ using TMPro;
 public class ItemManagement : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI carryCap;
-    PlayerController playCont;
+    private PlayerController player;
     public string itemType;
+    public int bagCarryAmount;
 
     public void CallEquip(string equip)
     {
@@ -29,6 +30,7 @@ public class ItemManagement : MonoBehaviour
     {
         StartCoroutine(GetItemById(itemId));
     }
+
     //Remove Resource To Tree
     public void RemResToTree(int itemId, int resId)
     {
@@ -38,6 +40,8 @@ public class ItemManagement : MonoBehaviour
     {
         StartCoroutine(RemItem(charId, itemId));
     }
+
+    //Add Resources To Global Inventory
     public void AddToHomeTree(string dH, int resId, int resAmount)
     {
         StartCoroutine(AddToHome(dH, resId, resAmount));
@@ -45,6 +49,11 @@ public class ItemManagement : MonoBehaviour
     public void CallHomeTree(int resId, int resAmount)
     {
         StartCoroutine(GetHomeTree(resId, resAmount));
+    }
+
+    private void Start()
+    {
+        player = gameObject.GetComponent<PlayerController>();
     }
 
     IEnumerator GetEquip(string equip)
@@ -73,7 +82,6 @@ public class ItemManagement : MonoBehaviour
                     }
                     else
                     {
-                        PlayerController player = gameObject.GetComponent<PlayerController>();
                         carryCap.text = "Capacity: " + player.carryAmount;
                     }
 
@@ -108,10 +116,8 @@ public class ItemManagement : MonoBehaviour
                 Bag bag = new Bag();
                 bag = JsonUtility.FromJson<Bag>(dH);
 
-                CharacterInfo.bagCarryAmount += bag.data[0].item_bag_capacity;
-                Debug.Log(CharacterInfo.bagCarryAmount);
+                player.carryAmount += bag.data[0].item_bag_capacity;
 
-                carryCap.text = "Capacity: " + CharacterInfo.carryAmount;
             }
         }
     }

@@ -21,6 +21,7 @@ public class PlayerController : MonoBehaviour
     public bool isGathering = false;
     private bool inBuildArea = false;
 
+
     public NavMeshAgent agent;
     private float distFromRes;
     private Transform targetResource;
@@ -34,6 +35,7 @@ public class PlayerController : MonoBehaviour
     private GetPlayerData getPlayerData;
     private Animator anim;
     public Camera cam;
+
 
     public enum ActionState {Walking, NotMoving}
     public ActionState actionState;
@@ -80,6 +82,7 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
+        
         ActionStateSetup();
         AreaStateSetup();
 
@@ -96,25 +99,23 @@ public class PlayerController : MonoBehaviour
         buildUI = GetComponent<BuildingUI>();
         invUI = GetComponent<InventoryUI>();
         agent = GetComponent<NavMeshAgent>();
+        getPlayerData = GetComponent<GetPlayerData>();
+
+        getPlayerData.CallChar(UserId.user_id);
+
+
+
         InvokeRepeating("PlayerPosition", 0f, .3f);
 
 
         createIGN = GameObject.Find("Player UI");
-        createIGN.GetComponent<CreateIGN>().FindPlayer();
-        GetCharData();
+        
     }
 
 
-    private void GetCharData()
+    public void CreateIGN()
     {
-        charRace = CharacterInfo.charRace;
-        charId = CharacterInfo.charId;
-        userName = CharacterInfo.userName;
-        speed = CharacterInfo.speed;
-        carryAmount = CharacterInfo.bagCarryAmount + CharacterInfo.carryAmount;
-        playerName.text = userName;
-        equip = CharacterInfo.equip;
-        invDh = CharacterInfo.invDh;
+        createIGN.GetComponent<CreateIGN>().FindPlayer();
     }
 
 

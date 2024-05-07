@@ -96,7 +96,6 @@ public class AccountCreation : MonoBehaviour
                     UserId.user_id = userId;
                     mainMenu.accountState = MainMenu.AccountState.LoggedIn;
                     mainMenu.menuState = MainMenu.MenuState.Main;
-                    getPlayerData.CallChar(userId);
 
                 }
                 else
