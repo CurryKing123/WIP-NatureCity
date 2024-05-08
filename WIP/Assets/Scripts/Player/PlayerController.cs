@@ -60,7 +60,7 @@ public class PlayerController : MonoBehaviour
 
 
 
-
+    [SerializeField] private DDUserID ddUserId;
     
     public void CheckInv(int charId, int itemId)
     {
@@ -82,11 +82,12 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
+        ddUserId = GameObject.Find("UserID").GetComponent<DDUserID>();
         
         ActionStateSetup();
         AreaStateSetup();
 
-        userId = UserId.user_id;
+        userId = ddUserId.userId;
 
         anim = GetComponent<Animator>();
 
@@ -101,7 +102,7 @@ public class PlayerController : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
         getPlayerData = GetComponent<GetPlayerData>();
 
-        getPlayerData.CallChar(UserId.user_id);
+        getPlayerData.CallChar(userId);
 
 
 
@@ -109,6 +110,7 @@ public class PlayerController : MonoBehaviour
 
 
         createIGN = GameObject.Find("Player UI");
+        
         
     }
 

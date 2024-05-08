@@ -26,17 +26,20 @@ public class GetPlayerData : MonoBehaviour
     private CharacterInfo charInfo;
     private PlayerController player;
 
+    [SerializeField] private DDUserID ddUserId;
+
 
     void Start()
     {
         myChar = new CharArray();
         itMan = gameObject.GetComponent<ItemManagement>();
         player = gameObject.GetComponent<PlayerController>();
+        ddUserId = GameObject.Find("UserID").GetComponent<DDUserID>();
     }
 
     public void CallChar(int userId)
     {
-        Debug.Log($"UserId: {UserId.user_id}");
+        Debug.Log($"UserId: {userId}");
         StartCoroutine(GetChar(userId));
     }
     private void PostChar(int userId)

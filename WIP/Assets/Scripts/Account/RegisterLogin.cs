@@ -11,7 +11,7 @@ using System.IO;
 using System.Threading;
 using Unity.VisualScripting;
 
-public class AccountCreation : MonoBehaviour
+public class RegisterLogin : MonoBehaviour
 {
     private MainMenu mainMenu;
     public int userId;
@@ -21,11 +21,13 @@ public class AccountCreation : MonoBehaviour
     [SerializeField] private InputField passwordField;
     [SerializeField] private Button reglogButton;
     [SerializeField] private Button backButton;
+    [SerializeField] private DDUserID dduserId;
 
     private void Start()
     {
         mainMenu = GetComponent<MainMenu>();
         getPlayerData = GetComponent<GetPlayerData>();
+        dduserId = GameObject.Find("UserID").GetComponent<DDUserID>();
     }
     public void RegOrLog()
     {
@@ -93,7 +95,7 @@ public class AccountCreation : MonoBehaviour
                     userId = myAccount.data[0].user_id;
                     Debug.Log("Login Successful!");
                     Debug.Log($"User: {userId}");
-                    UserId.user_id = userId;
+                    dduserId.userId = userId;
                     mainMenu.accountState = MainMenu.AccountState.LoggedIn;
                     mainMenu.menuState = MainMenu.MenuState.Main;
 

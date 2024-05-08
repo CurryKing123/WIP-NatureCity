@@ -767,6 +767,7 @@ MonoBehaviour:
   reglogButton: {fileID: 469720953}
   mainMenu: {fileID: 282267691}
   reglogScreen: {fileID: 309922328}
+  ddUserId: {fileID: 0}
   accountState: 0
   menuState: 0
 --- !u!114 &281501815
@@ -786,6 +787,7 @@ MonoBehaviour:
   passwordField: {fileID: 1352798196}
   reglogButton: {fileID: 469720953}
   backButton: {fileID: 269168523}
+  dduserId: {fileID: 446187786}
 --- !u!114 &281501816
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1092,6 +1094,51 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 411141652}
   m_CullTransparentMesh: 1
+--- !u!1 &446187784
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 446187785}
+  - component: {fileID: 446187786}
+  m_Layer: 0
+  m_Name: UserID
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &446187785
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 446187784}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 450.16666, y: 36.51352, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &446187786
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 446187784}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87fcccaa66ffbbd428d69a0eb9ded46a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  userId: 0
 --- !u!1 &469720951
 GameObject:
   m_ObjectHideFlags: 0
@@ -1421,6 +1468,74 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &756809910
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 756809912}
+  - component: {fileID: 756809911}
+  m_Layer: 0
+  m_Name: NetworkManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &756809911
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 756809910}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 593a2fe42fa9d37498c96f9a383b6521, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  NetworkConfig:
+    ProtocolVersion: 0
+    NetworkTransport: {fileID: 0}
+    PlayerPrefab: {fileID: 0}
+    Prefabs:
+      NetworkPrefabsLists: []
+    TickRate: 30
+    ClientConnectionBufferTimeout: 10
+    ConnectionApproval: 0
+    ConnectionData: 
+    EnableTimeResync: 0
+    TimeResyncInterval: 30
+    EnsureNetworkVariableLengthSafety: 0
+    EnableSceneManagement: 1
+    ForceSamePrefabs: 1
+    RecycleNetworkIds: 1
+    NetworkIdRecycleDelay: 120
+    RpcHashSize: 0
+    LoadSceneTimeOut: 120
+    SpawnTimeout: 1
+    EnableNetworkLogs: 1
+    OldPrefabList: []
+  RunInBackground: 1
+  LogLevel: 1
+--- !u!4 &756809912
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 756809910}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 422.30658, y: 263.29587, z: 23.402649}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &777175718
 GameObject:
   m_ObjectHideFlags: 0
@@ -2858,3 +2973,5 @@ SceneRoots:
   - {fileID: 1364679775}
   - {fileID: 281501813}
   - {fileID: 289281719}
+  - {fileID: 446187785}
+  - {fileID: 756809912}

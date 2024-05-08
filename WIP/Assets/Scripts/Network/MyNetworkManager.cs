@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Mirror;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -16,12 +17,6 @@ public class MyNetworkManager : NetworkManager
         Debug.Log("Connected to server!");
     }
 
-    public void FindPlayer()
-    {
-        player = GameObject.Find("Player");
-        playerName = player.GetComponent<PlayerController>().userName;
-    }
-
 
     public override void OnServerAddPlayer(NetworkConnectionToClient conn)
     {
@@ -29,11 +24,20 @@ public class MyNetworkManager : NetworkManager
 
         MyNetworkPlayer netPlayer = conn.identity.GetComponent<MyNetworkPlayer>();
 
-
+        WaitForName(conn);
         
-        netPlayer.SetDisplayName(playerName);   
+        
         
 
         Debug.Log($"{numPlayers} Players in server");
+    }
+
+    async void WaitForName(NetworkConnectionToClient conn)
+    {
+        MyNetworkPlayer netPlayer = conn.identity.GetComponent<MyNetworkPlayer>();
+        await Task.Delay(1000);
+        player = GameObject.Find("Player");
+        playerName = player.GetComponent<PlayerController>().userName;
+        netPlayer.SetDisplayName(playerName);
     }
 }
