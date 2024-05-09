@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 7647955267875280841}
   - component: {fileID: 2021371248418430113}
   - component: {fileID: 609008096311200010}
+  - component: {fileID: 2905463810569229454}
   m_Layer: 0
   m_Name: Player Group
   m_TagString: Untagged
@@ -123,6 +124,23 @@ MonoBehaviour:
   syncInterval: 0
   vCam: {fileID: 0}
   player: {fileID: 7054530748644212929}
+--- !u!114 &2905463810569229454
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 540096833105809865}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f6f3bf89aa97405989c802ba270f815, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 1
+  syncMode: 0
+  syncInterval: 0
+  clientAuthority: 0
+  animator: {fileID: 8711136066556590507}
 --- !u!1 &905100010413133411
 GameObject:
   m_ObjectHideFlags: 0
@@ -467,3 +485,9 @@ MonoBehaviour:
   dH: 
   invDh: 
   equip: []
+  ddUserId: {fileID: 0}
+--- !u!95 &8711136066556590507 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 1095500802542222918, guid: f5fa085f6957f784c8e7de9d479e050f, type: 3}
+  m_PrefabInstance: {fileID: 8633449094760482797}
+  m_PrefabAsset: {fileID: 0}

@@ -35,6 +35,7 @@ public class PlayerController : MonoBehaviour
     private GetPlayerData getPlayerData;
     private Animator anim;
     public Camera cam;
+    private PlayerId playerId;
 
 
     public enum ActionState {Walking, NotMoving}
@@ -60,7 +61,6 @@ public class PlayerController : MonoBehaviour
 
 
 
-    [SerializeField] private DDUserID ddUserId;
     
     public void CheckInv(int charId, int itemId)
     {
@@ -82,12 +82,12 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
-        ddUserId = GameObject.Find("UserID").GetComponent<DDUserID>();
+        playerId = GameObject.Find("PlayerId").GetComponent<PlayerId>();
         
         ActionStateSetup();
         AreaStateSetup();
 
-        userId = ddUserId.userId;
+        userId = playerId.userId;
 
         anim = GetComponent<Animator>();
 

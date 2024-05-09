@@ -10,6 +10,7 @@ public class MyNetworkManager : NetworkManager
     [SerializeField] private GameObject player;
     private string playerName;
 
+
     public override void OnClientConnect()
     {
         base.OnClientConnect();
@@ -26,9 +27,6 @@ public class MyNetworkManager : NetworkManager
 
         WaitForName(conn);
         
-        
-        
-
         Debug.Log($"{numPlayers} Players in server");
     }
 

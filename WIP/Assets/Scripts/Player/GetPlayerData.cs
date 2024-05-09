@@ -26,7 +26,7 @@ public class GetPlayerData : MonoBehaviour
     private CharacterInfo charInfo;
     private PlayerController player;
 
-    [SerializeField] private DDUserID ddUserId;
+    private PlayerId playerId;
 
 
     void Start()
@@ -34,7 +34,7 @@ public class GetPlayerData : MonoBehaviour
         myChar = new CharArray();
         itMan = gameObject.GetComponent<ItemManagement>();
         player = gameObject.GetComponent<PlayerController>();
-        ddUserId = GameObject.Find("UserID").GetComponent<DDUserID>();
+        playerId = GameObject.Find("PlayerId").GetComponent<PlayerId>();
     }
 
     public void CallChar(int userId)
@@ -85,7 +85,8 @@ public class GetPlayerData : MonoBehaviour
                 {
                     Debug.Log("Found Character");
 
-                    player.charId = myChar.data[0].char_id;
+                    charId = myChar.data[0].char_id;
+                    player.charId = charId;
                     charRace = myChar.data[0].character_race;
                     player.charRace = charRace;
 

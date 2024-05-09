@@ -19,7 +19,8 @@ public class MainMenu : MonoBehaviour
 
     [SerializeField] private GameObject mainMenu;
     [SerializeField] private GameObject reglogScreen;
-    [SerializeField] private DDUserID ddUserId;
+
+    private PlayerId playerId;
 
     public enum AccountState {LoggedIn, LoggedOut}
     public AccountState accountState;
@@ -28,14 +29,15 @@ public class MainMenu : MonoBehaviour
 
     void Start()
     {
-        ddUserId = GameObject.Find("UserID").GetComponent<DDUserID>();
+        playerId = GameObject.Find("PlayerId").GetComponent<PlayerId>();
+
 
         AccountStateSetup();
         MenuStateSetup();
 
         menuState = MenuState.Main;
 
-        if (ddUserId.userId == 0)
+        if (playerId.userId == 0)
         {
             accountState = AccountState.LoggedOut;
         }
@@ -93,11 +95,11 @@ public class MainMenu : MonoBehaviour
 
     public void LogInOut()
     {
-        if (ddUserId.userId > 0)
+        if (playerId.userId > 0)
         {
             accountState = AccountState.LoggedOut;
             Debug.Log("Logged Out");
-            ddUserId.userId = 0;
+            playerId.userId = 0;
         }
         else
         {
