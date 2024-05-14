@@ -17,7 +17,6 @@ GameObject:
   - component: {fileID: 1809324903818670019}
   - component: {fileID: 8639424980642564321}
   - component: {fileID: 6122532369308020204}
-  - component: {fileID: 20034825141794527}
   - component: {fileID: 1095500802542222918}
   m_Layer: 0
   m_Name: Player 1
@@ -84,6 +83,7 @@ MonoBehaviour:
   playerName: {fileID: 0}
   cam: {fileID: 0}
   actionState: 0
+  areaState: 0
   speed: 0
   carryAmount: 0
   playerInventory: 0
@@ -155,6 +155,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   carryCap: {fileID: 0}
   itemType: 
+  bagCarryAmount: 0
 --- !u!114 &1809324903818670019
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -167,8 +168,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b395a7673442a945a350e5ed4c6f5e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  panelSet: {fileID: 0}
-  pressB: {fileID: 0}
+  buildUI: {fileID: 0}
+  player: {fileID: 0}
   popUp: 0
 --- !u!114 &8639424980642564321
 MonoBehaviour:
@@ -187,6 +188,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 7b58b99f8004dae4097e4bb1c506d9ee, type: 3}
   - {fileID: 21300000, guid: c29b1d019f0a2a147872d366be9259b5, type: 3}
   inventoryUI: {fileID: 0}
+  invUI: {fileID: 0}
   invGrid: {fileID: 0}
   iconPrefab: {fileID: 4182691558537491861, guid: 9c9a7351dbc2f0242a537e72d567875b, type: 3}
 --- !u!114 &6122532369308020204
@@ -210,19 +212,6 @@ MonoBehaviour:
   dH: 
   invDh: 
   equip: []
-  playerUI: {fileID: 0}
---- !u!114 &20034825141794527
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2124932457671155094}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0a49cc3478ad5504787838a6184dfc10, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!95 &1095500802542222918
 Animator:
   serializedVersion: 5

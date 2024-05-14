@@ -1,8 +1,10 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UserId : MonoBehaviour
+[Serializable]
+public class UserId
 {
-    public static int user_id;
+    public int userId;
 }

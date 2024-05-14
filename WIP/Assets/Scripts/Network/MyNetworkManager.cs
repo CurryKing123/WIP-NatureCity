@@ -7,7 +7,6 @@ using UnityEngine;
 
 public class MyNetworkManager : NetworkManager
 {
-    [SerializeField] private GameObject player;
     private string playerName;
 
 
@@ -25,17 +24,10 @@ public class MyNetworkManager : NetworkManager
 
         MyNetworkPlayer netPlayer = conn.identity.GetComponent<MyNetworkPlayer>();
 
-        WaitForName(conn);
+        //netPlayer.SetDisplayName(playerName);
         
         Debug.Log($"{numPlayers} Players in server");
     }
 
-    async void WaitForName(NetworkConnectionToClient conn)
-    {
-        MyNetworkPlayer netPlayer = conn.identity.GetComponent<MyNetworkPlayer>();
-        await Task.Delay(1000);
-        player = GameObject.Find("Player");
-        playerName = player.GetComponent<PlayerController>().userName;
-        netPlayer.SetDisplayName(playerName);
-    }
+
 }

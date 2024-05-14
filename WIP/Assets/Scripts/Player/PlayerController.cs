@@ -36,6 +36,7 @@ public class PlayerController : MonoBehaviour
     private Animator anim;
     public Camera cam;
     private PlayerId playerId;
+    private UserId userIdJson;
 
 
     public enum ActionState {Walking, NotMoving}
@@ -82,12 +83,16 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
-        playerId = GameObject.Find("PlayerId").GetComponent<PlayerId>();
+        //playerId = GameObject.Find("PlayerId").GetComponent<PlayerId>();
         
         ActionStateSetup();
         AreaStateSetup();
 
-        userId = playerId.userId;
+        //Getting UserId From Written Json File
+        string dH = File.ReadAllText(Application.persistentDataPath + "UserId.json");
+        userIdJson = new UserId();
+        userIdJson = JsonUtility.FromJson<UserId>(dH);
+        userId = userIdJson.userId;
 
         anim = GetComponent<Animator>();
 

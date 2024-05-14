@@ -15,8 +15,9 @@ public class RegisterLogin : MonoBehaviour
 {
     private MainMenu mainMenu;
     public int userId;
+    //private UserId userId;
     private GetPlayerData getPlayerData;
-    private PlayerId playerId;
+    [SerializeField] private PlayerId playerId;
 
     [SerializeField] private InputField usernameField;
     [SerializeField] private InputField passwordField;
@@ -28,7 +29,8 @@ public class RegisterLogin : MonoBehaviour
     {
         mainMenu = GetComponent<MainMenu>();
         getPlayerData = GetComponent<GetPlayerData>();
-        playerId = GameObject.Find("PlayerId").GetComponent<PlayerId>();
+        //userId = new UserId();
+        //playerId = GameObject.Find("PlayerId").GetComponent<PlayerId>();
     }
     public void RegOrLog()
     {
@@ -96,9 +98,11 @@ public class RegisterLogin : MonoBehaviour
                     userId = myAccount.data[0].user_id;
                     Debug.Log("Login Successful!");
                     Debug.Log($"User: {userId}");
-                    playerId.userId = userId;
+                    mainMenu.userId = userId;
                     mainMenu.accountState = MainMenu.AccountState.LoggedIn;
                     mainMenu.menuState = MainMenu.MenuState.Main;
+                    mainMenu.SerializeUserId();
+
 
                 }
                 else

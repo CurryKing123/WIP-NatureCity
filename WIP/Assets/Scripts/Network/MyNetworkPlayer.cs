@@ -10,8 +10,8 @@ public class MyNetworkPlayer : NetworkBehaviour
     [SerializeField] private TMP_Text displayNameText = null;
 
     [SyncVar(hook = nameof(HandleDisplayNameUpdated))]
-    [SerializeField]
-    private string displayName = "Missing Name";
+    //[SerializeField]
+    public string displayName;
 
 
     [Server]

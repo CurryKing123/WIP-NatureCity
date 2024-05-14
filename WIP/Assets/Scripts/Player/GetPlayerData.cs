@@ -25,7 +25,7 @@ public class GetPlayerData : MonoBehaviour
     private ItemManagement itMan;
     private CharacterInfo charInfo;
     private PlayerController player;
-
+    private MyNetworkPlayer myNetworkPlayer;
     private PlayerId playerId;
 
 
@@ -34,7 +34,8 @@ public class GetPlayerData : MonoBehaviour
         myChar = new CharArray();
         itMan = gameObject.GetComponent<ItemManagement>();
         player = gameObject.GetComponent<PlayerController>();
-        playerId = GameObject.Find("PlayerId").GetComponent<PlayerId>();
+        //playerId = GameObject.Find("PlayerId").GetComponent<PlayerId>();
+        myNetworkPlayer = this.transform.parent.gameObject.GetComponent<MyNetworkPlayer>();
     }
 
     public void CallChar(int userId)
@@ -94,6 +95,7 @@ public class GetPlayerData : MonoBehaviour
 
 
                     player.userName = myChar.data[0].user_name;
+                    myNetworkPlayer.displayName = myChar.data[0].user_name;
 
                     equip = new string[]{myChar.data[0].equip_item_1,
                     myChar.data[0].equip_item_2,

@@ -22,6 +22,9 @@ public class MainMenu : MonoBehaviour
 
     private PlayerId playerId;
 
+    public int userId;
+    private UserId userIdJson;
+
     public enum AccountState {LoggedIn, LoggedOut}
     public AccountState accountState;
     public enum MenuState {Main, Register, Login}
@@ -29,15 +32,22 @@ public class MainMenu : MonoBehaviour
 
     void Start()
     {
-        playerId = GameObject.Find("PlayerId").GetComponent<PlayerId>();
-
+        userIdJson = new UserId();
+        if (File.Exists(Application.persistentDataPath + "UserId.json"))
+        {
+            string dH = File.ReadAllText(Application.persistentDataPath + "UserId.json");
+            userIdJson = JsonUtility.FromJson<UserId>(dH);
+            userId = userIdJson.userId;   
+        }
+        Debug.Log(Application.persistentDataPath);
+        //playerId = GameObject.Find("PlayerId").GetComponent<PlayerId>();
 
         AccountStateSetup();
         MenuStateSetup();
 
         menuState = MenuState.Main;
 
-        if (playerId.userId == 0)
+        if (userId <= 0)
         {
             accountState = AccountState.LoggedOut;
         }
@@ -70,7 +80,7 @@ public class MainMenu : MonoBehaviour
             mainMenu.SetActive(true);
             if (accountState == AccountState.LoggedIn)
             {
-                alertText.text = $"{UserId.user_id}";
+                alertText.text = $"{userId}";
                 playButton.gameObject.SetActive(true);
                 regButton.gameObject.SetActive(false);
                 logButton.GetComponentInChildren<Text>().text = "Logout";
@@ -86,6 +96,13 @@ public class MainMenu : MonoBehaviour
 
     }
 
+    public void SerializeUserId()
+    {
+        userIdJson.userId = userId;
+        string userIdToJson = JsonUtility.ToJson(userIdJson, true);
+        File.WriteAllText(Application.persistentDataPath + "UserId.json", userIdToJson);
+    }
+
     public void GoToRegister()
     {
         menuState = MenuState.Register;
@@ -95,11 +112,12 @@ public class MainMenu : MonoBehaviour
 
     public void LogInOut()
     {
-        if (playerId.userId > 0)
+        if (userId > 0)
         {
+            File.Delete(Application.persistentDataPath + "UserId.json");
             accountState = AccountState.LoggedOut;
             Debug.Log("Logged Out");
-            playerId.userId = 0;
+            userId = 0;
         }
         else
         {
