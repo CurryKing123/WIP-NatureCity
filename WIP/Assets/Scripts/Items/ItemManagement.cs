@@ -139,12 +139,13 @@ public class ItemManagement : MonoBehaviour
                 Items items = new Items();
                 items = JsonUtility.FromJson<Items>(dH);
                 itemType = items.data[0].item_type;
-                
+                player.InvUpdate();
 
                 if (itemType == "resource")
                 {
                     int resId = items.data[0].res_id;
                     RemResToTree(itemId, resId);
+                    player.InvUpdate();
                 }
             }
         }
@@ -195,6 +196,7 @@ public class ItemManagement : MonoBehaviour
             else
             {
                 Debug.Log("Deleted item from player inventory");
+                player.InvUpdate();
             }
         }
     }

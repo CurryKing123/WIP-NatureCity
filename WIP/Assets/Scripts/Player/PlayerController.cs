@@ -11,6 +11,7 @@ using UnityEngine.AI;
 using System.Threading;
 using System.Linq;
 using TMPro;
+using Mirror;
 
 public class PlayerController : MonoBehaviour
 {
@@ -37,6 +38,7 @@ public class PlayerController : MonoBehaviour
     public Camera cam;
     private PlayerId playerId;
     private UserId userIdJson;
+    private MyNetworkPlayer myNetworkPlayer;
 
 
     public enum ActionState {Walking, NotMoving}
@@ -79,6 +81,10 @@ public class PlayerController : MonoBehaviour
     {
         StartCoroutine(DepoRes(charId));
     }
+    public void InvUpdate()
+    {
+        StartCoroutine(GetInvUpdate());
+    }
 
 
     private void Start()
@@ -106,6 +112,7 @@ public class PlayerController : MonoBehaviour
         invUI = GetComponent<InventoryUI>();
         agent = GetComponent<NavMeshAgent>();
         getPlayerData = GetComponent<GetPlayerData>();
+        myNetworkPlayer = gameObject.transform.parent.GetComponent<MyNetworkPlayer>();
 
         getPlayerData.CallChar(userId);
 
@@ -145,8 +152,6 @@ public class PlayerController : MonoBehaviour
     }
     private void Update()
     {
-
-        StartCoroutine(GetInvUpdate(charId));
         
         if (agent.velocity.sqrMagnitude > 0)
         {
@@ -366,6 +371,7 @@ public class PlayerController : MonoBehaviour
             else
             {
                 Debug.Log("Added New Item");
+                InvUpdate();
             }
         }
     }
@@ -389,11 +395,13 @@ public class PlayerController : MonoBehaviour
             else
             {
                 Debug.Log(www.downloadHandler.text);
+                InvUpdate();
             }
         }
     }
 
-    IEnumerator GetInvUpdate(int charId)
+    //Get Updated Inventory
+    IEnumerator GetInvUpdate()
     {
         using (UnityWebRequest www = UnityWebRequest.Get($"http://localhost:8002/inventory/get-inv-by-id?char_id={charId}"))
         {
@@ -408,6 +416,7 @@ public class PlayerController : MonoBehaviour
             {
                 Inventory myInv = new Inventory();
                 invDh = www.downloadHandler.text;
+                invUI.InvGridUpdate();
             }
         }
     }
@@ -432,7 +441,6 @@ public class PlayerController : MonoBehaviour
                 inv = JsonUtility.FromJson<Inventory>(dH);
                 for(int i = 0; i < inv.data.Length; i++)
                 {
-                    ItemManagement itMan = gameObject.GetComponent<ItemManagement>();
                     int itemId = inv.data[i].item_id;
                     Debug.Log($"Depositing itemId: {itemId}");
                     itMan.CallItem(itemId);

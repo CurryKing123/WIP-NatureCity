@@ -86,17 +86,21 @@ public class GetPlayerData : MonoBehaviour
                 {
                     Debug.Log("Found Character");
 
+                    //Player Character ID
                     charId = myChar.data[0].char_id;
                     player.charId = charId;
+
+                    //Player Character Race
                     charRace = myChar.data[0].character_race;
                     player.charRace = charRace;
 
                     CallRace(charRace);
 
-
+                    //Player In Game Name
                     player.userName = myChar.data[0].user_name;
                     myNetworkPlayer.displayName = myChar.data[0].user_name;
 
+                    //Player Equipment
                     equip = new string[]{myChar.data[0].equip_item_1,
                     myChar.data[0].equip_item_2,
                     myChar.data[0].equip_item_3,
@@ -153,6 +157,8 @@ public class GetPlayerData : MonoBehaviour
                 string dH = www.downloadHandler.text;
                 Debug.Log(dH);
                 charRace = JsonUtility.FromJson<Races>(dH);
+
+                //Player Character Race Stats
                 player.speed = charRace.data[0].move_speed;
                 player.carryAmount = charRace.data[0].carry_amount;
             }

@@ -24,4 +24,12 @@ public class MyNetworkPlayer : NetworkBehaviour
     {
         displayNameText.text = newName;
     }
+
+    public void IsLocalPlayer()
+    {
+        if (!isLocalPlayer)
+        {
+            return;
+        }
+    }
 }
