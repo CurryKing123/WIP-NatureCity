@@ -16,11 +16,7 @@ using Mirror;
 public class PlayerController : MonoBehaviour
 {
 
-    public bool inResArea = false;
-    private bool isMoving = false;
-    public bool isMovingToResource = false;
     public bool isGathering = false;
-    private bool inBuildArea = false;
 
 
     public NavMeshAgent agent;
@@ -39,11 +35,14 @@ public class PlayerController : MonoBehaviour
     private PlayerId playerId;
     private UserId userIdJson;
     private MyNetworkPlayer myNetworkPlayer;
+    private Ray ray;
+    private RaycastHit hit;
 
 
-    public enum ActionState {Walking, NotMoving}
+
+    public enum ActionState {Walking, NotMoving, MovingToResource}
     public ActionState actionState;
-    public enum AreaState {BuildArea, ResourceArea, None}
+    public enum AreaState {BuildArea, ResourceArea, Blacksmith, None}
     public AreaState areaState;
 
 
@@ -114,11 +113,10 @@ public class PlayerController : MonoBehaviour
         getPlayerData = GetComponent<GetPlayerData>();
         myNetworkPlayer = gameObject.transform.parent.GetComponent<MyNetworkPlayer>();
 
+        
+
         getPlayerData.CallChar(userId);
 
-
-
-        InvokeRepeating("PlayerPosition", 0f, .3f);
 
 
         createIGN = GameObject.Find("Player UI");
@@ -139,16 +137,13 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSeconds(3f);
     }
 
-    private void PlayerPosition()
+
+    private void FixedUpdate()
     {
+        //player position
         playerPos = transform.position;
-    }
-    private void DistanceFromResource()
-    {
-        if (targetResource != null)
-        {
-            distFromRes = Vector3.Distance(targetResource.position, playerPos);
-        }
+
+
     }
     private void Update()
     {
@@ -166,9 +161,8 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetMouseButtonDown(1))
         {
+            ray = cam.ScreenPointToRay(Input.mousePosition);
             agent.speed = speed;
-            Ray ray = cam.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
 
             if (Physics.Raycast(ray, out hit))
             {
@@ -178,18 +172,16 @@ public class PlayerController : MonoBehaviour
                 {
                     ResourceManager resource = hit.collider.GetComponent<ResourceManager>();
                     targetResource = hit.transform;
-                    isMovingToResource = true;
-
-                    //updates distance between player and resource
-                    InvokeRepeating("DistanceFromResource", 0f, .3f);
+                    actionState = ActionState.MovingToResource;
                     
                     
                     if (targetResource != null)
                     {
+                        distFromRes = Vector3.Distance(targetResource.position, playerPos);
                         MoveToResource(targetResource);
                         Debug.Log("Moving to resource");
                         resource.isBeingGathered = false;
-                        if (isMovingToResource && distFromRes < 1 && inResArea)
+                        if (actionState == ActionState.MovingToResource && distFromRes < 1 && areaState == AreaState.ResourceArea)
                         {
 
                             if (playerInventory >= carryAmount)
@@ -210,7 +202,7 @@ public class PlayerController : MonoBehaviour
                 {
                     // Move the player to the clicked position
                     MovePlayer(hit.point);
-                    isMovingToResource = false;
+                    actionState = ActionState.Walking;
                     if (isGathering)
                     {
                         //Figure Out How To Stop Gathering Clicking Away From Resource
@@ -218,6 +210,19 @@ public class PlayerController : MonoBehaviour
                     }
                 }
             }
+        }
+
+        if (Input.GetMouseButtonDown(0))
+        {
+
+            if (Physics.Raycast(ray, out hit))
+            {
+                if (hit.collider.CompareTag("Blacksmith") && areaState == AreaState.Blacksmith)
+                {
+                    
+                }
+            }
+
         }
 
         //Build UI Popup
@@ -258,7 +263,7 @@ public class PlayerController : MonoBehaviour
             
             Debug.Log("In Resource Area");
             areaState = AreaState.ResourceArea;
-            if (isMovingToResource && distFromRes < 5)
+            if (actionState == ActionState.MovingToResource)
                 {
                     if (playerInventory >= carryAmount)
                     {
@@ -269,7 +274,9 @@ public class PlayerController : MonoBehaviour
                         ResourceManager resMan = other.GetComponent<ResourceManager>();
                         isGathering = true;
                         resMan.StartGathering(transform);
+                        
                     }
+                    Debug.Log("Should be gathering");
                 
                 }
         }
@@ -284,6 +291,12 @@ public class PlayerController : MonoBehaviour
             Debug.Log("Entering Build Area");
             areaState = AreaState.BuildArea;
         }
+
+        else if (other.CompareTag("Blacksmith"))
+        {
+            Debug.Log("Entering Blacksmith Area");
+            areaState = AreaState.Blacksmith;
+        }
     }
 
     private void OnTriggerExit(Collider other)
@@ -294,6 +307,7 @@ public class PlayerController : MonoBehaviour
             ResourceManager resMan = other.GetComponent<ResourceManager>();
             resMan.StopGathering();
             Debug.Log("Out of Resource Area");
+            areaState = AreaState.None;
             isGathering = false;
         }
 
@@ -322,7 +336,7 @@ public class PlayerController : MonoBehaviour
     void MovePlayer(Vector3 destination)
     {
         agent.SetDestination(destination);
-        isMoving = true;
+        actionState = ActionState.Walking;
     }
 
 
@@ -458,6 +472,9 @@ public class PlayerController : MonoBehaviour
 
             case ActionState.NotMoving:
             break;
+
+            case ActionState.MovingToResource:
+            break;
         }
     }
 
@@ -469,6 +486,9 @@ public class PlayerController : MonoBehaviour
             break;
 
             case AreaState.ResourceArea:
+            break;
+
+            case AreaState.Blacksmith:
             break;
 
             case AreaState.None:

@@ -12,14 +12,15 @@ public class CreateIGN : MonoBehaviour
     [SerializeField] private GameObject namePrompt;
     [SerializeField] private GameObject createButton;
     [SerializeField] private GameObject playerName;
-    [SerializeField] private GameObject player;
+    [SerializeField] private PlayerController player;
+    [SerializeField] private MyNetworkPlayer myNetworkPlayer;
 
 
     private CharArray myChar;
 
     private string userName;
     private int charId;
-    private string dH;
+    public string dH;
 
     private void Start()
     {
@@ -32,8 +33,9 @@ public class CreateIGN : MonoBehaviour
     public void FindPlayer()
     {
 
-        player = GameObject.Find("Player");
-        userName = player.GetComponent<PlayerController>().userName;
+        player = GameObject.Find("Player").GetComponent<PlayerController>();
+        myNetworkPlayer = GameObject.Find("Player").transform.parent.GetComponent<MyNetworkPlayer>();
+        userName = player.userName;
         if (userName == "" )
         {
             namePrompt.SetActive(true);
@@ -74,7 +76,8 @@ public class CreateIGN : MonoBehaviour
             {
                 Debug.Log("New Name Created");
                 namePrompt.SetActive(false);
-                playerName.GetComponent<TextMeshProUGUI>().text = userName;
+                player = GameObject.Find("Player").GetComponent<PlayerController>();
+                myNetworkPlayer.displayName = userName;
             }
         }
     }

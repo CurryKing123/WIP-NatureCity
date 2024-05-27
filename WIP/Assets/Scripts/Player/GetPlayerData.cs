@@ -27,6 +27,7 @@ public class GetPlayerData : MonoBehaviour
     private PlayerController player;
     private MyNetworkPlayer myNetworkPlayer;
     private PlayerId playerId;
+    private CreateIGN createIgn;
 
 
     void Start()
@@ -34,6 +35,7 @@ public class GetPlayerData : MonoBehaviour
         myChar = new CharArray();
         itMan = gameObject.GetComponent<ItemManagement>();
         player = gameObject.GetComponent<PlayerController>();
+        createIgn = GameObject.Find("Player UI").gameObject.GetComponent<CreateIGN>();
         //playerId = GameObject.Find("PlayerId").GetComponent<PlayerId>();
         myNetworkPlayer = this.transform.parent.gameObject.GetComponent<MyNetworkPlayer>();
     }
@@ -67,6 +69,7 @@ public class GetPlayerData : MonoBehaviour
 
             dH = www.downloadHandler.text;
             player.dH = dH;
+            createIgn.dH = dH;
 
             myChar = JsonUtility.FromJson<CharArray>(dH);
 
