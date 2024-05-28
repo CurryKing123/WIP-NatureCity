@@ -445,6 +445,22 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 5749523328328038889, guid: f5fa085f6957f784c8e7de9d479e050f, type: 3}
+      propertyPath: m_Size.y
+      value: 2.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5749523328328038889, guid: f5fa085f6957f784c8e7de9d479e050f, type: 3}
+      propertyPath: m_Size.z
+      value: 4.09
+      objectReference: {fileID: 0}
+    - target: {fileID: 5749523328328038889, guid: f5fa085f6957f784c8e7de9d479e050f, type: 3}
+      propertyPath: m_Center.y
+      value: 1.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5749523328328038889, guid: f5fa085f6957f784c8e7de9d479e050f, type: 3}
+      propertyPath: m_Center.z
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 6122532369308020204, guid: f5fa085f6957f784c8e7de9d479e050f, type: 3}
     m_RemovedGameObjects: []
@@ -485,7 +501,6 @@ MonoBehaviour:
   dH: 
   invDh: 
   equip: []
-  ddUserId: {fileID: 0}
 --- !u!95 &8711136066556590507 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: 1095500802542222918, guid: f5fa085f6957f784c8e7de9d479e050f, type: 3}

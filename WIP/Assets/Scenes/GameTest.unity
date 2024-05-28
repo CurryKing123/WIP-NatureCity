@@ -347,7 +347,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &267632823
 RectTransform:
   m_ObjectHideFlags: 0
@@ -701,7 +701,6 @@ GameObject:
   - component: {fileID: 540296278}
   - component: {fileID: 540296277}
   - component: {fileID: 540296276}
-  - component: {fileID: 540296275}
   m_Layer: 0
   m_Name: Blacksmith
   m_TagString: Untagged
@@ -709,27 +708,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!65 &540296275
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 540296274}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!65 &540296276
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1365,7 +1343,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.000030518, y: 0}
+  m_AnchoredPosition: {x: -0.000030517578, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &916772598
@@ -1482,32 +1460,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pressB: {fileID: 1294996251}
   uiPopup: {fileID: 1563651903}
---- !u!1 &1121633740 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2232977374476880644, guid: e21ab4aa436f9394aa25af8df5bc21c2, type: 3}
-  m_PrefabInstance: {fileID: 3051012243049513803}
-  m_PrefabAsset: {fileID: 0}
---- !u!65 &1121633745
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1121633740}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1162281080
 GameObject:
   m_ObjectHideFlags: 0
@@ -2962,10 +2914,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 2232977374476880644, guid: e21ab4aa436f9394aa25af8df5bc21c2, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1121633745}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e21ab4aa436f9394aa25af8df5bc21c2, type: 3}
 --- !u!1001 &4609856180982872022
 PrefabInstance:

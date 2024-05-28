@@ -31,12 +31,12 @@ public class BuildingUI : MonoBehaviour
 
     public void PressPopup()
     {
-        buildUI.GetComponent<BuildingUIGroup>().pressB.SetActive(true);
+        //buildUI.GetComponent<BuildingUIGroup>().pressB.SetActive(true);
     }
 
     public void ExitPressPopup()
     {
-        buildUI.GetComponent<BuildingUIGroup>().pressB.SetActive(false);
+       // buildUI.GetComponent<BuildingUIGroup>().pressB.SetActive(false);
     }
 
     public void BuildPopup()

@@ -16,12 +16,15 @@ using Mirror;
 public class PlayerController : MonoBehaviour
 {
 
+    [SerializeField] private GameObject pressB;
+
     public bool isGathering = false;
 
 
     public NavMeshAgent agent;
     private float distFromRes;
-    private Transform targetResource;
+    private float staticDistFromRes;
+    private Vector3 targetResource;
     private ResourceManager resMan;
     private BuildingUI buildUI;
     private InventoryUI invUI;
@@ -104,6 +107,8 @@ public class PlayerController : MonoBehaviour
         actionState = ActionState.NotMoving;
         areaState = AreaState.None;
 
+        targetResource = new Vector3();
+
         
         cam = FindAnyObjectByType<Camera>();
         itMan = gameObject.GetComponent<ItemManagement>();
@@ -112,6 +117,8 @@ public class PlayerController : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
         getPlayerData = GetComponent<GetPlayerData>();
         myNetworkPlayer = gameObject.transform.parent.GetComponent<MyNetworkPlayer>();
+
+        pressB = GameObject.Find("Building").GetComponent<BuildingUIGroup>().pressB;
 
         
 
@@ -150,13 +157,17 @@ public class PlayerController : MonoBehaviour
         
         if (agent.velocity.sqrMagnitude > 0)
         {
-            actionState = ActionState.Walking;
             anim.SetBool("Walking", true);
         }
         else
         {
-            actionState = ActionState.NotMoving;
             anim.SetBool("Walking", false);
+        }
+
+        if(targetResource != null)
+        {
+            distFromRes = Vector3.Distance(targetResource, playerPos);
+            //Debug.Log($"Distance From Resource: " + distFromRes);
         }
 
         if (Input.GetMouseButtonDown(1))
@@ -166,27 +177,32 @@ public class PlayerController : MonoBehaviour
 
             if (Physics.Raycast(ray, out hit))
             {
-                
-
                 if (hit.collider.CompareTag("ResourceNode"))
                 {
-                    ResourceManager resource = hit.collider.GetComponent<ResourceManager>();
-                    targetResource = hit.transform;
                     actionState = ActionState.MovingToResource;
+                    targetResource = hit.transform.position;
+                    staticDistFromRes = Vector3.Distance(targetResource, playerPos);
+                    Debug.Log($"Target Resource: " + targetResource);
+                    Debug.Log($"Distance From Resource: " + distFromRes);
+                    ResourceManager resource = hit.collider.GetComponent<ResourceManager>();
+                    MoveToResource(targetResource, resource);
                     
                     
                     if (targetResource != null)
                     {
-                        distFromRes = Vector3.Distance(targetResource.position, playerPos);
-                        MoveToResource(targetResource);
+                        
                         Debug.Log("Moving to resource");
-                        resource.isBeingGathered = false;
-                        if (actionState == ActionState.MovingToResource && distFromRes < 1 && areaState == AreaState.ResourceArea)
+                        if (actionState == ActionState.MovingToResource && staticDistFromRes < 1 && areaState == AreaState.ResourceArea)
                         {
 
                             if (playerInventory >= carryAmount)
                             {
                                 Debug.Log("Inventory Full");
+                                isGathering = false;
+                                resource.isBeingGathered = false;
+                            }
+                            else if (isGathering)
+                            {
                                 isGathering = false;
                             }
                             else
@@ -195,6 +211,10 @@ public class PlayerController : MonoBehaviour
                                 resource.StartGathering(transform);
                             }
 
+                        }
+                        else
+                        {
+                            isGathering = false;
                         }
                     }
                 }
@@ -225,6 +245,16 @@ public class PlayerController : MonoBehaviour
 
         }
 
+        if (areaState == AreaState.BuildArea)
+        {
+            pressB.SetActive(true);
+        }
+
+        else
+        {
+            pressB.SetActive(false);
+        }
+        
         //Build UI Popup
         if (Input.GetKeyDown(KeyCode.B) && areaState == AreaState.BuildArea)
         {
@@ -263,7 +293,7 @@ public class PlayerController : MonoBehaviour
             
             Debug.Log("In Resource Area");
             areaState = AreaState.ResourceArea;
-            if (actionState == ActionState.MovingToResource)
+            if (actionState == ActionState.MovingToResource && distFromRes < 5)
                 {
                     if (playerInventory >= carryAmount)
                     {
@@ -328,15 +358,17 @@ public class PlayerController : MonoBehaviour
 
 
     
-    private void MoveToResource(Transform resource)
+    private void MoveToResource(Vector3 resNode, ResourceManager resource)
     {
-        isGathering = false;
-        agent.SetDestination(resource.position);
+
+        agent.SetDestination(resNode);
+        actionState = ActionState.MovingToResource;
     }
     void MovePlayer(Vector3 destination)
     {
         agent.SetDestination(destination);
         actionState = ActionState.Walking;
+        isGathering = false;
     }
 
 
