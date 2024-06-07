@@ -11,6 +11,7 @@ public class InventoryUI : MonoBehaviour
     private PlayerController playCont;
     private Inventory inv;
     private GetPlayerData getPlayerData;
+    private Transform getIcon;
     public bool popUp = false;
 
     [SerializeField] private Sprite[] sprites;
@@ -40,7 +41,7 @@ public class InventoryUI : MonoBehaviour
             for(int i = 0; i < inv.data.Length; i++)
             {
                 Instantiate(iconPrefab, invGrid.transform);
-                Transform getIcon = invGrid.transform.GetChild(i);
+                getIcon = invGrid.transform.GetChild(i);
                 int itemId = inv.data[i].item_id;
                 int count = inv.data[i].item_amount;
                 AddItemIcon(getIcon, count, itemId);
@@ -50,7 +51,7 @@ public class InventoryUI : MonoBehaviour
         {
             for(int i = 0; i < invGrid.transform.childCount; i++)
             {
-                Transform getIcon = invGrid.transform.GetChild(i);
+                getIcon = invGrid.transform.GetChild(i);
                 Destroy(getIcon.gameObject);
             }
         }
@@ -58,7 +59,7 @@ public class InventoryUI : MonoBehaviour
         {
             for(int i = 0; i < inv.data.Length; i++)
             {
-                Transform getIcon = invGrid.transform.GetChild(i);
+                getIcon = invGrid.transform.GetChild(i);
                 int itemId = inv.data[i].item_id;
                 int count = inv.data[i].item_amount;
                 AddItemIcon(getIcon, count, itemId);

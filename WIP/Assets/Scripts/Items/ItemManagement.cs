@@ -26,15 +26,15 @@ public class ItemManagement : MonoBehaviour
     {
         StartCoroutine(GetBag(bagName));
     }
-    public void CallItem(int itemId)
+    public void CallItem(int itemId, int charId)
     {
-        StartCoroutine(GetItemById(itemId));
+        StartCoroutine(GetItemById(itemId, charId));
     }
 
     //Remove Resource To Tree
-    public void RemResToTree(int itemId, int resId)
+    public void RemResToTree(int itemId, int resId, int charId)
     {
-        StartCoroutine(RemFromPlayerInv(itemId, resId));
+        StartCoroutine(RemFromPlayerInv(itemId, resId, charId));
     }
     public void RemoveItemFromInv(int charId, int itemId)
     {
@@ -122,7 +122,7 @@ public class ItemManagement : MonoBehaviour
         }
     }
 
-    IEnumerator GetItemById(int itemId)
+    IEnumerator GetItemById(int itemId, int charId)
     {
         using (UnityWebRequest www = UnityWebRequest.Get($"http://localhost:8002/item/get-item-by-id?item_id={itemId}"))
         {
@@ -144,7 +144,7 @@ public class ItemManagement : MonoBehaviour
                 if (itemType == "resource")
                 {
                     int resId = items.data[0].res_id;
-                    RemResToTree(itemId, resId);
+                    RemResToTree(itemId, resId, charId);
                     player.InvUpdate();
                 }
             }
@@ -152,10 +152,8 @@ public class ItemManagement : MonoBehaviour
     }
 
 
-    IEnumerator RemFromPlayerInv(int itemId, int resId)
+    IEnumerator RemFromPlayerInv(int itemId, int resId, int charId)
     {
-        PlayerController player = gameObject.GetComponent<PlayerController>();
-        int charId = player.charId;
         using (UnityWebRequest www = UnityWebRequest.Get($"http://localhost:8002/inventory/get-inv-by-id2?char_id={charId}&item_id={itemId}"))
         {
             www.SetRequestHeader("key", "1");

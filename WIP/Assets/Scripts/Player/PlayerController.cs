@@ -19,6 +19,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private GameObject pressB;
 
     public bool isGathering = false;
+    private bool blacksmithUIPopup = false;
 
 
     public NavMeshAgent agent;
@@ -28,6 +29,8 @@ public class PlayerController : MonoBehaviour
     private ResourceManager resMan;
     private BuildingUI buildUI;
     private InventoryUI invUI;
+    private BlacksmithUI blacksmithUI;
+    [SerializeField] private BlacksmithUIGroup blacksmithUIGroup;
     private GameObject createIGN;
     public Vector3 playerPos;
     public TextMeshProUGUI playerName;
@@ -37,7 +40,7 @@ public class PlayerController : MonoBehaviour
     public Camera cam;
     private PlayerId playerId;
     private UserId userIdJson;
-    private MyNetworkPlayer myNetworkPlayer;
+    private bool localPlayer;
     private Ray ray;
     private RaycastHit hit;
 
@@ -79,9 +82,9 @@ public class PlayerController : MonoBehaviour
     {
         StartCoroutine(AddNewItem(itemId));
     }
-    public void DepositResource(int charId)
+    public void CheckHomeInventory(int charId)
     {
-        StartCoroutine(DepoRes(charId));
+        StartCoroutine(CheckHomeInv(charId));
     }
     public void InvUpdate()
     {
@@ -116,9 +119,12 @@ public class PlayerController : MonoBehaviour
         invUI = GetComponent<InventoryUI>();
         agent = GetComponent<NavMeshAgent>();
         getPlayerData = GetComponent<GetPlayerData>();
-        myNetworkPlayer = gameObject.transform.parent.GetComponent<MyNetworkPlayer>();
+        blacksmithUI = GetComponent<BlacksmithUI>();
+        localPlayer = gameObject.transform.parent.GetComponent<MyNetworkPlayer>().isLocalPlayer;
 
         pressB = GameObject.Find("Building").GetComponent<BuildingUIGroup>().pressB;
+        blacksmithUIGroup = GameObject.Find("Blacksmith").GetComponent<BlacksmithUIGroup>();
+
 
         
 
@@ -234,13 +240,17 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetMouseButtonDown(0))
         {
-
+            ray = cam.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out hit))
             {
+                //Blacksmith UI Interaction
                 if (hit.collider.CompareTag("Blacksmith") && areaState == AreaState.Blacksmith)
+                
                 {
-                    
+                    blacksmithUIGroup.blacksmithUI.SetActive(true);
+                    blacksmithUIPopup = true;
                 }
+                
             }
 
         }
@@ -288,44 +298,51 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("ResourceNode"))
+        if (localPlayer)
         {
-            
-            Debug.Log("In Resource Area");
-            areaState = AreaState.ResourceArea;
-            if (actionState == ActionState.MovingToResource && distFromRes < 5)
-                {
-                    if (playerInventory >= carryAmount)
+            if (other.CompareTag("ResourceNode"))
+            {
+
+                Debug.Log("In Resource Area");
+                areaState = AreaState.ResourceArea;
+                if (actionState == ActionState.MovingToResource && distFromRes < 5)
                     {
-                        Debug.Log("Inventory Full");
+                        if (playerInventory >= carryAmount)
+                        {
+                            Debug.Log("Inventory Full");
+                        }
+                        else
+                        {
+                            ResourceManager resMan = other.GetComponent<ResourceManager>();
+                            isGathering = true;
+                            resMan.StartGathering(transform);
+
+                        }
+                        Debug.Log("Should be gathering");
+
                     }
-                    else
-                    {
-                        ResourceManager resMan = other.GetComponent<ResourceManager>();
-                        isGathering = true;
-                        resMan.StartGathering(transform);
-                        
-                    }
-                    Debug.Log("Should be gathering");
-                
-                }
-        }
+            }
 
-        else if (other.CompareTag("HomeTree"))
-        {
-            DepositResource(charId);
-        }
+            else if (other.CompareTag("HomeTree"))
+            {
+                CheckHomeInventory(charId);
+            }
 
-        else if (other.CompareTag("BuildArea"))
-        {
-            Debug.Log("Entering Build Area");
-            areaState = AreaState.BuildArea;
-        }
+            else if (other.CompareTag("BuildArea"))
+            {
+                Debug.Log("Entering Build Area");
+                areaState = AreaState.BuildArea;
+            }
 
-        else if (other.CompareTag("Blacksmith"))
+            else if (other.CompareTag("Blacksmith"))
+            {
+                Debug.Log("Entering Blacksmith Area");
+                areaState = AreaState.Blacksmith;
+            }
+        }
+        else
         {
-            Debug.Log("Entering Blacksmith Area");
-            areaState = AreaState.Blacksmith;
+            Debug.Log("Not local player");
         }
     }
 
@@ -349,6 +366,15 @@ public class PlayerController : MonoBehaviour
                 buildUI.ExitBuildPopup();
             }
             buildUI.ExitPressPopup();
+        }
+
+        if (other.CompareTag("Blacksmith"))
+        {
+            if (blacksmithUIPopup)
+            {
+                blacksmithUIGroup.blacksmithUI.SetActive(false);
+                blacksmithUIPopup = false;
+            }
         }
 
 
@@ -469,7 +495,7 @@ public class PlayerController : MonoBehaviour
 
     //Check Inventory At HomeTree
 
-    IEnumerator DepoRes(int charId)
+    IEnumerator CheckHomeInv(int charId)
     {
         using (UnityWebRequest www = UnityWebRequest.Get($"http://localhost:8002/inventory/get-inv-by-id?char_id={charId}"))
         {
@@ -489,7 +515,7 @@ public class PlayerController : MonoBehaviour
                 {
                     int itemId = inv.data[i].item_id;
                     Debug.Log($"Depositing itemId: {itemId}");
-                    itMan.CallItem(itemId);
+                    itMan.CallItem(itemId, charId);
                 }
             }
         }
