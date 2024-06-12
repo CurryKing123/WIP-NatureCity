@@ -363,6 +363,8 @@ MonoBehaviour:
   blacksmithUI: {fileID: 267632822}
   blacksmithGrid: {fileID: 2042319740}
   iconPrefab: {fileID: 4182691558537491861, guid: d0972584457d1e349811a95e95828c28, type: 3}
+  blacksmithButtons:
+  - {fileID: 609764753668915896}
 --- !u!1 &267632822
 GameObject:
   m_ObjectHideFlags: 0
@@ -2850,7 +2852,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2831941053962714620, guid: 1c11ba71436e0404d87aabe48aad9a85, type: 3}
       propertyPath: m_Name
-      value: Axe icon
+      value: axe
       objectReference: {fileID: 0}
     - target: {fileID: 3212089531719349247, guid: 1c11ba71436e0404d87aabe48aad9a85, type: 3}
       propertyPath: m_Pivot.x
@@ -2866,7 +2868,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3212089531719349247, guid: 1c11ba71436e0404d87aabe48aad9a85, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3212089531719349247, guid: 1c11ba71436e0404d87aabe48aad9a85, type: 3}
       propertyPath: m_AnchorMin.x
@@ -2874,15 +2876,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3212089531719349247, guid: 1c11ba71436e0404d87aabe48aad9a85, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3212089531719349247, guid: 1c11ba71436e0404d87aabe48aad9a85, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 100
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3212089531719349247, guid: 1c11ba71436e0404d87aabe48aad9a85, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 100
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3212089531719349247, guid: 1c11ba71436e0404d87aabe48aad9a85, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2914,11 +2916,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3212089531719349247, guid: 1c11ba71436e0404d87aabe48aad9a85, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 50
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3212089531719349247, guid: 1c11ba71436e0404d87aabe48aad9a85, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -50
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3212089531719349247, guid: 1c11ba71436e0404d87aabe48aad9a85, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -2931,6 +2933,34 @@ PrefabInstance:
     - target: {fileID: 3212089531719349247, guid: 1c11ba71436e0404d87aabe48aad9a85, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3609490995817664839, guid: 1c11ba71436e0404d87aabe48aad9a85, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3609490995817664839, guid: 1c11ba71436e0404d87aabe48aad9a85, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3609490995817664839, guid: 1c11ba71436e0404d87aabe48aad9a85, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 233243601}
+    - target: {fileID: 3609490995817664839, guid: 1c11ba71436e0404d87aabe48aad9a85, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3609490995817664839, guid: 1c11ba71436e0404d87aabe48aad9a85, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: CheckGlobalInventory
+      objectReference: {fileID: 0}
+    - target: {fileID: 3609490995817664839, guid: 1c11ba71436e0404d87aabe48aad9a85, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: BlacksmithUI, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 3609490995817664839, guid: 1c11ba71436e0404d87aabe48aad9a85, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 4283734906973428470, guid: 1c11ba71436e0404d87aabe48aad9a85, type: 3}
       propertyPath: m_text
@@ -2946,6 +2976,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 3212089531719349247, guid: 1c11ba71436e0404d87aabe48aad9a85, type: 3}
   m_PrefabInstance: {fileID: 609764753668915894}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &609764753668915896 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3609490995817664839, guid: 1c11ba71436e0404d87aabe48aad9a85, type: 3}
+  m_PrefabInstance: {fileID: 609764753668915894}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1485462031795953311
 PrefabInstance:
   m_ObjectHideFlags: 0

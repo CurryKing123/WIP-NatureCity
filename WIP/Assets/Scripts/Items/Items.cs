@@ -18,4 +18,6 @@ public class ItemData
     public string item_name;
     public int res_id;
     public int res_cost;
+    public int wood_cost;
+    public int stone_cost;
 }
