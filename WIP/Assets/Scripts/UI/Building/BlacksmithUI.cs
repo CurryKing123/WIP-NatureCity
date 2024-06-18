@@ -8,20 +8,28 @@ using UnityEngine.EventSystems;
 public class BlacksmithUI : MonoBehaviour
 {
     [SerializeField] private Sprite [] sprites;
-    [SerializeField] private GameObject blacksmithUI;
+    public GameObject blacksmithUI;
     [SerializeField] private GameObject blacksmithGrid;
     [SerializeField] private Button iconPrefab;
 
     [SerializeField] private Button [] blacksmithButtons;
     [SerializeField] private GameObject [] craftedItems;
+    [SerializeField] private GameObject blacksmithMesh;
 
     private string itemName;
     private float localTime = 0f;
     private float waitTime = 0f;
-    private bool isCrafting = false;
+    public bool isCrafting = false;
+    private int woodCost;
+    private int stoneCost;
+    private int globalWood;
+    private int globalStone;
+    private float craftTime;
+    private int maxItems = 5;
 
     private Items items;
     private GlobalInventory globalInv;
+    private Transform player;
 
 
     private void Start()
@@ -35,6 +43,35 @@ public class BlacksmithUI : MonoBehaviour
         if (isCrafting)
         {
             localTime += Time.deltaTime;
+            CraftItem();
+        }
+        else
+        {
+            StopCrafting();
+        }
+    }
+
+    public void StartCrafting()
+    {
+        if (!isCrafting)
+        {
+            Debug.Log("Start Crafting...");
+            waitTime = craftTime;
+            isCrafting = true;
+            CraftItem();
+        }
+    }
+    private void StopCrafting()
+    {
+        if (isCrafting)
+        {
+            Debug.Log("Stop Crafting...");
+            localTime = 0f;
+            isCrafting = false;
+        }
+        else
+        {
+            localTime = 0f;
         }
     }
 
@@ -47,9 +84,9 @@ public class BlacksmithUI : MonoBehaviour
     {
         StartCoroutine(GetItem());
     }
-    public void CheckGlobalInventory(int woodCost, int stoneCost, string itemName)
+    public void CheckGlobalInventory(int woodCost, int stoneCost)
     {
-        StartCoroutine(GetGlobalInv(woodCost, stoneCost, itemName));
+        StartCoroutine(GetGlobalInv(woodCost, stoneCost));
     }
     
 
@@ -63,15 +100,16 @@ public class BlacksmithUI : MonoBehaviour
 
             string dH = www.downloadHandler.text;
             items = JsonUtility.FromJson<Items>(dH);
-            int woodCost = items.data[0].wood_cost;
-            int stoneCost = items.data[0].stone_cost;
-            CheckGlobalInventory(woodCost, stoneCost, itemName);
+            woodCost = items.data[0].wood_cost;
+            stoneCost = items.data[0].stone_cost;
+            craftTime = items.data[0].craft_time;
+            CheckGlobalInventory(woodCost, stoneCost);
 
 
         }
     }
 
-    private IEnumerator GetGlobalInv(int woodCost, int stoneCost, string itemName)
+    private IEnumerator GetGlobalInv(int woodCost, int stoneCost)
     {
         using (UnityWebRequest www = UnityWebRequest.Get($"http://localhost:8002/global_inventory/get-global_inv"))
         {
@@ -81,8 +119,8 @@ public class BlacksmithUI : MonoBehaviour
             string dH = www.downloadHandler.text;
 
             globalInv = JsonUtility.FromJson<GlobalInventory>(dH);
-            int globalWood = globalInv.data[0].res_amount;
-            int globalStone = globalInv.data[1].res_amount;
+            globalWood = globalInv.data[0].res_amount;
+            globalStone = globalInv.data[1].res_amount;
 
             if (globalWood < woodCost)
             {
@@ -96,14 +134,25 @@ public class BlacksmithUI : MonoBehaviour
                 }
                 else
                 {
-                    StartCrafting(itemName);
+                    StartCrafting();
                 }
             }
         }
     }
 
-    private void StartCrafting(string itemName)
+    private void CraftItem()
     {
-        isCrafting = true;
+        if (localTime < waitTime)
+        {
+            if (!isCrafting)
+            {
+                StopCrafting();
+            }
+            return;
+        }
+        
+        waitTime = localTime + craftTime;
+        Debug.Log("Crafted 1...");
+        //Instantiate(craftedItems[0], new Vector3(blacksmithMesh.transform.position.x, blacksmithMesh.transform.position.y, blacksmithMesh.transform.position.z))
     }
 }

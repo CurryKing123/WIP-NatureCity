@@ -30,7 +30,6 @@ public class PlayerController : MonoBehaviour
     private BuildingUI buildUI;
     private InventoryUI invUI;
     private BlacksmithUI blacksmithUI;
-    [SerializeField] private BlacksmithUIGroup blacksmithUIGroup;
     private GameObject createIGN;
     public Vector3 playerPos;
     public TextMeshProUGUI playerName;
@@ -119,11 +118,10 @@ public class PlayerController : MonoBehaviour
         invUI = GetComponent<InventoryUI>();
         agent = GetComponent<NavMeshAgent>();
         getPlayerData = GetComponent<GetPlayerData>();
-        blacksmithUI = GetComponent<BlacksmithUI>();
         localPlayer = gameObject.transform.parent.GetComponent<MyNetworkPlayer>().isLocalPlayer;
 
         pressB = GameObject.Find("Building").GetComponent<BuildingUIGroup>().pressB;
-        blacksmithUIGroup = GameObject.Find("Blacksmith").GetComponent<BlacksmithUIGroup>();
+        blacksmithUI = GameObject.Find("Blacksmith").GetComponent<BlacksmithUI>();
 
 
         
@@ -160,80 +158,94 @@ public class PlayerController : MonoBehaviour
     }
     private void Update()
     {
+        if (localPlayer)
+        {
         
-        if (agent.velocity.sqrMagnitude > 0)
-        {
-            anim.SetBool("Walking", true);
-        }
-        else
-        {
-            anim.SetBool("Walking", false);
-        }
-
-        if(targetResource != null)
-        {
-            distFromRes = Vector3.Distance(targetResource, playerPos);
-            //Debug.Log($"Distance From Resource: " + distFromRes);
-        }
-
-        if (Input.GetMouseButtonDown(1))
-        {
-            ray = cam.ScreenPointToRay(Input.mousePosition);
-            agent.speed = speed;
-
-            if (Physics.Raycast(ray, out hit))
+            if (agent.velocity.sqrMagnitude > 0)
             {
-                if (hit.collider.CompareTag("ResourceNode"))
+                anim.SetBool("Walking", true);
+            }
+            else
+            {
+                anim.SetBool("Walking", false);
+            }
+
+            if(targetResource != null)
+            {
+                distFromRes = Vector3.Distance(targetResource, playerPos);
+                //Debug.Log($"Distance From Resource: " + distFromRes);
+            }
+
+            if (Input.GetMouseButtonDown(1))
+            {
+                ray = cam.ScreenPointToRay(Input.mousePosition);
+                agent.speed = speed;
+
+                if (Physics.Raycast(ray, out hit))
                 {
-                    actionState = ActionState.MovingToResource;
-                    targetResource = hit.transform.position;
-                    staticDistFromRes = Vector3.Distance(targetResource, playerPos);
-                    Debug.Log($"Target Resource: " + targetResource);
-                    Debug.Log($"Distance From Resource: " + distFromRes);
-                    ResourceManager resource = hit.collider.GetComponent<ResourceManager>();
-                    MoveToResource(targetResource, resource);
-                    
-                    
-                    if (targetResource != null)
+                    //Moving To Resource
+                    if (hit.collider.CompareTag("ResourceNode"))
                     {
-                        
-                        Debug.Log("Moving to resource");
-                        if (actionState == ActionState.MovingToResource && staticDistFromRes < 1 && areaState == AreaState.ResourceArea)
+                        actionState = ActionState.MovingToResource;
+                        targetResource = hit.transform.position;
+                        staticDistFromRes = Vector3.Distance(targetResource, playerPos);
+                        Debug.Log($"Target Resource: " + targetResource);
+                        Debug.Log($"Distance From Resource: " + distFromRes);
+                        ResourceManager resource = hit.collider.GetComponent<ResourceManager>();
+                        MoveToResource(targetResource, resource);
+
+
+                        if (targetResource != null)
                         {
 
-                            if (playerInventory >= carryAmount)
+                            Debug.Log("Moving to resource");
+                            if (actionState == ActionState.MovingToResource && staticDistFromRes < 1 && areaState == AreaState.ResourceArea)
                             {
-                                Debug.Log("Inventory Full");
-                                isGathering = false;
-                                resource.isBeingGathered = false;
-                            }
-                            else if (isGathering)
-                            {
-                                isGathering = false;
+
+                                if (playerInventory >= carryAmount)
+                                {
+                                    Debug.Log("Inventory Full");
+                                    isGathering = false;
+                                    resource.isBeingGathered = false;
+                                }
+                                else if (isGathering)
+                                {
+                                    isGathering = false;
+                                }
+                                else
+                                {
+                                    isGathering = true;
+                                    resource.StartGathering(transform);
+                                }
+
                             }
                             else
                             {
-                                isGathering = true;
-                                resource.StartGathering(transform);
+                                isGathering = false;
                             }
-
                         }
-                        else
+                    }
+                    else
+                    {
+                        // Move the player to the clicked position
+                        MovePlayer(hit.point);
+                        actionState = ActionState.Walking;
+
+                        //Stop Gathering When Moving
+                        if (isGathering)
                         {
+                            //Figure Out How To Stop Gathering Clicking Away From Resource
                             isGathering = false;
                         }
+
+
+                        //Stop Crafting When Moving
+                        if (blacksmithUI.isCrafting == true)
+                        {
+                            blacksmithUI.isCrafting = false;
+                        }
                     }
-                }
-                else
-                {
-                    // Move the player to the clicked position
-                    MovePlayer(hit.point);
-                    actionState = ActionState.Walking;
-                    if (isGathering)
-                    {
-                        //Figure Out How To Stop Gathering Clicking Away From Resource
-                        isGathering = false;
-                    }
+
                 }
             }
         }
@@ -247,7 +259,7 @@ public class PlayerController : MonoBehaviour
                 if (hit.collider.CompareTag("Blacksmith") && areaState == AreaState.Blacksmith)
                 
                 {
-                    blacksmithUIGroup.blacksmithUI.SetActive(true);
+                    blacksmithUI.blacksmithUI.SetActive(true);
                     blacksmithUIPopup = true;
                 }
                 
@@ -372,7 +384,7 @@ public class PlayerController : MonoBehaviour
         {
             if (blacksmithUIPopup)
             {
-                blacksmithUIGroup.blacksmithUI.SetActive(false);
+                blacksmithUI.blacksmithUI.SetActive(false);
                 blacksmithUIPopup = false;
             }
         }

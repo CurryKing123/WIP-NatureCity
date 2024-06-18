@@ -20,4 +20,5 @@ public class ItemData
     public int res_cost;
     public int wood_cost;
     public int stone_cost;
+    public int craft_time;
 }
