@@ -350,7 +350,8 @@ MonoBehaviour:
   iconPrefab: {fileID: 4182691558537491861, guid: d0972584457d1e349811a95e95828c28, type: 3}
   blacksmithButtons:
   - {fileID: 609764753668915896}
-  craftedItems: []
+  craftedItems:
+  - {fileID: 182942735400670503, guid: 3f1b4aa33aeccf0448d876e193017eab, type: 3}
   blacksmithMesh: {fileID: 540296274}
   isCrafting: 0
 --- !u!1 &267632822

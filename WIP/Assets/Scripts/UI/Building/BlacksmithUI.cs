@@ -153,6 +153,6 @@ public class BlacksmithUI : MonoBehaviour
         
         waitTime = localTime + craftTime;
         Debug.Log("Crafted 1...");
-        //Instantiate(craftedItems[0], new Vector3(blacksmithMesh.transform.position.x, blacksmithMesh.transform.position.y, blacksmithMesh.transform.position.z))
+        Instantiate(craftedItems[0], new Vector3(0, 0, 0), Quaternion.identity);
     }
 }

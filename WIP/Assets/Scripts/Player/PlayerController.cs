@@ -160,14 +160,21 @@ public class PlayerController : MonoBehaviour
     {
         if (localPlayer)
         {
-        
-            if (agent.velocity.sqrMagnitude > 0)
+            if (agent.velocity == new Vector3(0,0,0))
             {
+                actionState = ActionState.NotMoving;
+            }
+
+        
+            if (actionState != ActionState.NotMoving)
+            {
+                anim.SetBool("Idle", false);
                 anim.SetBool("Walking", true);
             }
             else
             {
                 anim.SetBool("Walking", false);
+                anim.SetBool("Idle", true);
             }
 
             if(targetResource != null)
@@ -192,7 +199,8 @@ public class PlayerController : MonoBehaviour
                         Debug.Log($"Target Resource: " + targetResource);
                         Debug.Log($"Distance From Resource: " + distFromRes);
                         ResourceManager resource = hit.collider.GetComponent<ResourceManager>();
-                        MoveToResource(targetResource, resource);
+                        //MoveToResource(targetResource, resource);
+                        agent.SetDestination(targetResource);
 
 
                         if (targetResource != null)
@@ -228,7 +236,8 @@ public class PlayerController : MonoBehaviour
                     else
                     {
                         // Move the player to the clicked position
-                        MovePlayer(hit.point);
+                        //MovePlayer(hit.point);
+                        agent.SetDestination(hit.point);
                         actionState = ActionState.Walking;
 
                         //Stop Gathering When Moving
