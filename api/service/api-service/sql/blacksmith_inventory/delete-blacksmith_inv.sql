@@ -1,0 +1,1 @@
+DELETE FROM NATURE.blacksmith_inventory WHERE item_id=?;

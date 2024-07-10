@@ -513,7 +513,7 @@ async function putRace(page = 1, req) {
 }
 
 async function deleteRace(page = 1, req) {
-  query = fs.readFileSync("./service/api-service/sql/race/del-race.sql");
+  query = fs.readFileSync("./service/api-service/sql/race/delete-race.sql");
   let prepareStatement = [];
   prepareStatement.push(req.query.race_id);
   req.prepareStatement = prepareStatement;
@@ -634,6 +634,52 @@ async function deleteGlobalInv(page = 1, req) {
 }
 
 
+//Blacksmith Inventory
+
+
+
+async function getBlacksmithInv(page = 1, req) {
+  query = fs.readFileSync("./service/api-service/sql/race/get-blacksmith_inv.sql");
+  req.prepareStatement = [];
+  return dbProcessor(page, query, req);
+}
+
+async function getBlacksmithInvByName(page = 1, req) {
+  query = fs.readFileSync("./service/api-service/sql/race/get-blacksmith_inv-by-name.sql");
+  let prepareStatement = [];  
+  prepareStatement.push(req.query.item_name);
+  req.prepareStatement = prepareStatement;
+  return dbProcessor(page, query, req);
+}
+
+async function postBlacksmithInv(page = 1, req) {
+  let prepareStatement = [];
+  prepareStatement.push(req.body.item_name);
+  prepareStatement.push(req.body.item_amount);
+  query = fs.readFileSync("./service/api-service/sql/race/post-blacksmith_inv.sql");
+  req.prepareStatement = prepareStatement;
+  return dbProcessor(page, query, req);
+}
+
+async function putBlacksmithInv(page = 1, req) {
+  let prepareStatement = [];
+  prepareStatement.push(req.body.item_name);
+  prepareStatement.push(req.body.item_amount);
+  prepareStatement.push(req.query.item_id);
+  query = fs.readFileSync("./service/api-service/sql/race/put-blacksmith_inv.sql");
+  req.prepareStatement = prepareStatement;
+  return dbProcessor(page, query, req);
+}
+
+async function deleteBlacksmithInv(page = 1, req) {
+  query = fs.readFileSync("./service/api-service/sql/race/delete-blacksmith_inv.sql");
+  let prepareStatement = [];
+  prepareStatement.push(req.query.item_id);
+  req.prepareStatement = prepareStatement;
+  return dbProcessor(page, query, req);
+}
+
+
 
 
 
@@ -729,5 +775,11 @@ module.exports = {
   getGlobalInvById,
   postGlobalInv,
   deleteGlobalInv,
-  putGlobalInv
+  putGlobalInv,
+
+  getBlacksmithInv,
+  getBlacksmithInvByName,
+  postBlacksmithInv,
+  deleteBlacksmithInv,
+  putBlacksmithInv
 };

@@ -1,0 +1,1 @@
+SELECT * FROM NATURE.blacksmith_inventory where item_name=?;

@@ -23,6 +23,7 @@ public class PlayerController : MonoBehaviour
 
 
     public NavMeshAgent agent;
+    public float velocity;
     private float distFromRes;
     private float staticDistFromRes;
     private Vector3 targetResource;
@@ -117,6 +118,7 @@ public class PlayerController : MonoBehaviour
         buildUI = GetComponent<BuildingUI>();
         invUI = GetComponent<InventoryUI>();
         agent = GetComponent<NavMeshAgent>();
+
         getPlayerData = GetComponent<GetPlayerData>();
         localPlayer = gameObject.transform.parent.GetComponent<MyNetworkPlayer>().isLocalPlayer;
 
@@ -158,15 +160,13 @@ public class PlayerController : MonoBehaviour
     }
     private void Update()
     {
+
         if (localPlayer)
         {
-            if (agent.velocity == new Vector3(0,0,0))
-            {
-                actionState = ActionState.NotMoving;
-            }
+            velocity = agent.velocity.magnitude;
 
         
-            if (actionState != ActionState.NotMoving)
+            if (velocity > .5f)
             {
                 anim.SetBool("Idle", false);
                 anim.SetBool("Walking", true);
@@ -193,14 +193,12 @@ public class PlayerController : MonoBehaviour
                     //Moving To Resource
                     if (hit.collider.CompareTag("ResourceNode"))
                     {
-                        actionState = ActionState.MovingToResource;
                         targetResource = hit.transform.position;
                         staticDistFromRes = Vector3.Distance(targetResource, playerPos);
-                        Debug.Log($"Target Resource: " + targetResource);
-                        Debug.Log($"Distance From Resource: " + distFromRes);
+                        //Debug.Log($"Target Resource: " + targetResource);
+                        //Debug.Log($"Distance From Resource: " + distFromRes);
                         ResourceManager resource = hit.collider.GetComponent<ResourceManager>();
-                        //MoveToResource(targetResource, resource);
-                        agent.SetDestination(targetResource);
+                        MoveToResource(targetResource, resource);
 
 
                         if (targetResource != null)
@@ -236,9 +234,10 @@ public class PlayerController : MonoBehaviour
                     else
                     {
                         // Move the player to the clicked position
-                        //MovePlayer(hit.point);
-                        agent.SetDestination(hit.point);
-                        actionState = ActionState.Walking;
+                        MovePlayer(hit.point);
+
+
+                        
 
                         //Stop Gathering When Moving
                         if (isGathering)
@@ -407,7 +406,6 @@ public class PlayerController : MonoBehaviour
     
     private void MoveToResource(Vector3 resNode, ResourceManager resource)
     {
-
         agent.SetDestination(resNode);
         actionState = ActionState.MovingToResource;
     }

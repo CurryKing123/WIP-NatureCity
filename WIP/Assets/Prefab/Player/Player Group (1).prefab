@@ -480,6 +480,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1263251587471870895}
     m_Modifications:
+    - target: {fileID: 999118570981155986, guid: f5fa085f6957f784c8e7de9d479e050f, type: 3}
+      propertyPath: m_AutoBraking
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 999118570981155986, guid: f5fa085f6957f784c8e7de9d479e050f, type: 3}
+      propertyPath: m_AngularSpeed
+      value: 360
+      objectReference: {fileID: 0}
     - target: {fileID: 1095500802542222918, guid: f5fa085f6957f784c8e7de9d479e050f, type: 3}
       propertyPath: m_Avatar
       value: 

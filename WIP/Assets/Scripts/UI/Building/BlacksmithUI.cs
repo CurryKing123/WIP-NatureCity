@@ -9,7 +9,8 @@ public class BlacksmithUI : MonoBehaviour
 {
     [SerializeField] private Sprite [] sprites;
     public GameObject blacksmithUI;
-    [SerializeField] private GameObject blacksmithGrid;
+    [SerializeField] private GameObject blacksmithCraftablesGrid;
+    [SerializeField] private GameObject blacksmithCraftedGrid;
     [SerializeField] private Button iconPrefab;
 
     [SerializeField] private Button [] blacksmithButtons;
@@ -153,6 +154,11 @@ public class BlacksmithUI : MonoBehaviour
         
         waitTime = localTime + craftTime;
         Debug.Log("Crafted 1...");
-        Instantiate(craftedItems[0], new Vector3(0, 0, 0), Quaternion.identity);
+        BlacksmithGridUpdate();
+    }
+
+    public void BlacksmithGridUpdate()
+    {
+        
     }
 }
