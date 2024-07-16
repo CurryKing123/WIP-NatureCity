@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using TMPro;
 
 public class BlacksmithUI : MonoBehaviour
 {
@@ -30,13 +31,21 @@ public class BlacksmithUI : MonoBehaviour
 
     private Items items;
     private GlobalInventory globalInv;
+    private BlacksmithInventory blacksmithInv;
+    private InventoryUI invUI;
     private Transform player;
+    private Transform getIcon;
+    private PlayerController playCont;
 
 
     private void Start()
     {
         items = new Items();
         globalInv = new GlobalInventory();
+        blacksmithInv = new BlacksmithInventory();
+        invUI = new InventoryUI();
+
+        StartBlacksmithInventory();
     }
 
     private void Update()
@@ -52,6 +61,11 @@ public class BlacksmithUI : MonoBehaviour
         }
     }
 
+    public void FindPlayer()
+    {
+        playCont = GameObject.Find("Player").GetComponent<PlayerController>();
+    }
+
     public void StartCrafting()
     {
         if (!isCrafting)
@@ -59,7 +73,6 @@ public class BlacksmithUI : MonoBehaviour
             Debug.Log("Start Crafting...");
             waitTime = craftTime;
             isCrafting = true;
-            CraftItem();
         }
     }
     private void StopCrafting()
@@ -81,6 +94,28 @@ public class BlacksmithUI : MonoBehaviour
         print(EventSystem.current.currentSelectedGameObject.name);
     }
 
+    //Coroutines
+
+    //public void GetCraftedItem()
+    //{
+    //    StartCoroutine(GetCraftedItem());
+    //}
+
+    public void StartBlacksmithInventory()
+    {
+        StartCoroutine(StartBlacksmithInv());
+    }
+
+    public void BlacksmithGridUpdate(string wtd)
+    {
+        StartCoroutine(BlacksmithInvUpdate(wtd));
+    }
+
+    public void AddToBlacksmithInventory(int itemId, int itemAmount, string dH)
+    {
+        StartCoroutine(AddToBlacksmithInv(itemId, itemAmount, dH));
+    }
+
     public void GetItemData()
     {
         StartCoroutine(GetItem());
@@ -90,6 +125,10 @@ public class BlacksmithUI : MonoBehaviour
         StartCoroutine(GetGlobalInv(woodCost, stoneCost));
     }
     
+    public void TransferItemData()
+    {
+        StartCoroutine(TransferItem());
+    }
 
     private IEnumerator GetItem()
     {
@@ -105,8 +144,6 @@ public class BlacksmithUI : MonoBehaviour
             stoneCost = items.data[0].stone_cost;
             craftTime = items.data[0].craft_time;
             CheckGlobalInventory(woodCost, stoneCost);
-
-
         }
     }
 
@@ -154,11 +191,136 @@ public class BlacksmithUI : MonoBehaviour
         
         waitTime = localTime + craftTime;
         Debug.Log("Crafted 1...");
-        BlacksmithGridUpdate();
+        string wtd = "add";
+        BlacksmithGridUpdate(wtd);
+        isCrafting = false;
     }
 
-    public void BlacksmithGridUpdate()
+    private IEnumerator BlacksmithInvUpdate(string wtd)
     {
-        
+        using (UnityWebRequest www = UnityWebRequest.Get($"http://localhost:8002/blacksmith_inventory/get-blacksmith_inv-by-name?item_name={itemName}"))
+        {
+            www.SetRequestHeader("key", "1");
+            yield return www.SendWebRequest();
+
+            string dH = www.downloadHandler.text;
+            blacksmithInv = JsonUtility.FromJson<BlacksmithInventory>(dH);
+
+            int itemId = blacksmithInv.data[0].item_id;
+
+            int itemAmount = blacksmithInv.data[0].item_amount;
+
+            if (wtd == "add")
+            {
+                //Adding 1 to crafted item amount
+                itemAmount = itemAmount + 1;
+                AddToBlacksmithInventory(itemId, itemAmount, dH);
+            }
+            else if (wtd == "sub")
+            {
+                //Subtracting 1 to crafted item amount
+                itemAmount = itemAmount - 1;
+                AddToBlacksmithInventory(itemId, itemAmount, dH);
+            }
+
+            for (int i = 0; i < 1; i++)
+            {
+                if (blacksmithButtons[i].name == "axe")
+                {
+                    getIcon = blacksmithCraftedGrid.transform.GetChild(i);
+                    getIcon.GetChild(0).GetComponent<TextMeshProUGUI>().text = $"Axes Available: {itemAmount}";
+                }
+                else
+                {
+                    Debug.Log("Theres a problem here");
+                }
+            }
+        }
     }
+
+    private IEnumerator AddToBlacksmithInv(int itemId, int itemAmount, string dH)
+    {
+        blacksmithInv = JsonUtility.FromJson<BlacksmithInventory>(dH);
+        blacksmithInv.data[0].item_amount = itemAmount;
+        string jsonUse = JsonUtility.ToJson(blacksmithInv.data[0], true);
+        using (UnityWebRequest www = UnityWebRequest.Put($"http://localhost:8002/blacksmith_inventory/put-blacksmith_inv?item_id={itemId}", jsonUse))
+        {
+            www.SetRequestHeader("key", "1");
+            www.SetRequestHeader("content-type", "application/json");
+            yield return www.SendWebRequest();
+
+            if (www.result != UnityWebRequest.Result.Success)
+            {
+                Debug.Log(www.error);
+            }
+
+        }
+    }
+
+
+
+    private IEnumerator StartBlacksmithInv()
+    {
+        using (UnityWebRequest www = UnityWebRequest.Get($"http://localhost:8002/blacksmith_inventory/get-blacksmith_inv"))
+        {
+            www.SetRequestHeader("key", "1");
+            yield return www.SendWebRequest();
+
+            if (www.result != UnityWebRequest.Result.Success)
+            {
+                Debug.Log(www.error);
+            }
+
+            else
+            {
+                string dH = www.downloadHandler.text;
+                blacksmithInv = JsonUtility.FromJson<BlacksmithInventory>(dH);
+
+                for (int i = 0; i < 2; i++)
+                {
+                    if (blacksmithButtons[i].name == "axe")
+                    {
+                        int itemAmount = blacksmithInv.data[0].item_amount;
+                        getIcon = blacksmithCraftedGrid.transform.GetChild(i);
+                        getIcon.GetChild(0).GetComponent<TextMeshProUGUI>().text = $"Axes Available: {itemAmount}";
+                    }
+                    else
+                    {
+                        Debug.Log("Theres a problem here");
+                    }
+                }
+            }
+        }
+    }
+
+    private IEnumerator TransferItem()
+    {
+        itemName = EventSystem.current.currentSelectedGameObject.name;
+        using (UnityWebRequest www = UnityWebRequest.Get($"http://localhost:8002/item/get-item-by-name?item_name={itemName}"))
+        {
+            www.SetRequestHeader("key", "1");
+            yield return www.SendWebRequest();
+
+            string dH = www.downloadHandler.text;
+            blacksmithInv = JsonUtility.FromJson<BlacksmithInventory>(dH);
+
+            int itemId = blacksmithInv.data[0].item_id;
+
+            if (www.result != UnityWebRequest.Result.Success)
+            {
+                Debug.Log(www.error);
+            }
+
+            else
+            {
+                playCont.playerInventory++;
+                playCont.CheckInv(playCont.charId, itemId);
+                playCont.InvUpdate();
+
+                string wtd = "sub";
+                BlacksmithGridUpdate(wtd);
+            }
+        }
+    }
+
 }

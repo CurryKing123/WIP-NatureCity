@@ -560,6 +560,14 @@ PrefabInstance:
       propertyPath: m_IsKinematic
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 8639424980642564321, guid: f5fa085f6957f784c8e7de9d479e050f, type: 3}
+      propertyPath: sprites.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8639424980642564321, guid: f5fa085f6957f784c8e7de9d479e050f, type: 3}
+      propertyPath: sprites.Array.data[2]
+      value: 
+      objectReference: {fileID: 21300000, guid: a074c76f5bf8a094e8e48635ff459cfc, type: 3}
     m_RemovedComponents:
     - {fileID: 6122532369308020204, guid: f5fa085f6957f784c8e7de9d479e050f, type: 3}
     m_RemovedGameObjects:

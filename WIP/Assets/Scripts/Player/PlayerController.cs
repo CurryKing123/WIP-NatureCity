@@ -125,15 +125,9 @@ public class PlayerController : MonoBehaviour
         pressB = GameObject.Find("Building").GetComponent<BuildingUIGroup>().pressB;
         blacksmithUI = GameObject.Find("Blacksmith").GetComponent<BlacksmithUI>();
 
-
-        
-
         getPlayerData.CallChar(userId);
 
-
-
         createIGN = GameObject.Find("Player UI");
-        
         
     }
 
@@ -141,6 +135,7 @@ public class PlayerController : MonoBehaviour
     public void CreateIGN()
     {
         createIGN.GetComponent<CreateIGN>().FindPlayer();
+        blacksmithUI.FindPlayer();
     }
 
 

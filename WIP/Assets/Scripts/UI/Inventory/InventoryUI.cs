@@ -69,13 +69,31 @@ public class InventoryUI : MonoBehaviour
     }
 
 
-    private void AddItemIcon(Transform getIcon, int count, int itemId)
+    public void AddItemIcon(Transform getIcon, int count, int itemId)
     {
         Image image = getIcon.GetComponent<Image>();
         TMP_Text text = getIcon.GetComponentInChildren<TMP_Text>();
         text.text = $"{count}";
 
-        image.sprite = sprites[itemId - 1];
+        for (int i = 0; i < 3; i++)
+        {
+            if (itemId == 1)
+            {
+                if (sprites[i].name == "sticks_placeholder")
+                image.sprite = sprites[i];
+            }
+            else if (itemId == 2)
+            {
+                if (sprites[i].name == "stone_placeholder")
+                image.sprite = sprites[i];
+            }
+            else if (itemId == 8)
+            {
+                if (sprites[i].name == "Axe")
+                image.sprite = sprites[i];
+            }
+        }
+        //image.sprite = sprites[itemId - 1];
     }
 
     public void InvPopUp()

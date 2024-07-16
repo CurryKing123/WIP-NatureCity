@@ -191,6 +191,7 @@ public class GetPlayerData : MonoBehaviour
                 {
                     player.playerInventory += myInv.data[i].item_amount;
                 }
+                player.InvUpdate();
             }
         }
     }
