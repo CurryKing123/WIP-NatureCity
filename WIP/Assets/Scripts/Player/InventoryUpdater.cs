@@ -19,22 +19,29 @@ public class InventoryUpdater : MonoBehaviour
     {
         StartCoroutine(CheckInvForDupe(charId, itemId));
     }
+
     public void AddMoreItem(int charId, int itemID, string dH)
     {
         StartCoroutine(AddMoreItemToInv(charId, itemID, dH));
     }
+
     public void AddNewInvItem(int charId, int itemId)
     {
         StartCoroutine(AddNewItem(charId, itemId));
     }
+
     public void CheckHomeInventory(int charId)
     {
         StartCoroutine(CheckHomeInv(charId));
     }
+
     public void InvUpdate(int charId)
     {
         StartCoroutine(GetInvUpdate(charId));
     }
+
+
+
 
     IEnumerator CheckInvForDupe(int charId, int itemId)
     {

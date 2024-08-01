@@ -182,36 +182,22 @@ public class PlayerController : MonoBehaviour
                         ResourceManager resource = hit.collider.GetComponent<ResourceManager>();
                         MoveToResource(targetResource, resource);
 
-
                         if (targetResource != null)
                         {
-
                             Debug.Log("Moving to resource");
                             if (actionState == ActionState.MovingToResource && staticDistFromRes < 1 && areaState == AreaState.ResourceArea)
                             {
-
-                                if (playerInventory >= carryAmount)
-                                {
-                                    Debug.Log("Inventory Full");
-                                    isGathering = false;
-                                    resource.isBeingGathered = false;
-                                }
-                                else if (isGathering)
-                                {
-                                    isGathering = false;
-                                }
-                                else
-                                {
-                                    isGathering = true;
-                                    resource.StartGathering(transform);
-                                }
-
+                                ResNodeCheck(resource);
                             }
                             else
                             {
                                 isGathering = false;
                             }
                         }
+                        
+                        
+
+                        
                     }
                     else
                     {
@@ -309,17 +295,10 @@ public class PlayerController : MonoBehaviour
                 areaState = AreaState.ResourceArea;
                 if (actionState == ActionState.MovingToResource && distFromRes < 5)
                     {
-                        if (playerInventory >= carryAmount)
-                        {
-                            Debug.Log("Inventory Full");
-                        }
-                        else
-                        {
-                            ResourceManager resMan = other.GetComponent<ResourceManager>();
-                            isGathering = true;
-                            resMan.StartGathering(transform);
+                        ResourceManager resMan = other.GetComponent<ResourceManager>();
 
-                        }
+                        ResNodeCheck(resMan);
+
                         Debug.Log("Should be gathering");
 
                     }
@@ -396,6 +375,50 @@ public class PlayerController : MonoBehaviour
         agent.SetDestination(destination);
         actionState = ActionState.Walking;
         isGathering = false;
+    }
+
+    private void GatherCheck(ResourceManager resource)
+    {
+        if (targetResource != null)
+        {
+            
+            if (playerInventory >= carryAmount)
+            {
+                Debug.Log("Inventory Full");
+                isGathering = false;
+                resource.isBeingGathered = false;
+            }
+            else if (isGathering)
+            {
+                isGathering = false;
+            }
+            else
+            {
+                isGathering = true;
+                resource.StartGathering(transform);
+            }
+            
+        }
+    }
+
+    private void ResNodeCheck(ResourceManager resource)
+    {
+        if (hit.collider.name == "Stone Spawner" || hit.collider.name == "Stick Spawner")
+        {
+            GatherCheck(resource);
+        }
+
+        if (hit.collider.name == "Tree Spawner")
+        {
+            if (invDh.Contains("Axe"))
+            {
+                GatherCheck(resource);
+            }
+            else
+            {
+                Debug.Log("Don't have correct tool");
+            }
+        }
     }
 
 
