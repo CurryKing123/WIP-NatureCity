@@ -23,6 +23,7 @@ public class GetPlayerData : MonoBehaviour
 
     private CharArray myChar;
     private ItemManagement itMan;
+    private InventoryUpdater invUp;
     private CharacterInfo charInfo;
     private PlayerController player;
     private MyNetworkPlayer myNetworkPlayer;
@@ -34,6 +35,7 @@ public class GetPlayerData : MonoBehaviour
     {
         myChar = new CharArray();
         itMan = gameObject.GetComponent<ItemManagement>();
+        invUp = gameObject.GetComponent<InventoryUpdater>();
         player = gameObject.GetComponent<PlayerController>();
         createIgn = GameObject.Find("Player UI").gameObject.GetComponent<CreateIGN>();
         //playerId = GameObject.Find("PlayerId").GetComponent<PlayerId>();
@@ -191,7 +193,7 @@ public class GetPlayerData : MonoBehaviour
                 {
                     player.playerInventory += myInv.data[i].item_amount;
                 }
-                player.InvUpdate();
+                invUp.InvUpdate(charId);
             }
         }
     }

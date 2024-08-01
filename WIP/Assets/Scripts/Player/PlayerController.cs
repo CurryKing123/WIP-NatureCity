@@ -27,10 +27,15 @@ public class PlayerController : MonoBehaviour
     private float distFromRes;
     private float staticDistFromRes;
     private Vector3 targetResource;
+
+
     private ResourceManager resMan;
     private BuildingUI buildUI;
     private InventoryUI invUI;
     private BlacksmithUI blacksmithUI;
+    private InventoryUpdater invUp;
+
+
     private GameObject createIGN;
     public Vector3 playerPos;
     public TextMeshProUGUI playerName;
@@ -70,26 +75,7 @@ public class PlayerController : MonoBehaviour
 
 
     
-    public void CheckInv(int charId, int itemId)
-    {
-        StartCoroutine(CheckInvForDupe(charId, itemId));
-    }
-    public void AddMoreItem(int itemID)
-    {
-        StartCoroutine(AddMoreItemToInv(itemID));
-    }
-    public void AddNewInvItem(int itemId)
-    {
-        StartCoroutine(AddNewItem(itemId));
-    }
-    public void CheckHomeInventory(int charId)
-    {
-        StartCoroutine(CheckHomeInv(charId));
-    }
-    public void InvUpdate()
-    {
-        StartCoroutine(GetInvUpdate());
-    }
+
 
 
     private void Start()
@@ -118,6 +104,7 @@ public class PlayerController : MonoBehaviour
         buildUI = GetComponent<BuildingUI>();
         invUI = GetComponent<InventoryUI>();
         agent = GetComponent<NavMeshAgent>();
+        invUp = GetComponent<InventoryUpdater>();
 
         getPlayerData = GetComponent<GetPlayerData>();
         localPlayer = gameObject.transform.parent.GetComponent<MyNetworkPlayer>().isLocalPlayer;
@@ -340,7 +327,7 @@ public class PlayerController : MonoBehaviour
 
             else if (other.CompareTag("HomeTree"))
             {
-                CheckHomeInventory(charId);
+                invUp.CheckHomeInventory(charId);
             }
 
             else if (other.CompareTag("BuildArea"))
@@ -412,128 +399,7 @@ public class PlayerController : MonoBehaviour
     }
 
 
-    IEnumerator CheckInvForDupe(int charId, int itemId)
-    {
-        using (UnityWebRequest www = UnityWebRequest.Get($"http://localhost:8002/inventory/get-inv-by-id2?char_id={charId}&item_id={itemId}"))
-        {
-            www.SetRequestHeader("key", "1");
-            yield return www.SendWebRequest();
-
-            if (www.result != UnityWebRequest.Result.Success) 
-            {
-                Debug.Log(www.error);
-            }
-            else
-            {
-                invDh = www.downloadHandler.text;
-                Inventory inv = new Inventory();
-                inv = JsonUtility.FromJson<Inventory>(invDh);
-                if (inv.data.Length == 0)
-                {
-                    AddNewInvItem(itemId);
-                    Debug.Log("Adding New Item");
-                }
-                else
-                {
-                    AddMoreItem(itemId);
-                    Debug.Log("Adding Existing Item");
-                }
-            }
-        }
-    }
-
-        IEnumerator AddNewItem(int itemID)
-    {
-        using (UnityWebRequest www = UnityWebRequest.Post("http://localhost:8002/inventory/post-inv",
-        "{ \"char_id\": \"" + charId + "\", \"item_id\": \"" + itemID + "\", \"item_amount\": \"" + 1 + "\" }", "application/json"))
-        {
-            www.SetRequestHeader("key", "1");
-            yield return www.SendWebRequest();
-
-            if (www.result != UnityWebRequest.Result.Success) 
-            {
-                Debug.Log(www.error);
-            }
-            else
-            {
-                Debug.Log("Added New Item");
-                InvUpdate();
-            }
-        }
-    }
-
-    IEnumerator AddMoreItemToInv(int itemId)
-    {
-        Inventory inv = new Inventory();
-        inv = JsonUtility.FromJson<Inventory>(invDh);
-        inv.data[0].item_amount = inv.data[0].item_amount + 1;
-        string jsonUse = JsonUtility.ToJson(inv.data[0], true);
-        using (UnityWebRequest www = UnityWebRequest.Put($"http://localhost:8002/inventory/put-inv?char_id={charId}&item_id={itemId}", jsonUse))
-        {
-            www.SetRequestHeader("key", "1");
-            www.SetRequestHeader("content-type", "application/json");
-            yield return www.SendWebRequest();
-
-            if (www.result != UnityWebRequest.Result.Success)
-            {
-                Debug.Log(www.error);
-            }
-            else
-            {
-                Debug.Log(www.downloadHandler.text);
-                InvUpdate();
-            }
-        }
-    }
-
-    //Get Updated Inventory
-    IEnumerator GetInvUpdate()
-    {
-        using (UnityWebRequest www = UnityWebRequest.Get($"http://localhost:8002/inventory/get-inv-by-id?char_id={charId}"))
-        {
-            www.SetRequestHeader("key", "1");
-            yield return www.SendWebRequest();
-
-            if (www.result != UnityWebRequest.Result.Success) 
-            {
-                Debug.Log(www.error);
-            }
-            else
-            {
-                Inventory myInv = new Inventory();
-                invDh = www.downloadHandler.text;
-                invUI.InvGridUpdate();
-            }
-        }
-    }
-
-    //Check Inventory At HomeTree
-
-    IEnumerator CheckHomeInv(int charId)
-    {
-        using (UnityWebRequest www = UnityWebRequest.Get($"http://localhost:8002/inventory/get-inv-by-id?char_id={charId}"))
-        {
-            www.SetRequestHeader("key", "1");
-            yield return www.SendWebRequest();
-
-            if (www.result != UnityWebRequest.Result.Success) 
-            {
-                Debug.Log(www.error);
-            }
-            else
-            {
-                string dH = www.downloadHandler.text;
-                Inventory inv = new Inventory();
-                inv = JsonUtility.FromJson<Inventory>(dH);
-                for(int i = 0; i < inv.data.Length; i++)
-                {
-                    int itemId = inv.data[i].item_id;
-                    Debug.Log($"Depositing itemId: {itemId}");
-                    itMan.CallItem(itemId, charId);
-                }
-            }
-        }
-    }
+    
 
     private void ActionStateSetup()
     {

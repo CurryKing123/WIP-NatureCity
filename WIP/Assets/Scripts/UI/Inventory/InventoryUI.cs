@@ -33,8 +33,10 @@ public class InventoryUI : MonoBehaviour
         invUI = inventoryUI.GetComponent<InventoryUIGroup>().invUI;
     }
 
-    public void InvGridUpdate()
+    public void InvGridUpdate(string dH)
     {
+        playCont.invDh = dH;
+        
         inv = JsonUtility.FromJson<Inventory>(playCont.invDh);
         if (invGrid.transform.childCount < inv.data.Length)
         {

@@ -80,6 +80,7 @@ public class ResourceManager : MonoBehaviour
     private void GatherResource(Transform player)
     {
         PlayerController playCont = player.GetComponent<PlayerController>();
+        InventoryUpdater invUp = player.GetComponent<InventoryUpdater>();
         if(resAmount > 0 && playCont.areaState == PlayerController.AreaState.ResourceArea)
         {
             if (localTime < waitTime)
@@ -98,8 +99,8 @@ public class ResourceManager : MonoBehaviour
 
             resAmount--;
             playCont.playerInventory++;
-            playCont.CheckInv(playCont.charId, itemId);
-            playCont.InvUpdate();
+            invUp.CheckInv(playCont.charId, itemId);
+            invUp.InvUpdate(playCont.charId);
 
             if (resAmount <= 0)
             {

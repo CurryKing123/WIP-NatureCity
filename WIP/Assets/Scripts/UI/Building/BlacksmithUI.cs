@@ -33,6 +33,7 @@ public class BlacksmithUI : MonoBehaviour
     private GlobalInventory globalInv;
     private BlacksmithInventory blacksmithInv;
     private InventoryUI invUI;
+    private InventoryUpdater invUp;
     private Transform player;
     private Transform getIcon;
     private PlayerController playCont;
@@ -64,6 +65,7 @@ public class BlacksmithUI : MonoBehaviour
     public void FindPlayer()
     {
         playCont = GameObject.Find("Player").GetComponent<PlayerController>();
+        invUp = playCont.GetComponent<InventoryUpdater>();
     }
 
     public void StartCrafting()
@@ -314,8 +316,8 @@ public class BlacksmithUI : MonoBehaviour
             else
             {
                 playCont.playerInventory++;
-                playCont.CheckInv(playCont.charId, itemId);
-                playCont.InvUpdate();
+                invUp.CheckInv(playCont.charId, itemId);
+                invUp.InvUpdate(playCont.charId);
 
                 string wtd = "sub";
                 BlacksmithGridUpdate(wtd);

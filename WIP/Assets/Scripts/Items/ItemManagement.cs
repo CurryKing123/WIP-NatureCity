@@ -15,6 +15,7 @@ public class ItemManagement : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI carryCap;
     private PlayerController player;
+    private InventoryUpdater invUp;
     public string itemType;
     public int bagCarryAmount;
 
@@ -54,6 +55,7 @@ public class ItemManagement : MonoBehaviour
     private void Start()
     {
         player = gameObject.GetComponent<PlayerController>();
+        invUp = gameObject.GetComponent<InventoryUpdater>();
     }
 
     IEnumerator GetEquip(string equip)
@@ -139,13 +141,13 @@ public class ItemManagement : MonoBehaviour
                 Items items = new Items();
                 items = JsonUtility.FromJson<Items>(dH);
                 itemType = items.data[0].item_type;
-                player.InvUpdate();
+                invUp.InvUpdate(charId);
 
                 if (itemType == "resource")
                 {
                     int resId = items.data[0].res_id;
                     RemResToTree(itemId, resId, charId);
-                    player.InvUpdate();
+                    invUp.InvUpdate(charId);
                 }
             }
         }
@@ -194,7 +196,7 @@ public class ItemManagement : MonoBehaviour
             else
             {
                 Debug.Log("Deleted item from player inventory");
-                player.InvUpdate();
+                invUp.InvUpdate(charId);
             }
         }
     }
