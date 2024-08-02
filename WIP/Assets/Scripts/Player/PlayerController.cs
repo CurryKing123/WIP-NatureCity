@@ -185,9 +185,10 @@ public class PlayerController : MonoBehaviour
                         if (targetResource != null)
                         {
                             Debug.Log("Moving to resource");
-                            if (actionState == ActionState.MovingToResource && staticDistFromRes < 1 && areaState == AreaState.ResourceArea)
+                            if (actionState == ActionState.MovingToResource && staticDistFromRes < 5 && areaState == AreaState.ResourceArea)
                             {
                                 ResNodeCheck(resource);
+                                agent.SetDestination(transform.position);
                             }
                             else
                             {
@@ -298,9 +299,6 @@ public class PlayerController : MonoBehaviour
                         ResourceManager resMan = other.GetComponent<ResourceManager>();
 
                         ResNodeCheck(resMan);
-
-                        Debug.Log("Should be gathering");
-
                     }
             }
 
